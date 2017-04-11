@@ -15,5 +15,3 @@
 ### Test it out
 - register a new user
 - Look in the AspNetUsers table to the added user
-
-### Connect it to the cloud

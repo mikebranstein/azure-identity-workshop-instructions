@@ -32,3 +32,9 @@
 - highly-scalable
 - can be encrypted
 - can use it across applications
+
+### web app
+- create web app in resource group
+- upload to azure from visual studio
+- test it!
+
