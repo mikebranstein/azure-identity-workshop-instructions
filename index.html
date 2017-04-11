@@ -37,12 +37,294 @@
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="another-chapter">Another chapter</h2>
-<p>Donec nisi magna, vehicula et purus eget, blandit suscipit tellus. Quisque lobortis augue at fringilla ullamcorper. Integer mattis diam eget augue suscipit, a malesuada mauris bibendum. Phasellus venenatis elit in semper hendrerit. Nunc tincidunt lectus in mauris facilisis, et laoreet metus aliquet. Mauris at hendrerit turpis, at semper mi. Suspendisse vel arcu nulla. Nullam scelerisque consequat molestie. Curabitur sit amet porta odio. Morbi lacinia vel tortor eu fringilla.</p>
-<h3 id="another-section">Another section</h3>
-<p>Mauris tempor facilisis accumsan. Mauris vitae iaculis risus. Mauris volutpat suscipit neque non bibendum. Phasellus non fringilla enim. Aliquam tempor quam vel ligula porta convallis. In blandit dictum tempus. Nunc at pulvinar justo. Aliquam eu mi eros. Nunc sit amet tellus non lorem malesuada tempus. Vestibulum nunc magna, varius ut aliquam non, fermentum sodales metus. Aliquam sit amet pulvinar lacus. Sed fringilla placerat tempor. Pellentesque id elementum nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec laoreet, ex eget vulputate tincidunt, enim nisi ullamcorper urna, at scelerisque tellus mi sit amet nisi. Duis ac risus ac odio efficitur dignissim vitae dapibus purus.</p>
-<h3 id="yet-another-section">Yet another section</h3>
-<p>Cras massa nulla, feugiat eu pretium in, tempor nec nulla. Nullam vel lobortis felis. Cras varius iaculis ornare. Ut at nisl sit amet leo pulvinar iaculis non ut purus. Morbi luctus magna sed condimentum cursus. Ut accumsan enim ligula, vitae dapibus odio blandit quis. Sed auctor ex non scelerisque vulputate. Nunc feugiat lobortis nisl consequat consectetur. Vivamus consequat sem id consectetur varius. Nam nec erat id est interdum venenatis eu eu felis. Suspendisse potenti. Donec non sapien in est maximus cursus eget eget nunc. Maecenas congue sapien ut tempor facilisis.</p>
+				<h2 id="getting-project-from-github">Getting project from Github</h2>
+<h3 id="clone-project-from-start-branch">Clone project from start branch</h3>
+<h3 id="verify-the-site-works">Verify the site works</h3>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="updating-windows-identity">Updating Windows Identity</h2>
+<h3 id="exploring-windows-identity">Exploring Windows Identity</h3>
+<h3 id="replacing-it-with-azure-table-storage">Replacing it with Azure Table Storage</h3>
+<h3 id="what-is-azure-table-storage-">What is Azure Table Storage?</h3>
+<h3 id="remove-entity-framework">Remove Entity Framework</h3>
+<ul>
+<li>Microsoft.AspNet.Identity.EntityFramework</li>
+<li>EntityFramework</li>
+</ul>
+<h3 id="add-elcamino-aspnet-identity-azuretable">Add ElCamino.AspNet.Identity.AzureTable</h3>
+<p>ElCamino is a ASP.NET Identity package that allows Identity to use table storage instead of a SQL database.</p>
+<ul>
+<li>ElCamino.AspNet.Identity.AzureTable</li>
+</ul>
+<p>It&#39;ll install a bunch of other packages, but just let it. </p>
+<h3 id="update-the-additional-nuget-packages-that-were-just-installed-with-elcamino">Update the additional NuGet packages that were just installed with ElCamino</h3>
+<p>You may need to do that multiple times. </p>
+<h3 id="identitymodel-cs">IdentityModel.cs</h3>
+<ul>
+<li>replace usings to strip out EF and support the ElCamino versions</li>
+<li>instead of public class ApplicationDbContext : IdentityDbContext&lt;&gt;, you need to inherit ApplicationDbContext: IdentityCloudContext</li>
+<li>change the whole class reference of ApplicationDbContext</li>
+</ul>
+<h3 id="identityconfig-cs">IdentityConfig.cs</h3>
+<ul>
+<li>replace usings</li>
+<li>add the StartupAsync() function to the ApplicationUserManager class to tell identity to auto-create the azure tables</li>
+</ul>
+<h3 id="globalasax-cs">Globalasax.cs</h3>
+<ul>
+<li>call the azure table create process </li>
+</ul>
+<h3 id="web-config">web.config</h3>
+<ul>
+<li>remove EF references</li>
+<li>add elcamino configuration to configSections</li>
+</ul>
+<h3 id="build-and-compile-your-app">build and compile your app</h3>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="testing-your-app-locally-using-storage-emulator">Testing your app locally using storage emulator</h2>
+<h3 id="install-azure-storage-emulator-and-explorer">Install azure storage emulator and explorer</h3>
+<ul>
+<li>URL: <a href="https://go.microsoft.com/fwlink/?linkid=717179&amp;clcid=0x409">https://go.microsoft.com/fwlink/?linkid=717179&amp;clcid=0x409</a></li>
+<li>URL: <a href="http://storageexplorer.com/">http://storageexplorer.com/</a></li>
+</ul>
+<h3 id="start-azure-sotrage-explorer">Start azure sotrage explorer</h3>
+<ul>
+<li>from start menu</li>
+<li>command line</li>
+<li>start storage explorer</li>
+<li>run the project</li>
+<li>when the site loads, you should see in your (Local and Attached) the tables AspNetIndex, AspNetRoles, AspNetUsers</li>
+</ul>
+<h3 id="test-it-out">Test it out</h3>
+<ul>
+<li>register a new user</li>
+<li>Look in the AspNetUsers table to the added user</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="connecting-the-app-to-azure">Connecting the app to Azure</h2>
+<h3 id="resource-group">resource Group</h3>
+<ul>
+<li>create resource group</li>
+</ul>
+<h3 id="storage-account">Storage account</h3>
+<ul>
+<li><p>create storage account</p>
+<ul>
+<li>name (remember it)</li>
+<li>deployment model: resource manager</li>
+<li>Account kind: general purpose</li>
+<li>Performance: standard</li>
+<li>Replication: Locally-redundant storage (LRS)</li>
+<li>Storage service encryption: Disabled</li>
+<li>Resource group: Use existing (from the prrevious)</li>
+<li>Location: East US</li>
+</ul>
+</li>
+<li><p>Wait for it to deploy</p>
+</li>
+</ul>
+<h3 id="connect-to-it-from-storage-explorer">Connect to it from storage explorer</h3>
+<ul>
+<li>add subscription azure storage explorer</li>
+<li>select the subscription</li>
+<li>find the sotrage account</li>
+<li>right-cick, copy Primary key</li>
+<li>Update connection string</li>
+<li>Account name: what you entered above</li>
+<li>Account key: what you copied from storage explorer</li>
+</ul>
+<h3 id="re-run-and-test-">Re-run and test!</h3>
+<ul>
+<li>register a new account, test out the site</li>
+</ul>
+<h3 id="now-you-have-a-cloud-based-central-authentication-database">now you have a cloud-based central authentication database</h3>
+<ul>
+<li>highly-scalable</li>
+<li>can be encrypted</li>
+<li>can use it across applications</li>
+</ul>
+<h3 id="web-app">web app</h3>
+<ul>
+<li>create web app in resource group</li>
+<li>upload to azure from visual studio</li>
+<li>test it!</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="adding-a-custom-field-to-aspnet-identity">Adding a custom field to AspNet Identity</h2>
+<p>I want to add a biography. </p>
+<h3 id="update-identitymodel-cs">Update IdentityModel.cs</h3>
+<ul>
+<li>add public string Biography { get; set; } to ApplicationUser class</li>
+</ul>
+<h3 id="update-identityconfig-cs">Update IdentityConfig.cs</h3>
+<ul>
+<li>Add async accessor method to ApplicationUserManager class GetBiographyAsync(string userId);</li>
+</ul>
+<h3 id="build-the-update-biography">Build the Update Biography</h3>
+<ul>
+<li>update the IndexViewModel to include the Biography property</li>
+<li><p>update Index.cshtml, add HTML to display the update biography links</p>
+</li>
+<li><p>add class to ManageViewModels.cs</p>
+</li>
+<li>create UpdateBiography.cshtml</li>
+<li>copy paste the HTML</li>
+<li>add GET controller action</li>
+<li>locate ManageMessageId enum in the hidden Helpers area, add the UpdateBiographySuccess value to the enum</li>
+<li><p>add POST controller action</p>
+</li>
+<li><p>update the Index GET function to display the correct update message and to load in the Biography via the user manager</p>
+</li>
+</ul>
+<h3 id="test-it-">test it!</h3>
+<ul>
+<li>works</li>
+<li>note that the tables are automatically upgraded to account for the changes we&#39;ve made</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="adding-a-profile-picture-to-the-app">Adding a profile picture to the app</h2>
+<p>We want to add a profile picture. It&#39;s similar to the biography, and we&#39;ll reuse some of the work we&#39;ve alreayd done to display it.</p>
+<h3 id="update-identitymodel-cs">Update IdentityModel.cs</h3>
+<ul>
+<li>add profile picture url to ApplicationUser</li>
+</ul>
+<h3 id="update-identityconfig-cs">Update IdentityConfig.cs</h3>
+<ul>
+<li>Add async accessor method to ApplicationUserManager class GetProfilePicAsync(string userId);</li>
+</ul>
+<h3 id="add-profile-pic-to-to-the-web-app">Add Profile Pic to to the web app</h3>
+<ul>
+<li>update the IndexViewModel to include the Profile Picture property</li>
+<li><p>update Index.cshtml, add HTML to display the update profile picture and a hiddenFor field links</p>
+</li>
+<li><p>ManageViewModels.cs, add System.Web to usings</p>
+</li>
+<li><p>update UpdateBiographyViewModel class in ManageViewModels.cs</p>
+</li>
+<li><p>update UpdateBiography.cshtml, adding profile picture div</p>
+</li>
+<li><p>update GET controller action for UpdateBiography</p>
+</li>
+<li>update POST controller action for UpdateBiography</li>
+<li>add method UploadImageAsync</li>
+<li><p>add usings to support UploadImageSync code</p>
+</li>
+<li><p>add app settings: StorageAccountName, StorageAccountKey, ProfilePicBlobContainer</p>
+</li>
+<li><p>replace values for storage account name, storage account key</p>
+</li>
+<li><p>update the Index GET function to display the correct update message and to load in the ProfilePicUrl via the user manager</p>
+</li>
+</ul>
+<h3 id="test-">test!</h3>
+<ul>
+<li>run web site</li>
+<li>check out storage explorer</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="introducing-a-staging-area-for-images">Introducing a staging area for images</h2>
+<p>We really don&#39;t want to allow employees to upload ANYTHING into their profile picture....</p>
+<h3 id="update-web-app-to-place-code-into-a-staging-area">update web app to place code into a staging area</h3>
+<ul>
+<li>update Index.cshtml verbiage for alt img tag</li>
+<li>update manage controller code for UploadImageAsync</li>
+<li>add web.config app setting for ProfilePicUploadBlobContainer</li>
+</ul>
+<h3 id="view-results">view results</h3>
+<ul>
+<li>run project</li>
+<li>upload an image</li>
+<li>look at storage explorer and see image in the uploaded directory</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="processing-images-with-azure-functions">Processing images with Azure Functions</h2>
+<p>Introduction</p>
+<h3 id="create-azure-funciton-use-content-from">Create Azure funciton - use content from</h3>
+<p><a href="https://github.com/Microsoft/TechnicalCommunityContent/blob/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On/Azure%20Functions%20HOL%20(C%23).md">https://github.com/Microsoft/TechnicalCommunityContent/blob/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On/Azure%20Functions%20HOL%20(C%23).md</a></p>
+<ul>
+<li>use same storage account that we previously created</li>
+<li>update project.json storage dependency</li>
+</ul>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="sending-results-back-to-your-browser">Sending results back to your browser</h2>
+<p>Why not use SignalR? </p>
+<h3 id="architecture">Architecture</h3>
+<p>What are we building? </p>
+<ol>
+<li>The profile page establishes a signalr listener on load</li>
+<li>When AZure function finishes, it posts to a Web API endpoint hosted in our website</li>
+<li>The Web API enpoint pushes a SignalR message to it&#39;s lisnters, using a server broadcast</li>
+<li>listener on the page determines if it&#39;s image is the once that was processed, then reloads the img source by appending a querystring to the image source URL</li>
+</ol>
+<h3 id="install-the-signalr-nuget-packages">Install the SignalR NuGet packages</h3>
+<ul>
+<li>Microsoft.AspNet.SignalR</li>
+<li>Microsoft.AspNet.SignalR.Core</li>
+<li>Microsoft.AspNet.SignalR.JS</li>
+<li>Microsoft.AspNet.SignalR.SystemWeb</li>
+</ul>
+<h3 id="establish-listener-on-index-cshtml-page">establish listener on Index.cshtml page</h3>
+<ul>
+<li>add script to Index.cshtml page</li>
+</ul>
+<h3 id="create-a-singalr-hub">Create a singalR hub</h3>
+<p>definition</p>
+<ul>
+<li>Add class ProfilePicHub.cs to the root of the project</li>
+<li>Then need to create a class that is responsible for broadcasting a message. Create ProfilePicture</li>
+</ul>
+<h3 id="configure-signalr-to-start-with-the-app">Configure SignalR to start with the app</h3>
+<ul>
+<li>Startup.cs - add line app.MapSignalR(); </li>
+</ul>
+<h3 id="install-webapi-nuget-packages">Install WebAPI Nuget packages</h3>
+<ul>
+<li>Microsoft.AspNet.WebApi</li>
+<li>Microsoft.AspNet.WebApi.Core</li>
+<li>Microsoft.AspNet.WebApi.WebHost</li>
+<li>Microsoft.AspNet.WebApi.Client</li>
+</ul>
+<h3 id="configure-web-api-in-solution">Configure Web Api in solution</h3>
+<ul>
+<li>create WebApiConfig.cs file in App_Start folder</li>
+<li>update Global.asax.cs file - using System.Web.Http;</li>
+<li>update Global.asax.cs file - add GlobalConfiguration.Configure(WebApiConfig.Register) before the route</li>
+</ul>
+<h3 id="add-a-profilepicturecontroller-class">Add a ProfilePictureController class</h3>
+<ul>
+<li>profilepicture controller class, add code</li>
+</ul>
+<h3 id="update-azure-function">update Azure Function</h3>
+<ul>
+<li>add more signal r code</li>
+</ul>
+<h3 id="test-it">test it</h3>
+<ul>
+<li>deploy your website to azure and watch the magic happen</li>
+</ul>
 
 			</div>
 		</div>
