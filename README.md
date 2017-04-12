@@ -1,10 +1,10 @@
-# Quick Start Guide Template
+# Quick Start Guide
 
-This is a template for building quick start guides.
+This is a website adapted from a quick start template. The actual guide is hosted on Github at [https://mikebranstein.github.io/GlobalAzureDay2017-instructions/](https://mikebranstein.github.io/GlobalAzureDay2017-instructions/). 
 
 ## Setup
 
-Start by running `npm install` to install this template’s dependencies:
+To install and run the site locally, you can start by running `npm install` to install this template’s dependencies:
 
 ```
 $ npm install
