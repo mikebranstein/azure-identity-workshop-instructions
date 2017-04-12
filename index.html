@@ -86,15 +86,71 @@
 <p>You can find additional lab materials and presentation content at the locations below:</p>
 <ul>
 <li>Presentation: </li>
-<li>Source code for this app: <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a></li>
+<li>Source code for the code used in this guide: <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a></li>
+<li>Source code for this guide (yes, it&#39;s all out there): <a href="https://mikebranstein.github.io/GlobalAzureDay2017-instructions/">https://github.com/mikebranstein/GlobalAzureDay2017-instructions</a></li>
 </ul>
 
 			</div>
 			<hr>
 			<div class="chapter">
 				<h2 id="getting-project-from-github">Getting project from Github</h2>
+<p>All the code you&#39;ll need for working through the bootcamp are stored on Github at <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a>.</p>
+<h3 id="organization-of-the-repository">Organization of the Repository</h3>
+<p>The repository at <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a> is organized into several <a href="https://github.com/mikebranstein/GlobalAzureDay2017/branches">branches</a>:</p>
+<ul>
+<li>start</li>
+<li>chapter2</li>
+<li>chapter5</li>
+<li>chapter6</li>
+<li>chapter7</li>
+<li>chapter9</li>
+</ul>
+<p>Each branch corresponds with the chapters in this bootcamp guide. The guide starts with the code from the <code>start</code> branch, and progresses with each chapter. </p>
+<blockquote>
+<p><strong>NOTE</strong> You don&#39;t need to copy the code from each branch, only the <code>start</code> branch. If you&#39;re following along with the guide, you can start with the <code>start</code> branch. If you get stuck, or if you can&#39;t follow-along, you can grab a fresh set of code from a branch name matching the chapter you&#39;re on. For example, if you get stuck and can&#39;t get your code working at the end of chapter 5, you can jump to chapter 6 and grab the <code>chapter6</code> branch.</p>
+</blockquote>
+<h3 id="pre-requisites">Pre-requisites</h3>
+<p>Before we go any further, be sure you have all the pre-requisites downloaded and installed. You&#39;ll need the following:</p>
+<ul>
+<li>Microsoft Windows PC</li>
+<li><a href="https://www.visualstudio.com">Visual Studio</a> 2015 or later</li>
+<li><a href="https://azure.microsoft.com">Azure Subscription</a> (trial is ok, and we&#39;ll sign you up in our first session)</li>
+<li><a href="https://azure.microsoft.com/en-us/downloads/">Azure SDK for .NET</a> installed (be sure to get the right one for your version of Visual Studio)</li>
+<li><a href="http://storageexplorer.com/">Storage Explorer</a> installed</li>
+<li><a href="https://go.microsoft.com/fwlink/?LinkId=717179&amp;clcid=0x409">Storage Emulator</a> installed</li>
+<li>The <a href="https://github.com/mikebranstein/GlobalAzureDay2017/tree/start">starter project</a> on Github</li>
+</ul>
 <h3 id="clone-project-from-start-branch">Clone project from start branch</h3>
+<p>Let&#39;s get started by getting the <code>start</code> branch.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Getting the code
+</h4>
+
+<p>Clone or download the <code>start</code> branch from <a href="https://github.com/mikebranstein/GlobalAzureDay2017/tree/start">https://github.com/mikebranstein/GlobalAzureDay2017/tree/start</a>).</p>
+<p>Use this <a href="https://github.com/mikebranstein/GlobalAzureDay2017/archive/start.zip">link</a> to download a zip file of the <code>start</code> branch.</p>
+<p><img src="images/chapter1/downloaded-zip.png" alt="image"></p>
+<blockquote>
+<p>Don&#39;t open the zip file yet. You need to unblock it first!</p>
+</blockquote>
+<p>Right-click the zip file and go to the properties option. Check the <em>Unblock</em> option, press <em>Apply</em>, press <em>Ok</em>.</p>
+<p><img src="images/chapter1/unblock.gif" alt="image"></p>
+<p>Now it&#39;s safe to unzip the file to your harddrive. </p>
+<div class="exercise-end"></div>
+
 <h3 id="verify-the-site-works">Verify the site works</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Compiling the solution
+</h4>
+
+<p>Open the solution in Visual Studio by double-clicking the <code>Web.sln</code> file in to root of the extracted files:</p>
+<p><img src="images/chapter1/solution-file.png" alt="image"></p>
+<p>The opened solution should look like this:</p>
+<p><img src="images/chapter1/opened-solution.png" alt="image"></p>
+<p>Build and debug the solution. You shoudl see the MVC 5 template spin up in your browser.</p>
+<p><img src="images/chapter1/site.png" alt="image"></p>
+<div class="exercise-end"></div>
+
+<p>That&#39;s it! You&#39;re up and running and ready to move on!</p>
 
 			</div>
 			<hr>

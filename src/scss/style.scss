@@ -130,7 +130,10 @@ ol li, ul li{
 img[src*=gif] {
 	border: 1px solid black;
 }
-
+img {
+	width: 50%!important;
+	height: 50%!important;
+}
 h5, h6 {
 	letter-spacing: .01rem;
 	color: #364149;
