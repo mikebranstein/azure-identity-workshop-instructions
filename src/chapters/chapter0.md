@@ -62,4 +62,5 @@ Key concepts and take aways:
 You can find additional lab materials and presentation content at the locations below:
 
 * Presentation: 
-* Source code for this app: [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017)
+* Source code for the code used in this guide: [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017)
+* Source code for this guide (yes, it's all out there): [https://github.com/mikebranstein/GlobalAzureDay2017-instructions](https://mikebranstein.github.io/GlobalAzureDay2017-instructions/)
