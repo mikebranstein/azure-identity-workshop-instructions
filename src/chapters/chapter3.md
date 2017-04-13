@@ -2,7 +2,7 @@
 
 Even though this bootcamp is all about the cloud and using Azure, it doesn't mean that we need to be connected to the cloud to develop and test our work.
 
-In fact, an important aspect of a technology stack is being able to quickly and easily create an isolated (and local) environemnt for development and testing. 
+In fact, an important aspect of a technology stack is being able to quickly and easily create an isolated (and local) environment for development and testing. 
 
 In this section, you'll learn how to use the Azure Storage Emulator to host your own Azure-like table storage environment. You'll also learn how to use Storage Explorer, a GUI application (similar to SQL Server Management Studio), that allows you to navigate and browse through your Azure storage accounts.  
 
@@ -35,7 +35,7 @@ After the emulator is started, a tray icon will appear noting the emulator is ru
  
 #### Troubleshooting the Storage Emulator
 
-You may have problems startng the storage emulator, and will receive a non-descript error like so:
+You may have problems starting the storage emulator, and will receive a non-descript error like so:
 
 ![image](images/chapter3/emulator-error.png)
 

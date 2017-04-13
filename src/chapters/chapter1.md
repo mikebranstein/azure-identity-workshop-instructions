@@ -4,7 +4,7 @@ All the code you'll need for working through the bootcamp are stored on Github a
 
 ### Organization of the Repository
 
-The repository at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017) is organized into several [branches](https://github.com/mikebranstein/GlobalAzureDay2017/branches):
+The repository at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017) is organized into several [branches](https://github.com/mikebranstein/GlobalAzureDay2017/branches/all):
 
 * start
 * chapter2
@@ -49,7 +49,7 @@ Right-click the zip file and go to the properties option. Check the *Unblock* op
 
 ![image](images/chapter1/unblock.gif)
 
-Now it's safe to unzip the file to your harddrive. 
+Now it's safe to unzip the file. 
 
 <div class="exercise-end"></div>
 
@@ -67,7 +67,7 @@ The opened solution should look like this:
 
 ![image](images/chapter1/opened-solution.png)
 
-Build and debug the solution. You shoudl see the MVC 5 template spin up in your browser.
+Build and debug the solution. You should see the MVC 5 template spin up in your browser.
 
 ![image](images/chapter1/site.png)
 

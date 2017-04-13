@@ -30,21 +30,21 @@ To get started you'll need the following pre-requisites. Please take a few momen
 * [Storage Emulator](https://go.microsoft.com/fwlink/?LinkId=717179&clcid=0x409) installed
 * The [starter project](https://github.com/mikebranstein/GlobalAzureDay2017/tree/start) on Github
 
-### What you're building
+### What You're Building
 
 Azure is big. Really big. Too big to talk about all things Azure in a single day. 
 
 We've assembled an exciting workshop to introduce you to several Azure services that cloud developers should know about:
-* [web app](https://azure.microsoft.com/en-us/services/app-service/web/)
+* [Web app](https://azure.microsoft.com/en-us/services/app-service/web/)
 * [BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/)
-* [table storage](https://azure.microsoft.com/en-us/services/storage/tables/)
-* [functions](https://azure.microsoft.com/en-us/services/functions/)
+* [Table storage](https://azure.microsoft.com/en-us/services/storage/tables/)
+* [Functions](https://azure.microsoft.com/en-us/services/functions/)
 * [Cognitive Services](https://www.microsoft.com/cognitive-services) API for [computer vision](https://www.microsoft.com/cognitive-services/en-us/computer-vision-api)
 * [SignalR](https://www.asp.net/signalr) (yeah it's not a Azure service, but it is pretty cool)
 
-In this workshop you'll learn how to use these Azure services to build a cloud-hosted single sign-on app that can manage your user profile. When you're finished, you will have built and app that allows you to upload profile pictures that pass through an AI content filter to ensure they're work appropriate. 
+In this workshop you'll learn how to use these Azure services to build a cloud-hosted single sign-on app that can manage your user profile. When you're finished, you will have built an app that allows you to upload profile pictures that pass through an AI content filter to ensure they're work appropriate. 
 
-Key concepts and take aways:
+#### Key concepts and take aways
 
 * Navigating the Azure portal
 * Using Azure Resource Groups to manage multiple Azure services
@@ -63,4 +63,4 @@ You can find additional lab materials and presentation content at the locations 
 
 * Presentation: 
 * Source code for the code used in this guide: [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017)
-* Source code for this guide (yes, it's all out there): [https://github.com/mikebranstein/GlobalAzureDay2017-instructions](https://mikebranstein.github.io/GlobalAzureDay2017-instructions/)
+* This guide: [https://github.com/mikebranstein/GlobalAzureDay2017-instructions](https://mikebranstein.github.io/GlobalAzureDay2017-instructions/)

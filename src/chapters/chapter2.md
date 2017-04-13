@@ -1,6 +1,6 @@
 ## Updating Windows Identity
 
-In this chapter, you'll be learning aobut ASP.NET Identity and how to move it's backend data store from SQL Server to Azure Table Storage.
+In this chapter, you'll be learning about ASP.NET Identity and how to move it's backend data store from SQL Server to Azure Table Storage.
 
 Before we begin, let's cover a few basics on what ASP.NET Identity is and how it works. 
 
@@ -18,7 +18,7 @@ The ASP.NET membership system was introduced with ASP.NET 2.0 back in 2005, and 
 
 * The database schema was designed for SQL Server and you can't change it. You can add profile information, but the additional data is packed into a different table, which makes it difficult to access by any means except through the Profile Provider API.
 * The provider system enables you to change the backing data store, but the system is designed around assumptions appropriate for a relational database. You can write a provider to store membership information in a non-relational storage mechanism, such as Azure Storage Tables, but then you have to work around the relational design by writing a lot of code and a lot of `System.NotImplementedException` exceptions for methods that don't apply to NoSQL databases.
-* Since the log-in/log-out functionality is based on Forms Authentication, the membership system can't use [OWIN](https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/an-overview-of-project-katana). OWIN includes middleware components for authentication, including support for log-ins using external identity providers (like Microsoft Accounts, Facebook, Google, Twitter), and log-ins using organizational accounts from on-premises Active Directory or Azure Active Directory. OWIN also includes support for OAuth 2.0, JWT and CORS.
+* Since the log-in/log-out functionality is based on Forms Authentication, the membership system can't use [OWIN](https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/an-overview-of-project-katana). OWIN includes middleware components for authentication, including support for log-ins using external identity providers (like Microsoft Accounts, Facebook, Google, Twitter), and log-ins using account from on-premises Active Directory or [Azure Active Directory](https://azure.microsoft.com/en-us/services/active-directory/). OWIN also includes support for OAuth 2.0, JWT and CORS.
 
 #### ASP.NET Simple Membership
 
@@ -71,7 +71,7 @@ Considering these changes in web application development, ASP.NET Identity was d
     * You can easily add social log-ins such as Microsoft Account, Facebook, Twitter, Google, and others to your application, and store the user-specific data in your application.
 
 * **Azure Active Directory**
-    * You can also add log-in functionality using Azure Active Directory, and store the user-specific data in your application. For more information, see Organizational Accounts in Creating ASP.NET Web Projects in Visual Studio 2013
+    * You can also add log-in functionality using Azure Active Directory, and store the user-specific data in your application. To learn more about Azure Active Directory, check out this [article](https://azure.microsoft.com/en-us/services/active-directory/).
 
 * **OWIN Integration**
     * ASP.NET authentication is now based on OWIN middleware that can be used on any OWIN-based host. ASP.NET Identity does not have any dependency on System.Web. It is a fully compliant OWIN framework and can be used in any OWIN hosted application.
@@ -132,7 +132,7 @@ ASP.NET Identity is implemented using the following procedure. The purpose of th
     }
     ```
 
-    > **DEFINITION** The `ApplicationUser` class is part of the ASP.NET MVC template, and inherits fromt he `IdentityUser` class. The class name doesn't matter, but inhireting from `IdentityUser` does. We're not going to cover the specifics of the `IdentityUser` class in this bootcamp, but it represents a user, with properties like *Name*, *Email*, *PhoneNumber*, etc. For more details on the `IdentityUser` class check out [this article](https://msdn.microsoft.com/en-us/magazine/dn818488.aspx).
+    > **DEFINITION** The `ApplicationUser` class is part of the ASP.NET MVC template, and inherits from the `IdentityUser` class. The class name doesn't matter, but inhireting from `IdentityUser` does. We're not going to cover the specifics of the `IdentityUser` class in this bootcamp, but it represents a user, with properties like *Name*, *Email*, *PhoneNumber*, etc. For more details on the `IdentityUser` class check out [this article](https://msdn.microsoft.com/en-us/magazine/dn818488.aspx).
 
     > **DEFINITION** The `UserManager` class is part of ASP.NET Identity and provides methods for managing users. Strange, right? ;-) 
 
@@ -176,8 +176,6 @@ In this section, you'll be learning how to replace the backend data storage plat
 
 Using Entity Framework and SQL Server is a great choice. In fact, we *could* provision a SQL Server database in Azure, and use that for the backend data store for ASP.NET Identity. 
 
-> But we're not.
-
 Instead, you'll be replacing Entity Framework and SQL Server with a highly-scalable and light-weight NoSQL Azure service called [Table storage](https://azure.microsoft.com/en-us/services/storage/tables/). 
 
 Before we jump in, let's learn a little bit about Azure Table Storage.
@@ -205,7 +203,7 @@ The Table service contains the following components:
 
 ![image](images/chapter2/table-service.png)
 
-At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services hosued within the account. You'll be creating a storage account later in the bootcamp.
+At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services housed within the account. You'll be creating a storage account later in the bootcamp.
 
 There are various concepts important to know about Azure Table Storage:
 
@@ -291,6 +289,8 @@ Scroll to element named `<entityFramework>...</entityFramework>` near the end of
 Now that we've removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the `IdentityUser` class) and the backend data store. 
 
 We'll be using Azure Table storage as our data store, so we'll have to add another library to act as the middleware for persisting data to Azure Table storage. The package we'll be using is named *ElCamino.AspNet.Identity.AzureTable*.
+
+> **NOTE** The El Camino package is maintained by David Melendez on [Github](https://github.com/dlmelendez/identityazuretable). By default, the ASP.NET Identity system stores all the user information in a Microsoft SQL database using an EntityFramework provider. This project is a replacement of the EntityFramework SQL provider to use Azure Table Storage to persist user information such as (but not limited to): username/password, roles, claims and external login information.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Adding the ElCamino.AspNet.Identity.AzureTable package
