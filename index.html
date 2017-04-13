@@ -540,16 +540,53 @@ namespace Web
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="testing-your-app-locally-using-storage-emulator">Testing your app locally using storage emulator</h2>
-<h3 id="install-azure-storage-emulator-and-explorer">Install azure storage emulator and explorer</h3>
+				<h2 id="using-azure-storage-emulator-to-develop-locally">Using Azure Storage Emulator to Develop Locally</h2>
+<p>Even though this bootcamp is all about the cloud and using Azure, it doesn&#39;t mean that we need to be connected to the cloud to develop and test our work.</p>
+<p>In fact, an important aspect of a technology stack is being able to quickly and easily create an isolated (and local) environemnt for development and testing. </p>
+<p>In this section, you&#39;ll learn how to use the Azure Storage Emulator to host your own Azure-like table storage environment. You&#39;ll also learn how to use Storage Explorer, a GUI application (similar to SQL Server Management Studio), that allows you to navigate and browse through your Azure storage accounts.  </p>
+<h3 id="pre-requisite-check">Pre-requisite Check</h3>
+<p>Before we jump in, be sure to have installed these tools:</p>
 <ul>
-<li>URL: <a href="https://go.microsoft.com/fwlink/?linkid=717179&amp;clcid=0x409">https://go.microsoft.com/fwlink/?linkid=717179&amp;clcid=0x409</a></li>
-<li>URL: <a href="http://storageexplorer.com/">http://storageexplorer.com/</a></li>
+<li><a href="https://go.microsoft.com/fwlink/?linkid=717179&amp;clcid=0x409">Azure Storage Emulator</a></li>
+<li><a href="http://storageexplorer.com/">Storage Explorer</a></li>
 </ul>
-<h3 id="start-azure-sotrage-explorer">Start azure sotrage explorer</h3>
+<h3 id="running-azure-storage-emulator">Running Azure Storage Emulator</h3>
+<p>The Azure Storage Emulator is a command line tool. Let&#39;s start it up.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Starting up the Azure Storage Emulator
+</h4>
+
+<p>Locate the <code>Microsoft Azure Storage Emulator - vX.X</code> in your start menu. </p>
+<blockquote>
+<p><strong>NOTE</strong> I find it easiest to find by opening the start menu and typing <code>storage</code>.</p>
+</blockquote>
+<p><img src="images/chapter3/run-storage-emulator.gif" alt="image"></p>
+<p>When you run the storage emulator, a command prompt will open, initialize the emulator by installing a SQL database into your (localdb)\MSSQLLocalDB instance, and start the emulator.</p>
+<p>After the emulator is started, a tray icon will appear noting the emulator is running:</p>
+<p><img src="images/chapter3/emulator-running.png" alt="image"></p>
+<h4 id="troubleshooting-the-storage-emulator">Troubleshooting the Storage Emulator</h4>
+<p>You may have problems startng the storage emulator, and will receive a non-descript error like so:</p>
+<p><img src="images/chapter3/emulator-error.png" alt="image"></p>
+<p>There&#39;s a number of reasons why you may receive this error, including:</p>
 <ul>
-<li>from start menu</li>
-<li>command line</li>
+<li>Another program is listening on ports 10000, 10001, and 10002. Try shutting off Bit Torrent clients or other file sharing programs.</li>
+<li>You&#39;re not running the emulator as an Administrator.</li>
+</ul>
+<p>Most of the time, I&#39;ve found that the command prompt session trying to run the storage emulator wasn&#39;t running as an Administrator. Here&#39;s how to fix that problem:</p>
+<p>Open an Administrator command prompt by opening the start menu, typing <code>cmd</code>, right-clicking on the Command Prompt app, and selecting <em>Run as administrator</em>.</p>
+<p><img src="images/chapter3/admin-cmd.gif" alt="image"></p>
+<p>Change into the <code>C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator</code> folder:</p>
+<pre><code>cd &quot;C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator&quot;
+</code></pre><p>Run the <code>AzureStorageEmulator.exe start</code> command to start the storage emulator:</p>
+<pre><code>AzureStorageEmulator.exe start
+</code></pre><p>The storage emulator should start.</p>
+<p><img src="images/chapter3/emulator-start.png" alt="image"></p>
+<div class="exercise-end"></div>
+
+
+
+
+<ul>
 <li>start storage explorer</li>
 <li>run the project</li>
 <li>when the site loads, you should see in your (Local and Attached) the tables AspNetIndex, AspNetRoles, AspNetUsers</li>
