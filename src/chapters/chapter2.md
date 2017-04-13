@@ -304,7 +304,7 @@ The installation of this package will install various additional packages. If pr
 
 After the *ElCamino.AspNet.Identity.AzureTable* package has been installed, there will be several NuGet packages that need updated. Click the *Updates* link and update all NuGet packages
 
-![image](images/chapter2/update-nuget.gif)
+![image](images/chapter2/update-nuget2.gif)
 
 > **NOTE** You may need to update the NuGet packages several times, as various packages will install new dependencies during the upgrade process.
 
@@ -315,6 +315,8 @@ Now that the easy part is finished, it's time to start updating code to account 
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating ASP.NET Identity code to replace Entity Framework
 </h4>
+
+#### IdentityModel.cs Changes
 
 The first code change we'll make is to the `IdentityModel.cs` file. You can find this file in the `Models` folder of the web project.
 
@@ -348,21 +350,100 @@ public class ApplicationDbContext : IdentityCloudContext
 }
 ```
  
+#### IdentityConfig.cs Changes
+
+The next file we'll change is the `IdentityConfig.cs` file, located in the `App_Start` folder:
+
+![image](images/chapter2/identity-config.png)
+
+This file contains a variety of class definitions used by the ASP.NET MVC template. The most important of the classes is the `ApplicationUserManager` class. This class is responsible for configuring policies and defaults for user accounts in the application (for example, the password validation policy, user email address uniqueness, lockout period if a password is typed in wrong X number of times, and multi-factor authentication via SMS and/or email).
+
+The `ApplicationUserManager` class also contains a reference to the backend data store used to store user account information. We'll be modifying the class to auto-create the necessary tables if they don't exist.  
+
+Start by replacing the using statements at the top, removing the Entity Framework references and adding the ElCamino references.
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using Web.Models;
+using ElCamino.AspNet.Identity.AzureTable;
+using ElCamino.AspNet.Identity.AzureTable.Model;
+```
+
+Next, add a function named `StartupAsync()` that creates a new `UserStore` and creates the necessary Azure Tables. Place the below code beneath the `ApplicationUserManager` class constructor.
+
+> **NOTE** You might be wondering how we came up with this code. ElCamino has documentation online with this well-documented code. If you're interested in the details and their implementation specifics, check out their [website](https://dlmelendez.github.io/identityazuretable/#/walkthrough).
+
+```csharp
+/// <summary>
+/// ElCamino - Creates the Azure Table Storage Tables
+/// </summary>
+public static async void StartupAsync()
+{
+    var azureStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
+    await azureStore.CreateTablesIfNotExists();
+}
+```
+
+#### Global.asax.cs Changes
+
+Unfortunately, the `StartupAsync()` function you just added doesn't get called automatically. We'll need to update the `Global.asax.cs` file to invoke the `StartupAsync()` function when the application starts.
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+
+namespace Web
+{
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_Start()
+        {
+            //ElCamino - Added to create azure tables
+            ApplicationUserManager.StartupAsync();
+
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+    }
+}
+```
+
+#### web.config Changes
+
+The last step is to update the `web.config` file and add several ElCamino references to configure the middleware and specify a conneciton string to connect to Azure.
+
+Replace the `<configSections>...</configSections>` element with the following code:
+
+```xml
+  <configSections>
+    <section name="elcaminoIdentityConfiguration" type="ElCamino.AspNet.Identity.AzureTable.Configuration.IdentityConfigurationSection,ElCamino.AspNet.Identity.AzureTable " />
+  </configSections>
+  <elcaminoIdentityConfiguration tablePrefix="" storageConnectionString="UseDevelopmentStorage=true" />
+  <!--<elcaminoIdentityConfiguration tablePrefix="" storageConnectionString="DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;" />-->
+```
+
+By adding these XML settings, we're now able to specify an azure table storage account conneciton string via the web.config file. You may notice the connection string is `UseDevelopmentStorage=true`. This allows us to devleop locally without interfacing directly with Azure.  You'll learn the details of this soon, so hang in there. 
+
 <div class="exercise-end"></div>
 
+Nice work! We've finished replacing the backend data store of ASP.NET Identity to use Azure Table storage instead of Entity Framework and SQL Server. 
 
-### IdentityConfig.cs
+If you've been following along, you should be able to compile the solution. Go ahead and try.
 
-- replace usings
-- add the StartupAsync() function to the ApplicationUserManager class to tell identity to auto-create the azure tables
-
-### Globalasax.cs
-
-- call the azure table create process 
-
-### web.config
-
-- remove EF references
-- add elcamino configuration to configSections
-
-### build and compile your app
+In the next chapter, you'll learn how we can develop locally by using the Azure Storage emulator, and how to create an Azure storage account in the cloud.
