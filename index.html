@@ -156,28 +156,312 @@
 			<hr>
 			<div class="chapter">
 				<h2 id="updating-windows-identity">Updating Windows Identity</h2>
-<h3 id="exploring-windows-identity">Exploring Windows Identity</h3>
-<h3 id="replacing-it-with-azure-table-storage">Replacing it with Azure Table Storage</h3>
+<p>In this chapter, you&#39;ll be learning aobut ASP.NET Identity and how to move it&#39;s backend data store from SQL Server to Azure Table Storage.</p>
+<p>Before we begin, let&#39;s cover a few basics on what ASP.NET Identity is and how it works. </p>
+<h3 id="a-brief-history-of-asp-net-authentication-and-authorization">A brief history of ASP.NET authentication and authorization</h3>
+<p>If you&#39;ve developed an ASP.NET application prior to 2014, you&#39;ve probably heard of the ASP.NET membership system. </p>
+<p>The ASP.NET membership system was introduced with ASP.NET 2.0 back in 2005, and since then there have been many changes in the ways web applications typically handle authentication and authorization (credits: <a href="https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity">docs.microsoft.com</a>).</p>
+<blockquote>
+<p>Credit for this section is attributed to <a href="https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity">Microsoft</a>.</p>
+</blockquote>
+<h4 id="asp-net-membership">ASP.NET Membership</h4>
+<p><a href="https://msdn.microsoft.com/en-us/library/yh26yfzy.aspx">ASP.NET Membership</a> was designed to solve site membership requirements that were common in 2005, which involved Forms Authentication, and a SQL Server database for user names, passwords, and profile data. Today there is a much broader array of data storage options for web applications, and most developers want to enable their sites to use social identity providers for authentication and authorization functionality. The limitations of ASP.NET Membership&#39;s design make this transition difficult:</p>
+<ul>
+<li>The database schema was designed for SQL Server and you can&#39;t change it. You can add profile information, but the additional data is packed into a different table, which makes it difficult to access by any means except through the Profile Provider API.</li>
+<li>The provider system enables you to change the backing data store, but the system is designed around assumptions appropriate for a relational database. You can write a provider to store membership information in a non-relational storage mechanism, such as Azure Storage Tables, but then you have to work around the relational design by writing a lot of code and a lot of <code>System.NotImplementedException</code> exceptions for methods that don&#39;t apply to NoSQL databases.</li>
+<li>Since the log-in/log-out functionality is based on Forms Authentication, the membership system can&#39;t use <a href="https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/an-overview-of-project-katana">OWIN</a>. OWIN includes middleware components for authentication, including support for log-ins using external identity providers (like Microsoft Accounts, Facebook, Google, Twitter), and log-ins using organizational accounts from on-premises Active Directory or Azure Active Directory. OWIN also includes support for OAuth 2.0, JWT and CORS.</li>
+</ul>
+<h4 id="asp-net-simple-membership">ASP.NET Simple Membership</h4>
+<p><a href="https://docs.microsoft.com/en-us/aspnet/web-pages/overview/security/16-adding-security-and-membership">ASP.NET Simple Membership</a> was developed as a membership system for ASP.NET Web Pages. It was released with WebMatrix and Visual Studio 2010 SP1. The goal of Simple Membership was to make it easy to add membership functionality to a Web Pages application.</p>
+<p>Simple Membership did make it easier to customize user profile information, but it still shares the other problems with ASP.NET Membership, and it has some limitations:</p>
+<ul>
+<li>It was hard to persist membership system data in a non-relational store.</li>
+<li>You can&#39;t use it with OWIN.</li>
+<li>It doesn&#39;t work well with existing ASP.NET Membership providers, and it&#39;s not extensible.</li>
+</ul>
+<h4 id="asp-net-universal-providers">ASP.NET Universal Providers</h4>
+<p><a href="http://www.hanselman.com/blog/IntroducingSystemWebProvidersASPNETUniversalProvidersForSessionMembershipRolesAndUserProfileOnSQLCompactAndSQLAzure.aspx">ASP.NET Universal Providers</a> were developed to make it possible to persist membership information in Microsoft Azure SQL Database, and they also work with SQL Server Compact. The Universal Providers were built on Entity Framework Code First, which means that the Universal Providers can be used to persist data in any store supported by EF. With the Universal Providers, the database schema was cleaned up quite a lot as well.</p>
+<p>The Universal Providers are built on the ASP.NET Membership infrastructure, so they still carry the same limitations as the SqlMembership Provider. That is, they were designed for relational databases and it&#39;s hard to customize profile and user information. These providers also still use Forms Authentication for log-in and log-out functionality.</p>
+<h3 id="exploring-asp-net-identity">Exploring ASP.NET Identity</h3>
+<p>As the membership story in ASP.NET has evolved over the years, the ASP.NET team has learned a lot from feedback from customers.</p>
+<p>The assumption that users will log in by entering a user name and password that they have registered in your own application is no longer valid. The web has become more social. Users are interacting with each other in real time through social channels such as Facebook, Twitter, and other social web sites. Developers want users to be able to log in with their social identities so that they can have a rich experience on their web sites. A modern membership system must enable redirection-based log-ins to authentication providers such as Facebook, Twitter, and others.</p>
+<p>As web development evolved, so did the patterns of web development. Unit testing of application code became a core concern for application developers. In 2008 ASP.NET added a new framework based on the Model-View-Controller (MVC) pattern, in part to help developers build unit testable ASP.NET applications. Developers who wanted to unit test their application logic also wanted to be able to do that with the membership system.</p>
+<p>Considering these changes in web application development, ASP.NET Identity was developed with the following goals:</p>
+<ul>
+<li><p><strong>One ASP.NET Identity system</strong></p>
+<ul>
+<li>ASP.NET Identity can be used with all of the ASP.NET frameworks, such as ASP.NET MVC, Web Forms, Web Pages, Web API, and SignalR.</li>
+<li>ASP.NET Identity can be used when you are building web, phone, store, or hybrid applications.</li>
+</ul>
+</li>
+<li><p><strong>Ease of plugging in profile data about the user</strong></p>
+<ul>
+<li>You have control over the schema of user and profile information. For example, you can easily enable the system to store birth dates entered by users when they register an account in your application.</li>
+</ul>
+</li>
+<li><p><strong>Persistence control</strong></p>
+<ul>
+<li>By default, the ASP.NET Identity system stores all the user information in a database. ASP.NET Identity uses Entity Framework Code First to implement all of its persistence mechanism.</li>
+<li>Since you control the database schema, common tasks such as changing table names or changing the data type of primary keys is simple to do.</li>
+<li>It&#39;s easy to plug in different storage mechanisms such as SharePoint, Azure Storage Table Service, NoSQL databases, etc., without having to throw <code>System.NotImplementedExceptions</code> exceptions.</li>
+</ul>
+</li>
+<li><p><strong>Unit testability</strong></p>
+<ul>
+<li>ASP.NET Identity makes the web application more unit testable. You can write unit tests for the parts of your application that use ASP.NET Identity.</li>
+</ul>
+</li>
+<li><p><strong>Role provider</strong></p>
+<ul>
+<li>There is a role provider which lets you restrict access to parts of your application by roles. You can easily create roles such as &quot;Admin&quot; and add users to roles.</li>
+</ul>
+</li>
+<li><p><strong>Claims Based</strong></p>
+<ul>
+<li>ASP.NET Identity supports claims-based authentication, where the user&#39;s identity is represented as a set of claims. Claims allow developers to be a lot more expressive in describing a user&#39;s identity than roles allow. Whereas role membership is just a boolean (member or non-member), a claim can include rich information about the user&#39;s identity and membership.</li>
+</ul>
+</li>
+<li><p><strong>Social Login Providers</strong></p>
+<ul>
+<li>You can easily add social log-ins such as Microsoft Account, Facebook, Twitter, Google, and others to your application, and store the user-specific data in your application.</li>
+</ul>
+</li>
+<li><p><strong>Azure Active Directory</strong></p>
+<ul>
+<li>You can also add log-in functionality using Azure Active Directory, and store the user-specific data in your application. For more information, see Organizational Accounts in Creating ASP.NET Web Projects in Visual Studio 2013</li>
+</ul>
+</li>
+<li><p><strong>OWIN Integration</strong></p>
+<ul>
+<li>ASP.NET authentication is now based on OWIN middleware that can be used on any OWIN-based host. ASP.NET Identity does not have any dependency on System.Web. It is a fully compliant OWIN framework and can be used in any OWIN hosted application.</li>
+<li>ASP.NET Identity uses OWIN Authentication for log-in/log-out of users in the web site. This means that instead of using FormsAuthentication to generate the cookie, the application uses OWIN CookieAuthentication to do that.</li>
+</ul>
+</li>
+<li><p><strong>NuGet package</strong></p>
+<ul>
+<li>ASP.NET Identity is redistributed as a NuGet package which is installed in the ASP.NET MVC, Web Forms and Web API templates that ship with Visual Studio 2013. You can download this NuGet package from the NuGet gallery.</li>
+<li>Releasing ASP.NET Identity as a NuGet package makes it easier for the ASP.NET team to iterate on new features and bug fixes, and deliver these to developers in an agile manner.</li>
+</ul>
+</li>
+</ul>
+<h3 id="getting-started-with-asp-net-identity">Getting Started with ASP.NET Identity</h3>
+<p>ASP.NET Identity is used in the Visual Studio project templates for ASP.NET MVC, Web Forms, Web API and SPA. In this walkthrough, we&#39;ll illustrate how the project templates use ASP.NET Identity to add functionality to register, log in and log out a user.</p>
+<p>ASP.NET Identity is implemented using the following procedure. The purpose of this section is to give you a high level overview of ASP.NET Identity.</p>
+<blockquote>
+<p>You do not need to follow along with these steps, but are welcome to. </p>
+</blockquote>
+<ol>
+<li><p>Create an ASP.NET MVC application with Individual Accounts. You can use ASP.NET Identity in ASP.NET MVC, Web Forms, Web API, SignalR etc. In this example we start with an ASP.NET MVC application.</p>
+<p> <img src="images/chapter2/mvc-create.png" alt="image"></p>
+</li>
+<li><p>The created project contains the following three packages for ASP.NET Identity.</p>
+<ul>
+<li><p><strong>Microsoft.AspNet.Identity.EntityFramework</strong>
+  This package has the Entity Framework implementation of ASP.NET Identity which will persist the ASP.NET Identity data and schema to SQL Server.</p>
+</li>
+<li><p><strong>Microsoft.AspNet.Identity.Core</strong>
+  This package has the core interfaces for ASP.NET Identity. This package can be used to write an implementation for ASP.NET Identity that targets different persistence stores such as Azure Table Storage, NoSQL databases etc.</p>
+</li>
+<li><p><strong>Microsoft.AspNet.Identity.OWIN</strong>
+  This package contains functionality that is used to plug in OWIN authentication with ASP.NET Identity in ASP.NET applications. This is used when you add log in functionality to your application and call into OWIN Cookie Authentication middleware to generate a cookie.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Registering a user.</strong> After the project is created, launch the web applicaiton. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.</p>
+<p> <img src="images/chapter2/register.gif" alt="image"></p>
+<p> When the user clicks the Register button, the Register action of the Account controller creates the user by calling the ASP.NET Identity API. In the code snippet below, the <code>ApplicationUser</code> and <code>UserManager</code> classes are part of ASP.NET Identity. An <code>ApplicationUser</code> is created and passed to the <code>UserManager</code> class to create the user. </p>
+<pre><code class="lang-csharp"> [HttpPost]
+ [AllowAnonymous]
+ [ValidateAntiForgeryToken]
+ public async Task&lt;ActionResult&gt; Register(RegisterViewModel model)
+ {
+     if (ModelState.IsValid)
+     {
+         var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+         var result = await UserManager.CreateAsync(user, model.Password);
+         if (result.Succeeded)
+         {
+             // code truncated purposefully
+         }
+         AddErrors(result);
+     }
+
+     // If we got this far, something failed, redisplay form
+     return View(model);
+ }
+</code></pre>
+<blockquote>
+<p><strong>DEFINITION</strong> The <code>ApplicationUser</code> class is part of the ASP.NET MVC template, and inherits fromt he <code>IdentityUser</code> class. The class name doesn&#39;t matter, but inhireting from <code>IdentityUser</code> does. We&#39;re not going to cover the specifics of the <code>IdentityUser</code> class in this bootcamp, but it represents a user, with properties like <em>Name</em>, <em>Email</em>, <em>PhoneNumber</em>, etc. For more details on the <code>IdentityUser</code> class check out <a href="https://msdn.microsoft.com/en-us/magazine/dn818488.aspx">this article</a>.</p>
+<p><strong>DEFINITION</strong> The <code>UserManager</code> class is part of ASP.NET Identity and provides methods for managing users. Strange, right? ;-) </p>
+</blockquote>
+<p> Luckily, the ASP.NET MVC template provides a solid foundation for us, so you don&#39;t need to know <em>everything</em> about ASP.NET Identity to start using it. As we continue, we&#39;ll make sure you know what you&#39;ll need to know as we go. </p>
+</li>
+<li><p><strong>Logging in.</strong> If user registration is successful, the user is automatically logged in. A call to the <code>SignInManager</code> class is made, passing the instance of the <code>ApplicationUser</code> previously created.  </p>
+<pre><code class="lang-csharp"> [HttpPost]
+ [AllowAnonymous]
+ [ValidateAntiForgeryToken]
+ public async Task&lt;ActionResult&gt; Register(RegisterViewModel model)
+ {
+     if (ModelState.IsValid)
+     {
+         var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+         var result = await UserManager.CreateAsync(user, model.Password);
+         if (result.Succeeded)
+         {
+             await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+             return RedirectToAction(&quot;Index&quot;, &quot;Home&quot;);
+         }
+         AddErrors(result);
+     }
+
+     // If we got this far, something failed, redisplay form
+     return View(model);
+ }
+</code></pre>
+<blockquote>
+<p><strong>DEFINITION</strong> The <code>SignInManager</code> class is also part of ASP.NET Identity and provides methods for managing the sign in processes.</p>
+</blockquote>
+<p> We&#39;re not diving into the details of what actually happens when a user is signed in (for example, creating a claim, cookie, etc.). If you&#39;re interested in the details, check out <a href="https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity">this article</a>.</p>
+</li>
+</ol>
+<p>There are various other classes in ASP.NET Identity and the ASP.NET MVC template of importance, but we&#39;re not going to investigate them here. But, don&#39;t worry. We&#39;ll teach you about it as needed.</p>
+<h3 id="asp-net-identity-data-storage">ASP.NET Identity Data Storage</h3>
+<p>In this section, you&#39;ll be learning how to replace the backend data storage platform of ASP.NET Identity. By default, ASP.NET Identity uses <a href="https://msdn.microsoft.com/en-us/library/aa937723.aspx">Entity Framework</a> to manage data persistence to SQL Server. </p>
+<p>Using Entity Framework and SQL Server is a great choice. In fact, we <em>could</em> provision a SQL Server database in Azure, and use that for the backend data store for ASP.NET Identity. </p>
+<blockquote>
+<p>But we&#39;re not.</p>
+</blockquote>
+<p>Instead, you&#39;ll be replacing Entity Framework and SQL Server with a highly-scalable and light-weight NoSQL Azure service called <a href="https://azure.microsoft.com/en-us/services/storage/tables/">Table storage</a>. </p>
+<p>Before we jump in, let&#39;s learn a little bit about Azure Table Storage.</p>
 <h3 id="what-is-azure-table-storage-">What is Azure Table Storage?</h3>
-<h3 id="remove-entity-framework">Remove Entity Framework</h3>
+<p>Azure Table storage is a service that stores structured NoSQL data in the cloud, providing a key/attribute store with a schemaless design. Because Table storage is schemaless, it&#39;s easy to adapt your data as the needs of your application evolve. Access to Table storage data is fast and cost-effective for many types of applications, and is typically lower in cost than traditional SQL for similar volumes of data.</p>
+<p>You can use Table storage to store flexible datasets like user data for web applications, address books, device information, or other types of metadata your service requires. You can store any number of entities in a table, and a storage account may contain any number of tables, up to the capacity limit of the storage account</p>
+<h4 id="the-azure-table-service">The Azure Table Service</h4>
+<p>The Azure Table storage service stores large amounts of structured data. The service is a NoSQL datastore which accepts authenticated calls from inside and outside the Azure cloud. Azure tables are ideal for storing structured, non-relational data. Common uses of the Table service include:</p>
+<ul>
+<li>Storing TBs of structured data capable of serving web scale applications</li>
+<li>Storing datasets that don&#39;t require complex joins, foreign keys, or stored procedures and can be denormalized for fast access</li>
+<li>Quickly querying data using a clustered index</li>
+<li>Accessing data using the OData protocol and LINQ queries with WCF Data Service .NET Libraries</li>
+</ul>
+<p>You can use the Table service to store and query huge sets of structured, non-relational data, and your tables will scale as demand increases.</p>
+<h4 id="table-service-concepts">Table Service Concepts</h4>
+<p>The Table service contains the following components:</p>
+<p><img src="images/chapter2/table-service.png" alt="image"></p>
+<p>At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services hosued within the account. You&#39;ll be creating a storage account later in the bootcamp.</p>
+<p>There are various concepts important to know about Azure Table Storage:</p>
+<ul>
+<li><p><strong>URL format:</strong> You can access tables and entities Code addresses tables in an account using this address format: http://<code>&lt;storage account&gt;</code>.table.core.windows.net/<code>&lt;table&gt;</code>
+You can address Azure tables directly using this address with the OData protocol. For more information, see <a href="OData.org">OData.org</a>.</p>
+</li>
+<li><p><strong>Storage Account:</strong> All access to Azure Storage is done through a storage account. </p>
+</li>
+<li><p><strong>Table:</strong> A table is a collection of entities. Tables don&#39;t enforce a schema on entities, which means a single table can contain entities that have different sets of properties. The number of tables that a storage account can contain is limited only by the storage account capacity limit.</p>
+</li>
+<li><p><strong>Entity:</strong> An entity is a set of properties, similar to a database row. An entity can be up to 1MB in size.</p>
+</li>
+<li><p><strong>Properties:</strong> A property is a name-value pair. Each entity can include up to 252 properties to store data. Each entity also has 3 system properties that specify a partition key, a row key, and a timestamp. Entities with the same partition key can be queried more quickly, and inserted/updated in atomic operations. An entity&#39;s row key is its unique identifier within a partition.</p>
+</li>
+</ul>
+<h4 id="comparing-table-storage-to-sql-server-tables">Comparing Table storage to SQL Server tables</h4>
+<p>If you&#39;re familiar with SQL server, you can compare it easily to the storage account, table service, tables, and entitites:</p>
+<ul>
+<li>SQL Server == Storage Account</li>
+<li>Database == Table Service</li>
+<li>Table == Table</li>
+<li>Record == Entity</li>
+<li>Column == Property</li>
+</ul>
+<p>Now that you know about Table storage, let&#39;s get to work replacing Entity Framework and SQL Server as the backend store for ASP.NET Identity.</p>
+<h3 id="replacing-the-backend-data-store-of-asp-net-identity">Replacing the Backend Data Store of ASP.NET Identity</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Removing Entity Framework
+</h4>
+
+<p>Start by right-clicking your solution in the Visual Studio solution explorer and selecting <em>Manage NuGet Packages for Solution...</em>.</p>
+<p><img src="images/chapter2/manage-nuget.png" alt="image"></p>
+<p>In the NuGet window, click on <em>Installed</em>, type in <em>entity</em> in the <em>Search</em> bar:</p>
+<p><img src="images/chapter2/search-nuget.gif" alt="image"></p>
+<p>Uninstall these NuGet packages in the following order:</p>
 <ul>
 <li>Microsoft.AspNet.Identity.EntityFramework</li>
 <li>EntityFramework</li>
 </ul>
-<h3 id="add-elcamino-aspnet-identity-azuretable">Add ElCamino.AspNet.Identity.AzureTable</h3>
-<p>ElCamino is a ASP.NET Identity package that allows Identity to use table storage instead of a SQL database.</p>
-<ul>
-<li>ElCamino.AspNet.Identity.AzureTable</li>
-</ul>
-<p>It&#39;ll install a bunch of other packages, but just let it. </p>
-<h3 id="update-the-additional-nuget-packages-that-were-just-installed-with-elcamino">Update the additional NuGet packages that were just installed with ElCamino</h3>
-<p>You may need to do that multiple times. </p>
-<h3 id="identitymodel-cs">IdentityModel.cs</h3>
-<ul>
-<li>replace usings to strip out EF and support the ElCamino versions</li>
-<li>instead of public class ApplicationDbContext : IdentityDbContext&lt;&gt;, you need to inherit ApplicationDbContext: IdentityCloudContext</li>
-<li>change the whole class reference of ApplicationDbContext</li>
-</ul>
+<p><img src="images/chapter2/uninstall-ef.gif" alt="image"></p>
+<p>We&#39;re not done yet, so hold on. There are several references to Entity Framework in the <code>web.config</code> file. Remove the following:</p>
+<p>In <code>&lt;configSections&gt;</code>, remove the section named <em>entityFramework</em>. Leave the <code>&lt;configSections&gt;</code> element in place, because we&#39;ll be adding to it later.</p>
+<pre><code class="lang-xml">&lt;configSections&gt;
+    &lt;section name=&quot;entityFramework&quot; type=&quot;System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; requirePermission=&quot;false&quot; /&gt;
+&lt;/configSections&gt;
+</code></pre>
+<p>Delete the connection string named <code>DefaultConnection</code>:</p>
+<pre><code class="lang-xml">&lt;connectionStrings&gt;
+    &lt;add name=&quot;DefaultConnection&quot; connectionString=&quot;Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-Web-20170403111511.mdf;Initial Catalog=aspnet-Web-20170403111511;Integrated Security=True&quot; providerName=&quot;System.Data.SqlClient&quot; /&gt;
+&lt;/connectionStrings&gt;
+</code></pre>
+<p>Scroll to element named <code>&lt;entityFramework&gt;...&lt;/entityFramework&gt;</code> near the end of the file. Remove the entire element:</p>
+<pre><code class="lang-xml">&lt;entityFramework&gt;
+    &lt;defaultConnectionFactory type=&quot;System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework&quot;&gt;
+        &lt;parameters&gt;
+        &lt;parameter value=&quot;mssqllocaldb&quot; /&gt;
+        &lt;/parameters&gt;
+    &lt;/defaultConnectionFactory&gt;
+    &lt;providers&gt;
+        &lt;provider invariantName=&quot;System.Data.SqlClient&quot; type=&quot;System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer&quot; /&gt;
+    &lt;/providers&gt;
+&lt;/entityFramework&gt;
+</code></pre>
+<div class="exercise-end"></div>
+
+<p>Now that we&#39;ve removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the <code>IdentityUser</code> class) and the backend data store. </p>
+<p>We&#39;ll be using Azure Table storage as our data store, so we&#39;ll have to add another library to act as the middleware for persisting data to Azure Table storage. The package we&#39;ll be using is named <em>ElCamino.AspNet.Identity.AzureTable</em>.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Adding the ElCamino.AspNet.Identity.AzureTable package
+</h4>
+
+<p>Open the NuGet package manager for the solution, browse for and install the ElCamino.AspNet.Identity.AzureTable NuGet package:</p>
+<p><img src="images/chapter2/install-elcamino.gif" alt="image"></p>
+<p>The installation of this package will install various additional packages. If prompted, allow them to be installed. Also accept any license agreements, if prompted.</p>
+<p>After the <em>ElCamino.AspNet.Identity.AzureTable</em> package has been installed, there will be several NuGet packages that need updated. Click the <em>Updates</em> link and update all NuGet packages</p>
+<p><img src="images/chapter2/update-nuget.gif" alt="image"></p>
+<blockquote>
+<p><strong>NOTE</strong> You may need to update the NuGet packages several times, as various packages will install new dependencies during the upgrade process.</p>
+</blockquote>
+<div class="exercise-end"></div>
+
+<p>Now that the easy part is finished, it&#39;s time to start updating code to account for a new backend data store. ASP.NET Identity makes this reletively painless. Let&#39;s get started.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating ASP.NET Identity code to replace Entity Framework
+</h4>
+
+<p>The first code change we&#39;ll make is to the <code>IdentityModel.cs</code> file. You can find this file in the <code>Models</code> folder of the web project.</p>
+<p><img src="images/chapter2/identity-model.png" alt="image"></p>
+<p>Replace the using statements at the top, removing the Entity Framework references and adding the ElCamino references.</p>
+<blockquote>
+<p><strong>NOTE</strong> Throughout the bootcamp, feel free to copy and paste code directly from the guide into Visual Studio. There&#39;s a handy <em>Copy</em> button above our code listings!</p>
+</blockquote>
+<pre><code class="lang-csharp">using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using ElCamino.AspNet.Identity.AzureTable;
+using ElCamino.AspNet.Identity.AzureTable.Model;
+</code></pre>
+<p>Find the class declaration for <code>ApplicationDbContext</code>. This class is an abstraction used to interface between the ASP.NET MVC template code for ASP.NET Identity and the middleware that interfaces with ASP.NET Identity. The class currently inherits from <code>IdentityDbContext&lt;&gt;</code>. </p>
+<p>Change the class declaration so it inherits from <code>IdentityCloudContext</code>. Also remove the parameterized base class constructor. The new <code>ApplicationDbContext</code> class should look like this:</p>
+<pre><code class="lang-csharp">public class ApplicationDbContext : IdentityCloudContext
+{
+    public ApplicationDbContext() : base() { }
+
+    public static ApplicationDbContext Create()
+    {
+        return new ApplicationDbContext();
+    }
+}
+</code></pre>
+<div class="exercise-end"></div>
+
+
 <h3 id="identityconfig-cs">IdentityConfig.cs</h3>
 <ul>
 <li>replace usings</li>
