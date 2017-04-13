@@ -446,4 +446,6 @@ Nice work! We've finished replacing the backend data store of ASP.NET Identity t
 
 If you've been following along, you should be able to compile the solution. Go ahead and try.
 
+![image](images/chapter2/recompile-success.png)
+
 In the next chapter, you'll learn how we can develop locally by using the Azure Storage emulator, and how to create an Azure storage account in the cloud.
