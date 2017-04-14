@@ -705,32 +705,131 @@ namespace Web
 <p><img src="images/chapter4/exploring-storage-account.gif" class="img-large" /></p>
 <div class="exercise-end"></div>
 
-<h3 id="opening-the-storage-account-in-storage-explorer">Opening the Storage Account in Storage Explorer</h3>
-<p>Now that we&#39;ve added the stor</p>
+<h3 id="accessing-a-storage-account-in-storage-explorer">Accessing a Storage Account in Storage Explorer</h3>
+<p>Now that yo&#39;ve added a storage account to your Azure Subscription, let&#39;s check it out in Storage Explorer.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Viewing an Azure-hosted Storage Account in Storage Explorer 
+</h4>
+
+<p>In a previous step, we added our Azure subscription to Storage Explorer. Before continuing, ensure your subscription has been added. </p>
+<p>Return to Storage Explorer and press the <em>Refresh All</em> link. You should see the storage account appear underneath your Azure subscription. You&#39;ll recall my storage account was named <em>globalazurelouisville</em>:</p>
+<p><img src="images/chapter4/refresh.png" alt="image"></p>
+<p>Expand the storage account, then the <em>Tables</em> item to verify no tables have been created.</p>
+<p><img src="images/chapter4/no-tables.png" alt="image"></p>
+<div class="exercise-end"></div>
+
+<p>Great work! Now that we&#39;ve provisioned a storage account and we can access it from Storage Explorer, it&#39;s time to start using it. In this next exercise, you&#39;ll obtain connection information from the storage account and add it to your web app.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Getting a Storage Account Connection String 
+</h4>
+
+<p>In an earlier chapter, you replaced Entity Framework with the El Camino package, so our web app could use Azure Table Storage to persist user information via ASP.NET Identity. As part of that process, several lines we added to the <code>web.config</code> file:</p>
+<pre><code class="lang-xml">&lt;configSections&gt;
+    &lt;section name=&quot;elcaminoIdentityConfiguration&quot; type=&quot;ElCamino.AspNet.Identity.AzureTable.Configuration.IdentityConfigurationSection,ElCamino.AspNet.Identity.AzureTable &quot; /&gt;
+&lt;/configSections&gt;
+&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;UseDevelopmentStorage=true&quot; /&gt;
+&lt;!--&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;&quot; /&gt;--&gt;
+</code></pre>
+<p>Take a closer look at the <code>&lt;elcaminoIdentityConfiguration&gt;</code> element:</p>
+<pre><code class="lang-xml">&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;UseDevelopmentStorage=true&quot; /&gt;
+</code></pre>
+<p>This element contains a storage account connection string. Similar to SQL Server databases, storage accounts have a connection string. And, similar to local SQL server installations (like localdb), locally-hosted storage emulators have a special connection string.</p>
+<p>When you&#39;re devleoping locally, the connection string is <code>UserDevelopmentStorage=true</code>.</p>
+<p>But, when we move to the cloud, the connection string has an enhanced structure containing 3 components: </p>
 <ul>
-<li>add subscription azure storage explorer</li>
-<li>select the subscription</li>
-<li>find the sotrage account</li>
-<li>right-cick, copy Primary key</li>
-<li>Update connection string</li>
-<li>Account name: what you entered above</li>
-<li>Account key: what you copied from storage explorer</li>
+<li><strong>Default Endpoints Protocol:</strong> the commnucation protocol used to talk to the remote table storage. By default it&#39;s https, and there&#39;s truthfully no reason for you to change it.</li>
+<li><strong>Account Name:</strong> the name you gave the account.</li>
+<li><strong>Account Key:</strong> a secret key that you shouldn&#39;t share with others. Treat it like a super user password.</li>
 </ul>
-<h3 id="re-run-and-test-">Re-run and test!</h3>
+<p>You can see this structure in the commented-out section of the <code>web.config</code> from above:</p>
+<pre><code class="lang-xml">&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;&quot; /&gt;
+</code></pre>
+<p>Let&#39;s update our web app to use the Azure-hosted storage account we jsut created. Comment-out the development configuration element and uncomment the element with the Azure-hosted conneciton string.</p>
+<pre><code class="lang-xml">&lt;configSections&gt;
+    &lt;section name=&quot;elcaminoIdentityConfiguration&quot; type=&quot;ElCamino.AspNet.Identity.AzureTable.Configuration.IdentityConfigurationSection,ElCamino.AspNet.Identity.AzureTable &quot; /&gt;
+&lt;/configSections&gt;
+&lt;!--&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;UseDevelopmentStorage=true&quot; /&gt;--&gt;
+&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;&quot; /&gt;
+</code></pre>
+<p>Replace <code>STORAGE_ACCOUNT_NAME</code> with the name of the storage account you created in the previous steps. Ours looks like:</p>
+<pre><code class="lang-xml">&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;DefaultEndpointsProtocol=https;AccountName=globalazurelouisville;AccountKey=STORAGE_ACCOUNT_KEY;&quot; /&gt;
+</code></pre>
+<p>The last step is to get our storage account key, replacing the <code>STORAGE_ACCOUNT_KEY</code> placeholder int he <code>web.config</code>. Luckily, Storage Explorer makes this simple.</p>
+<p>Go back to Storage Explorer, right-click the storage account name, selecting <em>Copy Primary Key</em>.</p>
+<p><img src="images/chapter4/copy-primary-key.gif" alt="image"></p>
+<p>This copies the primary storage account key to your clipboard. Paste the key into your <code>web.config</code>, replacing <code>STORAGE_ACCOUNT_KEY</code> with the value from your clipboard. </p>
+<div class="exercise-end"></div>
+
+<h3 id="testing-with-azure-table-storage">Testing with Azure Table Storage</h3>
+<p>Now that you&#39;ve updated the <code>web.config</code> to point to an Azure storage account, let&#39;s re-launch the web app and test it out!</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Testing the updated web app
+</h4>
+
+<p>When the web app launches, register a user. </p>
+<blockquote>
+<p><strong>NOTE</strong> You may recall that you previosuly registerd a user with the app, but we&#39;ve just told the app to use a different storage account for ASP.NET Identity. This means you&#39;ll ahve to re-register the user.</p>
+</blockquote>
+<p>Click the <em>Register</em> link in the upper-right corner of the app. Enter in an email and password. Press the <em>Register</em> button to create the user.</p>
+<p><img src="images/chapter3/register.png" alt="image"></p>
+<p>As a final check, refresh the Azure storage account in Storage Explorer, verifying that the <em>AspNetIndex</em>, <em>AspNetRoles</em>, and <em>AspNetUsers</em> tables were created and your registered user appears in the <em>AspNetUsers</em> table.</p>
+<p><img src="images/chapter4/verify.gif" class="img-large" /></p>
+<div class="exercise-end"></div>
+
+<p>Congratulations!</p>
+<p>You just built a highly-scalable, secure, centralized, single-sign on system. That&#39;s right. The storage account you just created and attached to ASP.NET Identity can be shared across applications: jsut reuse the connection string in your next app. And the best part - it took ~45 minutes. Bam!</p>
+<p>Pretty impressive.</p>
+<h3 id="understanding-app-service-and-web-apps">Understanding App Service and Web Apps</h3>
+<p>In the last part of this chapter, you&#39;ll learn how to create an Azure Web App and deploy our solution to the cloud. In short, I like to think of Azure Web Apps like IIS in the cloud, but without the pomp and circumstance of setting up and configuring IIS.</p>
+<p>Web Apps are also part of a larger Azure service called the App Service, which is focused on helping you to build highly-scalable cloud apps focused on the web (via Web Apps), mobile (via Mobile Apps), APIs (via API Apps), and automated business processes (via Logic Apps). </p>
+<p>We don&#39;t have time to fully explore all of the components of the Azure App Service, so if you&#39;re interested, you can read more <a href="https://azure.microsoft.com/en-us/services/app-service/">online</a>.</p>
+<h4 id="what-is-an-azure-web-app-">What is an Azure Web App?</h4>
+<p>As we&#39;ve mentioned, Web Apps are like IIS in the cloud, but calling it that seems a bit unfair because there&#39;s quite a bit more to  Web Apps:</p>
 <ul>
-<li>register a new account, test out the site</li>
+<li><p><strong>Websites and Web Apps:</strong> Web Apps let developers rapidly build, deploy, and manage powerful websites and web apps. Build standards-based web apps and APIs using .NET, Node.js, PHP, Python, and Java. Deliver both web and mobile apps for employees or customers using a single back end. Securely deliver APIs that enable additional apps and devices.</p>
+</li>
+<li><p><strong>Familiar and fast:</strong> Use your existing skills to code in your favorite language and IDE to build APIs and apps faster than ever. Access a rich gallery of pre-built APIs that make connecting to cloud services like Office 365 and Salesforce.com easy. Use templates to automate common workflows and accelerate your development. Experience unparalleled developer productivity with continuous integration using Visual Studio Team Services, GitHub, and live-site debugging.</p>
+</li>
+<li><p><strong>Enterprise grade:</strong> App Service is designed for building and hosting secure mission-critical applications. Build Azure Active Directory-integrated business apps that connect securely to on-premises resources, and then host them on a secure cloud platform that&#39;s compliant with ISO information security standard, SOC2 accounting standards, and PCI security standards. Automatically back up and restore your apps, all while enjoying enterprise-level SLAs.</p>
+</li>
+<li><p><strong>Build on Linux or bring your own Linux container image:</strong> Azure App Service provides default containers for versions of Node.js and PHP that make it easy to quickly get up and running on the service. With our new container support, developers can create a customized container based on the defaults. For example, developers could create a container with specific builds of Node.js and PHP that differ from the default versions provided by the service. This enables developers to use new or experimental framework versions that are not available in the default containers.</p>
+</li>
+<li><p><strong>Global scale:</strong> App Service provides availability and automatic scale on a global datacenter infrastructure. Easily scale applications up or down on demand, and get high availability within and across different geographical regions. Replicating data and hosting services in multiple locations is quick and easy, making expansion into new regions and geographies as simple as a mouse click.</p>
+</li>
+<li><p><strong>Optimized for DevOps:</strong> Focus on rapidly improving your apps without ever worrying about infrastructure. Deploy app updates with built-in staging, roll-back, testing-in-production, and performance testing capabilities. Achieve high availability with geo-distributed deployments. Monitor all aspects of your apps in real-time and historically with detailed operational logs. Never worry about maintaining or patching your infrastructure again.</p>
+</li>
 </ul>
-<h3 id="now-you-have-a-cloud-based-central-authentication-database">now you have a cloud-based central authentication database</h3>
+<h3 id="deploying-to-a-web-app-from-visual-studio">Deploying to a Web App from Visual Studio</h3>
+<p>Now that you understand the basics of web apps, let&#39;s create one and deploy our app to the cloud! </p>
+<p>Earlier in this chapter, we created a storage account in Azure via the Azure portal. You can also create Web Apps via the Azure portal in the same manner. But, we&#39;re going to show you another way of creating a Web App: from Visual Studio.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Deploying to a Web App from Visual Studio
+</h4>
+
+<p>From Visual Studio, right-click the <em>Web</em> project and select <em>Publish</em>. In the web publish window, select <em>Microsoft Azure App Service</em>, <em>Create New</em>, and press <em>Publish</em>. This short clip walks you through the process:</p>
+<p><img src="images/chapter4/publish-web-app.gif" class="img-large" /></p>
+<p>On the next page, give your Web App a name, select your Azure subscription, and select the Resource Group you created earlier (mine was named Global-Azure-Louisville-2017).</p>
+<p><img src="images/chapter4/web-app-settings.png" class="img-medium" /></p>
+<p>Click <em>New...</em> to create a new Web App plan.</p>
+<blockquote>
+<p><strong>NOTE</strong> Web App plans describe the performance needs of a web app. Plans range from free (where multiple web apps run on shared hardware) to not-so-free, where you have dedicated hardware, lots of processing power, RAM, and SSDs. To learn more about the various plans, check out this <a href="https://azure.microsoft.com/en-us/pricing/details/app-service/plans/">article</a>.</p>
+</blockquote>
+<p>Create a new free plan.</p>
+<p><img src="images/chapter4/new-plan.png" class="img-medium" /></p>
+<p>After the plan is created, click <em>Create</em> to create the Web App in Azure.</p>
+<p><img src="images/chapter4/deploying.gif" class="img-large" /></p>
+<p>When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. after the publish has finished, you shoudl see something similar:</p>
+<p><img src="images/chapter4/published.png" class="img-large" /></p>
+<p>Finally, Visual Studio will launch the site in your browser, showing you your deployed site.</p>
+<div class="exercise-end"></div>
+
+<p>Well done. You&#39;ve reached the end of chapter 4. If you&#39;ve been following along, you have learned:</p>
 <ul>
-<li>highly-scalable</li>
-<li>can be encrypted</li>
-<li>can use it across applications</li>
-</ul>
-<h3 id="web-app">web app</h3>
-<ul>
-<li>create web app in resource group</li>
-<li>upload to azure from visual studio</li>
-<li>test it!</li>
+<li>How to create dashabords and resource groups int he Azure portal</li>
+<li>How to create a storage account for blobs, files, tables, and queues</li>
+<li>How to view the contents of a storage account with Storage Explorer</li>
+<li>What a storage account connection string looks like</li>
+<li>How to create a Web App from Visual Studio and deploy to it</li>
 </ul>
 
 			</div>
