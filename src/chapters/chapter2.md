@@ -106,7 +106,7 @@ ASP.NET Identity is implemented using the following procedure. The purpose of th
 
 3. **Registering a user.** After the project is created, launch the web applicaiton. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.
 
-    ![image](images/chapter2/register.gif)
+    <img src="images/chapter2/register.gif" class="img-medium" />
 
     When the user clicks the Register button, the Register action of the Account controller creates the user by calling the ASP.NET Identity API. In the code snippet below, the `ApplicationUser` and `UserManager` classes are part of ASP.NET Identity. An `ApplicationUser` is created and passed to the `UserManager` class to create the user. 
 
@@ -249,7 +249,7 @@ Uninstall these NuGet packages in the following order:
 * Microsoft.AspNet.Identity.EntityFramework
 * EntityFramework
 
-![image](images/chapter2/uninstall-ef.gif)
+<img src="images/chapter2/uninstall-ef.gif" class="img-medium" />
 
 We're not done yet, so hold on. There are several references to Entity Framework in the `web.config` file. Remove the following:
 
@@ -298,13 +298,13 @@ We'll be using Azure Table storage as our data store, so we'll have to add anoth
 
 Open the NuGet package manager for the solution, browse for and install the ElCamino.AspNet.Identity.AzureTable NuGet package:
 
-![image](images/chapter2/install-elcamino.gif)
+<img src="images/chapter2/install-elcamino.gif" class="img-medium" />
 
 The installation of this package will install various additional packages. If prompted, allow them to be installed. Also accept any license agreements, if prompted.
 
 After the *ElCamino.AspNet.Identity.AzureTable* package has been installed, there will be several NuGet packages that need updated. Click the *Updates* link and update all NuGet packages
 
-![image](images/chapter2/update-nuget2.gif)
+<img src="images/chapter2/update-nuget2.gif" class="img-medium" />
 
 > **NOTE** You may need to update the NuGet packages several times, as various packages will install new dependencies during the upgrade process.
 

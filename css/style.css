@@ -570,6 +570,18 @@ img {
   width: 50% !important;
   height: 50% !important; }
 
+.img-small {
+  width: 25% !important;
+  height: 25% !important; }
+
+.img-medium {
+  width: 75% !important;
+  height: 75% !important; }
+
+.img-large {
+  width: 95% !important;
+  height: 95% !important; }
+
 h5, h6 {
   letter-spacing: .01rem;
   color: #364149;
