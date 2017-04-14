@@ -138,7 +138,7 @@ After registering, you're automatically logged in as that user. Take a minute to
 
 ![image](images/chapter3/view-profile.png)
 
-We'll be coming back to this profile page thorughout the bootcamp, modifying it to add a profile picture and a biography.
+We'll be coming back to this profile page throughout the bootcamp, modifying it to add a profile picture and a biography.
 
 <img src="images/chapter3/manage-profile.png" class="img-medium" />
 

@@ -207,8 +207,8 @@ At the top level is a storage account. Storage accounts are named containers wit
 
 There are various concepts important to know about Azure Table Storage:
 
-* **URL format:** You can access tables and entities Code addresses tables in an account using this address format: http://`<storage account>`.table.core.windows.net/`<table>`
-You can address Azure tables directly using this address with the OData protocol. For more information, see [OData.org](OData.org).
+* **URL format:** You can access tables and entities through code using this address format: http://`<storage account>`.table.core.windows.net/`<table>`
+You can also address Azure tables directly using this address with the OData protocol. For more information, see [OData.org](OData.org).
 
 * **Storage Account:** All access to Azure Storage is done through a storage account. 
 
