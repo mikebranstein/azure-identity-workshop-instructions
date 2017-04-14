@@ -150,3 +150,4 @@ After registering the user, let's look back at Storage Explorer. Select the *Asp
 
 <div class="exercise-end"></div>
 
+That's it for chapter 3. In the next chapter, you'll learn how to connect the web app to an Azure-hosted Table Storage account.
