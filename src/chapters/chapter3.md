@@ -122,7 +122,7 @@ You should now see the *AspNetIndex*, *AspNetRoles*, and *AspNetUsers* tables.
 
 <div class="exercise-end"></div>
 
-### Testing  it out
+### Testing it out
 
 Now that everything is running, let's test it out by registering a new user.
 

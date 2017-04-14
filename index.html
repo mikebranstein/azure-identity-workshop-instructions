@@ -613,7 +613,7 @@ namespace Web
 <p>You should now see the <em>AspNetIndex</em>, <em>AspNetRoles</em>, and <em>AspNetUsers</em> tables. </p>
 <div class="exercise-end"></div>
 
-<h3 id="testing-it-out">Testing  it out</h3>
+<h3 id="testing-it-out">Testing it out</h3>
 <p>Now that everything is running, let&#39;s test it out by registering a new user.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Register a user
@@ -638,28 +638,75 @@ namespace Web
 			<hr>
 			<div class="chapter">
 				<h2 id="connecting-the-app-to-azure">Connecting the app to Azure</h2>
-<h3 id="resource-group">resource Group</h3>
+<p>In this chapter, you&#39;ll be learning how to create an Azure storage account and connect the web app we created in chatpers 2 and 3 to the storage account.</p>
+<h3 id="creating-a-resource-group">Creating a Resource Group</h3>
+<p>Our first stop will be to create a Resource Group in Azure. </p>
+<blockquote>
+<p><strong>DEFINITION</strong> Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think ofresource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
+</blockquote>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create a Dashboard and Resource Group
+</h4>
+
+<h4 id="creating-a-dashboard">Creating a Dashboard</h4>
+<p>We&#39;ll start by creating a dashboard. </p>
+<p>Login to the Azure portal, click <em>+ New Dashboard</em>, give the dashboard name, and click <em>Done customizing</em>.</p>
+<p><img src="images/chapter4/create-dashboard.gif" class="img-medium" /></p>
+<p>That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the bootcamp becaus eit helps keep everything organized. You&#39;ll have a single place to go to find everything you build today.</p>
+<h4 id="creating-a-resource-group">Creating a Resource Group</h4>
+<p>Next, we&#39;ll create a resource group to hold the various services we&#39;ll be creating today. </p>
+<p>Click the <em>+ New</em> button on the left.</p>
+<p><img src="images/chapter4/new.png" alt="image"></p>
+<p>Search for resource group by using the search box, selecting <em>Resource Group</em> when it appears.</p>
+<p><img src="images/chapter4/new-resource.png" alt="image"></p>
+<p>Select <em>Resource Group</em> from the search results window:</p>
+<p><img src="images/chapter4/resource-group-results.png" alt="image"></p>
+<p>Click <em>Create</em> at the bottom:</p>
+<p><img src="images/chapter4/create-resource-group.png" alt="image"></p>
+<p>Give the Resource group a name, select your Azure subscription, and a location. Also CHECK the <em>Pin to Dashboard</em> option. Press <em>Create</em> when you&#39;re finished.</p>
+<p><img src="images/chapter4/create-resource-group-2.png" alt="image"></p>
+<p>After it&#39;s created, it will be open in Azure automatically:</p>
+<p><img src="images/chapter4/resource-group-created.png" alt="image"></p>
+<p>Close the resource group by clicking the <em>X</em> in the upper-right corner. Note that the resource group has been added to your dashboard.</p>
+<p><img src="images/chapter4/resource-group-dashboard.png" alt="image"></p>
+<p>Form the dashboard, you can click on the resource group to re-open it at any time.</p>
+<div class="exercise-end"></div>
+
+<p>That wraps up the basics of creating resource groups. We&#39;re not going to take a deep dive into Azure Resource Group. If you&#39;re interested in learning more, check out this <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal">article</a>.</p>
+<h3 id="creating-a-storage-account">Creating a Storage Account</h3>
+<p>Our next stop is at Storage Accounts. You&#39;ll recall from the last chapter that storage accounts are the topmost Azure service that contains other resources such as the blob storage, file storage, queue storage, and table storage services.</p>
+<p>Before we can store data to an Azure table, we&#39;ll need to create a storage account.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create a Storage Account
+</h4>
+
+<p>Return to your dashboard if you&#39;re not already there. Click <em>+ New</em>, select <em>Storage</em> from the list of service categories, and select <em>Storage account - blob, file, table, queue</em>.</p>
+<p><img src="images/chapter4/create-storage-account.gif" class="img-medium" /></p>
+<p>Complete the following fields:</p>
 <ul>
-<li>create resource group</li>
+<li><strong>Name:</strong> this must be a unique, URL-friendly name that will be prepended to the URL <code>{storage-account-name}.core.windows.net</code>. You&#39;ll use this full URL name to reference the storage account in code</li>
+<li><strong>Deployment model:</strong> Resource manager. The <em>Classic</em> option is a legacy option that will be deprecated soon. Don&#39;t pick it. Chosing the <em>Resource manager</em> options also allows you to create automation scripts for provisioning Azure resources easily</li>
+<li><strong>Account kind:</strong> General purpose. You can create an account that stores only blobs (binary large objects), but for our bootcamp we want a storage account that can sotre both tables and blobs</li>
+<li><strong>Performance:</strong> Standard, because our needs are simple. If you were an enterprise, you may want to choose Premium for the enhanced SLA and scalability. To learn more about the difference, check out this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-introduction#introducing-the-azure-storage-services">article</a></li>
+<li><strong>Replication:</strong> Locally-redundant storage (LRS). The data in your Microsoft Azure storage account is always replicated to ensure durability and high availability. Replication copies your data, either within the same data center, or to a second data center, depending on which replication option you choose. Replication protects your data and preserves your application up-time in the event of transient hardware failures. If your data is replicated to a second data center, that also protects your data against a catastrophic failure in the primary location. To learn more read this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-redundancy">article</a>.</li>
+<li><strong>Storage service encryption:</strong> Disabled. Azure Storage Service Encryption (SSE) for Data at Rest helps you protect and safeguard your data to meet your organizational security and compliance commitments. With this feature, Azure Storage automatically encrypts your data prior to persisting to storage and decrypts prior to retrieval. The encryption, decryption, and key management are totally transparent to users. To learn more, read this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-service-encryption">article</a>.</li>
+<li><strong>Subscription:</strong> Select your subscription.</li>
+<li><strong>Resource group:</strong> Use existing and select the resource group you just created. By selecting the existing resource group, the storage account will be added to the resource group. This makes it easier to manage.</li>
+<li><strong>Location:</strong> East US</li>
+<li><strong>PIN to dashboard:</strong> Yes</li>
 </ul>
-<h3 id="storage-account">Storage account</h3>
-<ul>
-<li><p>create storage account</p>
-<ul>
-<li>name (remember it)</li>
-<li>deployment model: resource manager</li>
-<li>Account kind: general purpose</li>
-<li>Performance: standard</li>
-<li>Replication: Locally-redundant storage (LRS)</li>
-<li>Storage service encryption: Disabled</li>
-<li>Resource group: Use existing (from the prrevious)</li>
-<li>Location: East US</li>
-</ul>
-</li>
-<li><p>Wait for it to deploy</p>
-</li>
-</ul>
-<h3 id="connect-to-it-from-storage-explorer">Connect to it from storage explorer</h3>
+<p><img src="images/chapter4/storage-account-options.png" alt="image"></p>
+<p>After you create the Storage account, you&#39;ll be brought back to your dashboard and presenting with a deployment placeholder:</p>
+<p><img src="images/chapter4/storage-account-placeholder.png" class="img-small" /></p>
+<p>All Azure services deployed with the Resource Manager option are deployed in an asynchronous manner.</p>
+<p>When the storage account is provisioned, it will open up in the portal. </p>
+<p><img src="images/chapter4/storage-account-provisioned.png" class="img-large" /></p>
+<p>From the storage account details pages, you can explore the contents of blobs, files, queues, tables, and queues. The experience is similar to that of storage explorer.</p>
+<p><img src="images/chapter4/exploring-storage-account.gif" class="img-large" /></p>
+<div class="exercise-end"></div>
+
+<h3 id="opening-the-storage-account-in-storage-explorer">Opening the Storage Account in Storage Explorer</h3>
+<p>Now that we&#39;ve added the stor</p>
 <ul>
 <li>add subscription azure storage explorer</li>
 <li>select the subscription</li>
