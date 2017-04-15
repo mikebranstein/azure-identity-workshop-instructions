@@ -836,15 +836,168 @@ namespace Web
 			<hr>
 			<div class="chapter">
 				<h2 id="adding-a-custom-field-to-aspnet-identity">Adding a custom field to AspNet Identity</h2>
-<p>I want to add a biography. </p>
-<h3 id="update-identitymodel-cs">Update IdentityModel.cs</h3>
+<p>In the previous chapters, you learned how to persist ASP.NET Identity user information in Azure Table Storage. You also learned how to use a locally-hosted storage emulator so you can develop without connecting the cloud. </p>
+<p>In this chapter, we&#39;ll continue to update our web app by adding a custom field to the user&#39;s profile. </p>
+<h3 id="visualizing-what-you-re-building">Visualizing What You&#39;re Building</h3>
+<p>Before we jump in, let&#39;s take a minute to visualize what you&#39;ll be building. </p>
+<p><img src="images/chapter5/manage-biography.gif" class="img-large" /></p>
+<p>The ASP.NET MVC template starts with a profile management page displaying thatallwos you to change your password, manage alternate logins (such as Facebook, Twitter, Microsoft, etc.), and configure multi-factor authentication (if enabled).</p>
+<p>We&#39;ll be adding a the <em>Biography</em> field. Once added, you&#39;ll be able to see your biography on the main page and navigate to a second page to update the biography. </p>
+<p>You may also notice the status message that is shown when the biography has been updated. </p>
+<p><img src="images/chapter5/message.png" alt="image"></p>
+<p>Let&#39;s get started! We&#39;ll begin by modifying ASP.NET Identity to include the new field, then move on to modifying the MVC code.</p>
+<h3 id="extending-asp-net-identity">Extending ASP.NET Identity</h3>
+<p>If you ever used the old ASP.NET Membership Provider, you&#39;ll remember how painful it was to extend it. Extending ASP.NET Identity is different: it&#39;s easy.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Extending ASP.NET Identity
+</h4>
+
+<p>To extend ASP.NET Identity, add two things:</p>
+<ol>
+<li>public property to the <code>ApplicationUser</code> class</li>
+<li>async accessor function for the property to the <code>ApplicationUserManager</code> class</li>
+</ol>
+<h4 id="updating-the-applicationuser-class">Updating the <code>ApplicationUser</code> class</h4>
+<p>Add a public property to the <code>ApplicationUser</code> class, located in the the <em>IdentityModel.cs</em> file. You can find this file in the <em>Models</em> folder.</p>
+<p>You&#39;ll remember this is the class that inherits from <code>IdentityUser</code>, the class ASP.NET Identity uses to represent a user. </p>
+<pre><code class="lang-csharp">public string Biography { get; set; }
+</code></pre>
+<h4 id="updating-the-applicationusermanager-class">Updating the <code>ApplicationUserManager</code> class</h4>
+<p>Add an asynchronous accessor function to the <code>ApplicationUserManager</code> class. The method will take a <code>userId</code> and return the user&#39;s biography. You can find the <code>ApplicationUserManager</code> class in the <em>IdentityConfig.cs</em> file, located in the <em>App_Start</em> folder.</p>
+<p>Add this code after the constructor.</p>
+<pre><code class="lang-csharp">public async Task&lt;string&gt; GetBiographyAsync(string userId)
+{
+    var user = await this.Store.FindByIdAsync(userId);
+    return (user != null) ? user.Biography : string.Empty;
+}
+</code></pre>
+<p>This function uses the <code>Store</code> object, which is of type <code>IUserStore&lt;ApplicationUser&gt;</code>, which (simply put) is the object that manages storing and retrieving user data from our Azure table. </p>
+<p>The <code>this.Store.FindByIdAsync(userId)</code> call gets a reference to our user. We then return the user&#39;s biography, or an empty string if the user isn&#39;t found.</p>
+<div class="exercise-end"></div>
+
+<p>And, that&#39;s it. Pretty simple. That&#39;s all you need to do to extend ASP.NET Identity with a new property. </p>
+<h3 id="updating-mvc-code-to-support-the-biography-property">Updating MVC code to Support the Biography Property</h3>
+<p>Now that you&#39;ve added the property, let&#39;s update the MVC models, views, and controller actions to support the addition of the biography property.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating the MVC code to support the biography property
+</h4>
+
+<p>This exercise is a bit longer than others, because we&#39;ll be updating a lot of files. At a high level, we&#39;ll be adding the biography property to our web app in several steps. </p>
+<p>We&#39;ll start with the profile management page, which will show the biography and a link to update the biography:</p>
 <ul>
-<li>add public string Biography { get; set; } to ApplicationUser class</li>
+<li><strong>Step 1:</strong> Update the <code>IndexViewModel</code> in <em>ManageViewModels.cs</em></li>
+<li><strong>Step 2:</strong> Update the Manage\Index view </li>
 </ul>
-<h3 id="update-identityconfig-cs">Update IdentityConfig.cs</h3>
+<p>Then we&#39;ll move on to a new page that updates the biography:</p>
 <ul>
-<li>Add async accessor method to ApplicationUserManager class GetBiographyAsync(string userId);</li>
+<li><strong>Step 3:</strong> Create the <code>UpdateBiographyViewModel</code> class in <em>ManageViewModels.cs</em></li>
+<li><strong>Step 4:</strong> Create the Update Biography view</li>
+<li><strong>Step 5:</strong> Add a GET controller action for the Update Biography view to <em>ManageController.cs</em></li>
+<li><strong>Step 6:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></li>
+<li><strong>Step 7:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></li>
 </ul>
+<p>Finally, we&#39;ll return to the profile management page:</p>
+<ul>
+<li><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em> to populate the view with the updated biography</li>
+</ul>
+<p>There&#39;s a lot to do, so let&#39;s get moving!</p>
+<h4 id="-step-1-update-the-indexviewmodel-in-manageviewmodels-cs-"><strong>Step 1:</strong> Update the <code>IndexViewModel</code> in <em>ManageViewModels.cs</em></h4>
+<p>Start by updating the <code>IndexViewModel</code> class. Add a property for the biography.</p>
+<pre><code class="lang-csharp">public class IndexViewModel
+{
+    public bool HasPassword { get; set; }
+    public IList&lt;UserLoginInfo&gt; Logins { get; set; }
+    public string PhoneNumber { get; set; }
+    public bool TwoFactor { get; set; }
+    public bool BrowserRemembered { get; set; }
+    public string Biography { get; set; }
+}
+</code></pre>
+<blockquote>
+<p>Adding this property will allow the index view to display the biography when it loads. We&#39;ll be setting the value of the biography later in this excercise when we update the index controller&#39;s GET action.</p>
+</blockquote>
+<h4 id="-step-2-update-the-manage-index-view"><strong>Step 2:</strong> Update the Manage\Index view</h4>
+<p>Update <em>Index.cshtml</em> in the <em>Views\Manage</em> folder to display:</p>
+<ul>
+<li>Biography heading</li>
+<li>Biography value</li>
+<li>Link to update the Biography</li>
+</ul>
+<p>Add the Ravor markup at as te first child element of the <code>&lt;dl class=&quot;dl-horizontal&quot;&gt;</code> element:</p>
+<pre><code class="lang-html">&lt;dt&gt;Biography:&lt;/dt&gt;
+&lt;dd&gt;
+    @Model.Biography
+    [
+    @Html.ActionLink(&quot;Update your biography&quot;, &quot;UpdateBiography&quot;)
+    ]
+&lt;/dd&gt;
+</code></pre>
+<p>THe HTML action link will render as an HTML link to the Update Biography view (which we&#39;ll create next).</p>
+<h4 id="-step-3-create-the-updatebiographyviewmodel-class-in-manageviewmodels-cs-"><strong>Step 3:</strong> Create the <code>UpdateBiographyViewModel</code> class in <em>ManageViewModels.cs</em></h4>
+<p>Add a new view model class named <code>UpdateBiographyViewModel</code> in the <em>ManageViewModels.cs</em> file. This view model will be used to view and update a user&#39;s biography from the Update Biography view.</p>
+<pre><code class="lang-csharp">public class UpdateBiographyViewModel
+{
+    [Display(Name = &quot;Biography&quot;)]
+    public string Biography { get; set; }
+}
+</code></pre>
+<h4 id="-step-4-create-the-update-biography-view"><strong>Step 4:</strong> Create the Update Biography view</h4>
+<p>Create a view named <code>UpdateBiography.cshtml</code> in the <em>Views\Manage</em> folder. This view will use the previously created <code>UpdateBiographyViewModel</code> to show and update a user&#39;s biography.</p>
+<pre><code class="lang-html">@model Web.Models.UpdateBiographyViewModel
+@{
+    ViewBag.Title = &quot;Biography&quot;;
+}
+
+&lt;h2&gt;@ViewBag.Title&lt;/h2&gt;
+
+@using (Html.BeginForm(&quot;UpdateBiography&quot;, &quot;Manage&quot;, FormMethod.Post, new { @class = &quot;form-horizontal&quot;, role = &quot;form&quot;, enctype = &quot;multipart/form-data&quot; }))
+{
+    @Html.AntiForgeryToken()
+    &lt;h4&gt;Update your biography&lt;/h4&gt;
+    &lt;hr /&gt;
+    @Html.ValidationSummary(&quot;&quot;, new { @class = &quot;text-danger&quot; })
+    &lt;div class=&quot;form-group&quot;&gt;
+        @Html.LabelFor(m =&gt; m.Biography, new { @class = &quot;col-md-2 control-label&quot; })
+        &lt;div class=&quot;col-md-10&quot;&gt;
+            @Html.TextBoxFor(m =&gt; m.Biography, new { @class = &quot;form-control&quot; })
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;div class=&quot;col-md-offset-2 col-md-10&quot;&gt;
+            &lt;input type=&quot;submit&quot; class=&quot;btn btn-default&quot; value=&quot;Submit&quot; /&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+}
+
+@section Scripts {
+    @Scripts.Render(&quot;~/bundles/jqueryval&quot;)
+}
+</code></pre>
+<h4 id="-step-5-add-a-get-controller-action-for-the-update-biography-view-to-managecontroller-cs-"><strong>Step 5:</strong> Add a GET controller action for the Update Biography view to <em>ManageController.cs</em></h4>
+<p>Now that the model and view are created, add a GET controller action to the <em>ManageController.cs</em> file to show the Update Biography view.</p>
+<pre><code class="lang-csharp">//
+// Get: /Manage/UpdateBiography
+public async Task&lt;ActionResult&gt; UpdateBiography()
+{
+    var userId = User.Identity.GetUserId();
+    var updateBiographyViewModel = new UpdateBiographyViewModel()
+    {
+        Biography = await UserManager.GetBiographyAsync(userId) 
+    };
+
+    return View(updateBiographyViewModel);
+}
+</code></pre>
+<p>You may not immediately recognize all of the code you just added, so let&#39;s break it down. First, we grab the current user&#39;s id by calling into ASP.NET Identity with <code>User.Identity.GetUserId()</code>. With the user&#39;s id, we call the funciton we created earlier in this chapter (<code>GetBiographyAsync()</code>) to load the user&#39;s biography. </p>
+<p>The retrieved biography is then used to construct a model passed back to the Update Biography view.</p>
+<h4 id="-step-6-add-a-post-controller-action-for-the-update-biography-view-to-managecontroller-cs-"><strong>Step 6:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></h4>
+<p>Now that we have the Update Biography view showing a user&#39;s biography, let&#39;s start planning what happens when a user&#39;s biogrpahy is updated. </p>
+<p>When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We&#39;ll cover this step next. </p>
+<h4 id="-step-7-add-a-your-biography-was-updated-message-to-managecontroller-cs-"><strong>Step 7:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></h4>
+<p>When A message reading, &quot;Your biography was updated&quot; is also displayed on the Manage\Index view. Displaying</p>
+<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontoller-cs-to-populate-the-view-with-the-updated-biography"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em> to populate the view with the updated biography</h4>
+<div class="exercise-end"></div>
+
 <h3 id="build-the-update-biography">Build the Update Biography</h3>
 <ul>
 <li>update the IndexViewModel to include the Biography property</li>
