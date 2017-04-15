@@ -115,7 +115,7 @@ Update *Index.cshtml* in the *Views\Manage* folder to display:
 * Biography value
 * Link to update the Biography
 
-Add the Ravor markup at as te first child element of the `<dl class="dl-horizontal">` element:
+Add the Ravor markup as the first child element of the `<dl class="dl-horizontal">` element:
 
 ```html
 <dt>Biography:</dt>
@@ -127,7 +127,7 @@ Add the Ravor markup at as te first child element of the `<dl class="dl-horizont
 </dd>
 ```
 
-THe HTML action link will render as an HTML link to the Update Biography view (which we'll create next).
+The HTML action link will render as an HTML link to the Update Biography view (which we'll create next).
 
 #### **Step 3:** Create the `UpdateBiographyViewModel` class in *ManageViewModels.cs*
 
