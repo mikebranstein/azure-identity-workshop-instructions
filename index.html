@@ -841,15 +841,15 @@ namespace Web
 <h3 id="visualizing-what-you-re-building">Visualizing What You&#39;re Building</h3>
 <p>Before we jump in, let&#39;s take a minute to visualize what you&#39;ll be building. </p>
 <p><img src="images/chapter5/manage-biography.gif" class="img-large" /></p>
-<p>The ASP.NET MVC template starts with a profile management page displaying thatallwos you to change your password, manage alternate logins (such as Facebook, Twitter, Microsoft, etc.), and configure multi-factor authentication (if enabled).</p>
-<p>We&#39;ll be adding a the <em>Biography</em> field. Once added, you&#39;ll be able to see your biography on the main page and navigate to a second page to update the biography. </p>
+<p>The ASP.NET MVC template starts with a profile management page that allows you to change your password, manage alternate logins (such as Facebook, Twitter, Microsoft, etc.), and configure multi-factor authentication (if enabled).</p>
+<p>We&#39;ll be adding the <em>Biography</em> field. Once added, you&#39;ll be able to see your biography on the main page and navigate to a second page to update the biography. </p>
 <p>You may also notice the status message that is shown when the biography has been updated. </p>
 <p><img src="images/chapter5/message.png" alt="image"></p>
 <p>Let&#39;s get started! We&#39;ll begin by modifying ASP.NET Identity to include the new field, then move on to modifying the MVC code.</p>
 <h3 id="extending-asp-net-identity">Extending ASP.NET Identity</h3>
 <p>If you ever used the old ASP.NET Membership Provider, you&#39;ll remember how painful it was to extend it. Extending ASP.NET Identity is different: it&#39;s easy.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Extending ASP.NET Identity
+    <b>Exercise</b>: Extending ASP.NET Identity with a Biography
 </h4>
 
 <p>To extend ASP.NET Identity, add two things:</p>
@@ -1082,15 +1082,54 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			<hr>
 			<div class="chapter">
 				<h2 id="adding-a-profile-picture-to-the-app">Adding a profile picture to the app</h2>
-<p>We want to add a profile picture. It&#39;s similar to the biography, and we&#39;ll reuse some of the work we&#39;ve alreayd done to display it.</p>
-<h3 id="update-identitymodel-cs">Update IdentityModel.cs</h3>
+<p>In this chapter you will learn:</p>
 <ul>
-<li>add profile picture url to ApplicationUser</li>
+<li>How to extend ASP.NET Identity by adding an image to a user profile</li>
+<li>How to upload files to Azure blob storage</li>
 </ul>
-<h3 id="update-identityconfig-cs">Update IdentityConfig.cs</h3>
-<ul>
-<li>Add async accessor method to ApplicationUserManager class GetProfilePicAsync(string userId);</li>
-</ul>
+<p>In the last chapter, you learned how to extend ASP.NET Identity by adding a biography to a user&#39;s profile. You also saw that by adding a public property to the <code>ApplicationUser</code> class, ASP.NET Identity managed the data sotre&#39;s schema.</p>
+<p>We&#39;ll continue extending ASP.NET Identity in this chapter by adding an image to the user profile management page.</p>
+<h3 id="visualizing-what-you-re-building">Visualizing What You&#39;re Building</h3>
+<p>Before we jump in, let&#39;s take a minute to visualize what you&#39;ll be building in this chapter.</p>
+<p><img src="images/chapter6/upload-picture.gif" class="img-large" /></p>
+<p>We&#39;ll be adding the <em>Profile Picture</em> field. Once added, you&#39;ll be able to see your uploaded picture on the main page and navigate to a second page to update it.</p>
+<p>Let&#39;s get started! We&#39;ll begin by modifying ASP.NET Identity to include the new field, then move on to modifying the MVC code.</p>
+<h3 id="extending-asp-net-identity">Extending ASP.NET Identity</h3>
+<p>You&#39;ll recall that we previously updated the <code>ApplicationUser</code> and <code>ApplicationUserManager</code> classes to extend ASp.NET Identity. We&#39;ll be doing something similar for the profile picture. </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
+</h4>
+
+<p>To extend ASP.NET Identity, add two things:</p>
+<ol>
+<li>public property to the <code>ApplicationUser</code> class</li>
+<li>async accessor function for the property to the <code>ApplicationUserManager</code> class</li>
+</ol>
+<h4 id="updating-the-applicationuser-class">Updating the <code>ApplicationUser</code> class</h4>
+<p>Add a public property to the <code>ApplicationUser</code> class, located in the the <em>IdentityModel.cs</em> file. You can find this file in the <em>Models</em> folder.</p>
+<p>You&#39;ll remember this is the class that inherits from <code>IdentityUser</code>, the class ASP.NET Identity uses to represent a user. </p>
+<pre><code class="lang-csharp">public string ProfilePicUrl { get; set; }
+</code></pre>
+<p>You may have noticed something interesting about the property you just added: it&#39;s a string, not an image. But why?</p>
+<blockquote>
+<p><strong>NOTE:</strong> We could add a binary property to store the actual image, but that would store the images as a column in the <em>AspNetUsers</em> table in Azure table storage. Table storage is great for semi-structured text data, but not so good for blob (binary large object) data, like an image. Instead, we&#39;ll be using a different type of Azure storage to store our images, called blob storage. We&#39;re not going to cover the details of blob storage right now, but it&#39;s important you understand why we&#39;re not adding a binary property to the <code>ApplicationUser</code> class.</p>
+</blockquote>
+<p>So, if we&#39;re not storing binary data in the <code>ApplicationUser</code> class, why are we storing a URL? You may recall from a previous chapter that data stored in an Azure storage account can be accessed via URL in the form of <em><a href="https://{storage-account-name}.{storage-type}.core.windows.net">https://{storage-account-name}.{storage-type}.core.windows.net</a></em>. </p>
+<p>After uploading an image to blob storage, we&#39;ll save the image URL to our user profile.  </p>
+<h4 id="updating-the-applicationusermanager-class">Updating the <code>ApplicationUserManager</code> class</h4>
+<p>We also need to add an asynchronous accessor function to the <code>ApplicationUserManager</code> class (jus tlike we did for the biography property). The method will take a <code>userId</code> and return the user&#39;s profile picture URL. You can find the <code>ApplicationUserManager</code> class in the <em>IdentityConfig.cs</em> file, located in the <em>App_Start</em> folder.</p>
+<p>Add this code after the constructor.</p>
+<pre><code class="lang-csharp">public async Task&lt;string&gt; GetProfilePicUrlAsync(string userId)
+{
+    var user = await this.Store.FindByIdAsync(userId);
+    return (user != null) ? user.ProfilePicUrl : string.Empty;
+}
+</code></pre>
+<p>This function uses the <code>Store</code> object, which is of type <code>IUserStore&lt;ApplicationUser&gt;</code>, which (simply put) is the object that manages storing and retrieving user data from our Azure table. </p>
+<p>The <code>this.Store.FindByIdAsync(userId)</code> call gets a reference to our user. We then return the user&#39;s profile picture URL, or an empty string if the user isn&#39;t found.</p>
+<div class="exercise-end"></div>
+
+<p>That&#39;s it. Let&#39;s move on to updating our MVC app to support the profile picture property.</p>
 <h3 id="add-profile-pic-to-to-the-web-app">Add Profile Pic to to the web app</h3>
 <ul>
 <li>update the IndexViewModel to include the Profile Picture property</li>

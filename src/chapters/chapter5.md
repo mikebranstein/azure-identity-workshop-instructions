@@ -10,9 +10,9 @@ Before we jump in, let's take a minute to visualize what you'll be building.
 
 <img src="images/chapter5/manage-biography.gif" class="img-large" />
 
-The ASP.NET MVC template starts with a profile management page displaying thatallwos you to change your password, manage alternate logins (such as Facebook, Twitter, Microsoft, etc.), and configure multi-factor authentication (if enabled).
+The ASP.NET MVC template starts with a profile management page that allows you to change your password, manage alternate logins (such as Facebook, Twitter, Microsoft, etc.), and configure multi-factor authentication (if enabled).
 
-We'll be adding a the *Biography* field. Once added, you'll be able to see your biography on the main page and navigate to a second page to update the biography. 
+We'll be adding the *Biography* field. Once added, you'll be able to see your biography on the main page and navigate to a second page to update the biography. 
 
 You may also notice the status message that is shown when the biography has been updated. 
 
@@ -25,7 +25,7 @@ Let's get started! We'll begin by modifying ASP.NET Identity to include the new 
 If you ever used the old ASP.NET Membership Provider, you'll remember how painful it was to extend it. Extending ASP.NET Identity is different: it's easy.
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Extending ASP.NET Identity
+    <b>Exercise</b>: Extending ASP.NET Identity with a Biography
 </h4>
 
 To extend ASP.NET Identity, add two things:
