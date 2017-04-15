@@ -89,7 +89,7 @@ Then we'll move on to a new page that uploads the profile picture:
 * **Step 4:** Update the Update Biography view
 * **Step 5:** Update the GET controller action for the Update Biography view to *ManageController.cs*
 * **Step 6:** Update the POST controller action for the Update Biography view to *ManageController.cs*
-* **Step 7:** Add applicaiton settings to *web.config* 
+* **Step 7:** Add application settings to *web.config* 
 
 Finally, we'll return to the profile management page:
 * **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* to populate the view with the updated profile picture URL
@@ -232,11 +232,86 @@ If that function returns `null`, the existing profile picture url is kept.
 
 > **NOTE:** You may not recognise the `??` syntax, as it's a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
 
+Add the `UploadImageAsync` function below the POST controller action.
+
+```csharp
+public async Task<string> UploadImageAsync(string currentBlobUrl, HttpPostedFileBase imageToUpload)
+{
+    string imageFullPath = null;
+    if (imageToUpload == null || imageToUpload.ContentLength == 0)
+    {
+        return null;
+    }
+    try
+    {
+        // connect to our storage account
+        var cloudStorageAccount = CloudStorageAccount.Parse($"DefaultEndpointsProtocol=https;AccountName={ConfigurationManager.AppSettings["StorageAccountName"]};AccountKey={ConfigurationManager.AppSettings["StorageAccountKey"]};");
+        var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+        var cloudBlobContainer = cloudBlobClient.GetContainerReference(ConfigurationManager.AppSettings["ProfilePicBlobContainer"]);
+
+        // create the blob storage container, if needed
+        if (await cloudBlobContainer.CreateIfNotExistsAsync())
+        {
+            await cloudBlobContainer.SetPermissionsAsync(
+                new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                }
+            );
+        }
+
+        var imageName = $"{Guid.NewGuid()}{Path.GetExtension(imageToUpload.FileName)}";
+
+        // upload image blob
+        var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
+        cloudBlockBlob.Properties.ContentType = imageToUpload.ContentType;
+        await cloudBlockBlob.UploadFromStreamAsync(imageToUpload.InputStream);
+
+        // get URL of uploaded image blob
+        imageFullPath = cloudBlockBlob.Uri.ToString();
+    }
+    catch (Exception ex)
+    {
+        // in reality, you should handle this...
+    }
+    return imageFullPath;
+}
+```
+
+There are 4 things happening in the upload function:
+* **Connect to Storage Account:** Using the `CloudStorageAccount` class, parse the storage account connection string, create a blob client, and a reference to the container (or folder) we'd like to access. The blob client works like a web service proxy that can interact with Azure blob storage to get a reference to the blob folders (a.k.a. containers) in the account. 
+* **Create the blob container:** It's important to know that the reference to the blob container doesn't means the cloud container exists. Whenever you access a container, you shoudl first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.
+* **Upload image blob:** With the container refereence, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.
+* **Get URL of the uploaded image blob:** When the image is uploaded, we get the URL of it via the `Uri` property. 
+
+> **NOTE:** Throughout the code we've written to access cloud resources, you'll notice a clear asynchronous programming pattern. When you're interacting with the cloud, you should always perform action in an asynchorous manner because you never know how long an action will take. In the event an action takes longer than expected, executing the command asynchronously won't prevent other code from executing.
+
+The last step is to add several references to the top of the *ManageController.cs* file:
+
+```csharp
+using Microsoft.WindowsAzure.Storage;
+using System.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.IO;
+```
+
+#### **Step 7:** Add application settings to *web.config* 
+
+Various functions and code we've added reference application settings via the `ConfigurationManager` class. Add the following keys to the `<appSettings>...</appSettings>` element of the *web.config* file.
+
+```xml
+    <add key="StorageAccountName" value="STORAGE_ACCOUNT_NAME" />
+    <add key="StorageAccountKey" value="STORAGE_ACCOUNT_KEY" />
+    <add key="ProfilePicBlobContainer" value="profile-pics" />
+``` 
+
+The `StorageAccountName` and `StorageAccountKey` keys are the same account name and key you added to the storage account connection string earlier. If you're unsure of these values, look at the El Camino configuration section.
+
+The `ProfilePicBlobContainer` key is a blob container name that will hold our uploaded images. Don't change these. In this chapter, the image upload function uses the key to upload profile pictures to the blob container named *profile-pics*. 
+
 #### **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* 
 
-The final step is to update the GET controller action of the Manage\Index view. Below is the entire function, but note the added line setting the `ViewBag.StatusMessage` to "Your biography was updated." when the `ManageMessageId` enum has a value of `UpdateBiographySuccess`. 
-
-You should also note that the index view model's biography property is set by calling the method you created eariler: `UserManager.GetBiographyAsynx(userId)`.
+The final step is to update the GET controller action of the Manage\Index view. The entire function is included below. 
 
 ```csharp
 //
@@ -262,6 +337,7 @@ public async Task<ActionResult> Index(ManageMessageId? message)
         Logins = await UserManager.GetLoginsAsync(userId),
         BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
         Biography = await UserManager.GetBiographyAsync(userId),
+        ProfilePicUrl = await UserManager.GetProfilePicUrlAsync(userId)
     };
     return View(model);
 }
@@ -269,43 +345,23 @@ public async Task<ActionResult> Index(ManageMessageId? message)
 
 <div class="exercise-end"></div>
 
-Phew! That was a huge update to the code base. Compile and cross your fingers ;-).
+Another *huge* update. Compile it again.
 
-When you launch the app to test, login and navigate to the profile management page. You should see something similar to the image below. If you don't, that's ok. You can always grab the code from the `chapter6` branch of the Github repository.
+When you launch the app to test, login and navigate to the profile management page. You should see something similar to the image below. If you don't, that's ok. You can always grab the code from the `chapter7` branch of the Github repository.
 
-<img src="images/chapter5/manage-biography.gif" class="img-large" />
+<img src="images/chapter6/upload-picture.gif" class="img-large" />
 
+Before we're finished, let's take a look at Storage Explorer to see our uploaded profile picture.
 
+Click *Refresh All*, browse to your Azure storage account, and open the *Blob Containers* element. Inside, you'll see the *profile-pics* container. Seelcting the container will show the uploaded profile pictures.
 
+<img src="images/chapter6/profile-pics-uploaded.gif" class="img-large" />
 
+#### Summary
 
+In this chapter, you learned:
+* Why you shouldn't store blobs in Azure table storage, and that blob storage is a much better choice
+* When interacting with the cloud, you shoudl use asynchronous method calls
+* When you reference blob containers, always check if they exist before using them
 
-
-
-### Add Profile Pic to to the web app
-
-DONE - update the IndexViewModel to include the Profile Picture property
-DONE - update Index.cshtml, add HTML to display the update profile picture and a hiddenFor field links
-
-DONE - ManageViewModels.cs, add System.Web to usings
-
-DONE- update UpdateBiographyViewModel class in ManageViewModels.cs
-
-DONE- update UpdateBiography.cshtml, adding profile picture div
-
-DONE - update GET controller action for UpdateBiography
-- update POST controller action for UpdateBiography
-- add method UploadImageAsync
-- add usings to support UploadImageSync code
-
-- add app settings: StorageAccountName, StorageAccountKey, ProfilePicBlobContainer
-- replace values for storage account name, storage account key
-
-- update the Index GET function to display the correct update message and to load in the ProfilePicUrl via the user manager
-
-### test!
-
-- run web site
-- check out storage explorer
-
-
+In the next chapter, we'll continue to explore blob storage by uploading profile pictures to a holding zone where images will need to be approved prior to being accepted as a profile picture.

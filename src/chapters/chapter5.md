@@ -261,7 +261,7 @@ After the user is saved, you're redirected back to the Manage\Index view, passin
 
 The final step is to update the GET controller action of the Manage\Index view. Below is the entire function, but note the added line setting the `ViewBag.StatusMessage` to "Your biography was updated." when the `ManageMessageId` enum has a value of `UpdateBiographySuccess`. 
 
-You should also note that the index view model's biography property is set by calling the method you created eariler: `UserManager.GetBiographyAsynx(userId)`.
+You should also note that the index view model's biography property is set by calling the method you created eariler: `UserManager.GetBiographyAsync(userId)`.
 
 ```csharp
 //
