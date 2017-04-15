@@ -132,57 +132,57 @@ Add this markup before the `<dl class="dl-horizontal">` element declaration:
 
 When the page loads, the profile picture will be downloaded from the URL specified. 
 
-#### **Step 3:** Create the `UpdateBiographyViewModel` class in *ManageViewModels.cs*
+#### **Step 3:** Update the `UpdateBiographyViewModel` class in *ManageViewModels.cs*
 
-Add a new view model class named `UpdateBiographyViewModel` in the *ManageViewModels.cs* file. This view model will be used to view and update a user's biography from the Update Biography view.
+In the last chapter, you created the `UpdateBiographyViewModel` class in the *ManageViewModels.cs* file. It was used to view and update a user's biography from the Update Biography view. 
+
+Update the class by adding several fields for the profile picture.
 
 ```csharp
 public class UpdateBiographyViewModel
 {
     [Display(Name = "Biography")]
     public string Biography { get; set; }
+
+    [Display(Name = "Profile Picture")]
+    [DataType(DataType.Upload)]
+    public HttpPostedFileBase ProfilePicture { get; set; }
+
+    public string ProfilePicUrl { get; set; }
 }
 ```
+You'll notice we added two properties: `ProfilePicture` and `ProfilePicUrl`:
+* **ProfilePicture:** stores the image binary, when uploaded
+* **ProfilePictureURL:** displays the current profile picture to users 
 
-#### **Step 4:** Create the Update Biography view
+When you add the `ProfilePicture` property, you'll need to add an additional reference to the top of the file because `HttpPosedFileBase` resides in the `System.Web` namespace.
 
-Create a view named `UpdateBiography.cshtml` in the *Views\Manage* folder. This view will use the previously created `UpdateBiographyViewModel` to show and update a user's biography.
+Add the `System.Web` reference to the *ManageViewModels.cs* file.
+
+```csharp
+using System.Web;
+```
+
+#### **Step 4:** Update the Update Biography view
+
+Update a view named `UpdateBiography.cshtml` in the *Views\Manage* folder. This view will use the previously created `UpdateBiographyViewModel` to show and update a user's profile picture.
+
+Add an additional `<div class="form-group">...</div>` element between the existing divs. 
 
 ```html
-@model Web.Models.UpdateBiographyViewModel
-@{
-    ViewBag.Title = "Biography";
-}
-
-<h2>@ViewBag.Title</h2>
-
-@using (Html.BeginForm("UpdateBiography", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Update your biography</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Biography, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Biography, new { @class = "form-control" })
-        </div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ProfilePicture, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        <img src="@Model.ProfilePicUrl" alt="Profile picture not present or not approved." class="has-border" style="width: 100%; max-width: 300px;" />
+        @Html.TextBoxFor(m => m.ProfilePicture, new { type = "file" })
+        @Html.HiddenFor(m => m.ProfilePicUrl)
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Submit" />
-        </div>
-    </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+</div>
 ```
 
-#### **Step 5:** Add a GET controller action for the Update Biography view to *ManageController.cs*
+#### **Step 5:** Update the GET controller action for the Update Biography view in *ManageController.cs*
 
-Now that the model and view are created, add a GET controller action to the *ManageController.cs* file to show the Update Biography view.
+Update the GET controller action in the *ManageController.cs* file to populate the profile picture URL property of the model.
 
 ```csharp
 //
@@ -192,46 +192,17 @@ public async Task<ActionResult> UpdateBiography()
     var userId = User.Identity.GetUserId();
     var updateBiographyViewModel = new UpdateBiographyViewModel()
     {
-        Biography = await UserManager.GetBiographyAsync(userId) 
+        Biography = await UserManager.GetBiographyAsync(userId),
+        ProfilePicUrl = await UserManager.GetProfilePicUrlAsync(userId)
     };
 
     return View(updateBiographyViewModel);
 }
 ``` 
 
-You may not immediately recognize all of the code you just added, so let's break it down. First, we grab the current user's id by calling into ASP.NET Identity with `User.Identity.GetUserId()`. With the user's id, we call the funciton we created earlier in this chapter (`GetBiographyAsync()`) to load the user's biography. 
+#### **Step 6:** Update the POST controller action for the Update Biography view in *ManageController.cs*
 
-The retrieved biography is then used to construct a model passed back to the Update Biography view.
-
-#### **Step 6:** Add a "Your biography was updated" message to *ManageController.cs*
-
-Now that we have the Update Biography view showing a user's biography, let's start planning what happens when a user's biogrpahy is updated. 
-
-When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We'll get to this next. 
-
-When you return to the Manage\Index view, a message reading, "Your biography was updated" is also displayed. This is done by passing a specially-formatted query string value back to the view via the `ManageMessageId` enum. 
-
-Update the enum's values to include a value for `UpdateBiographySuccess`. 
-
-> **NOTE** You may have trouble finding the enum declaration because it's hidden behind a collapsed region labeled *Helpers*. Scroll down to the bottom of the *ManageController.cs* class to find the region. Expand it and you'll be able to locate the enum.
-
-```csharp
-public enum ManageMessageId
-{
-    AddPhoneSuccess,
-    ChangePasswordSuccess,
-    SetTwoFactorSuccess,
-    SetPasswordSuccess,
-    RemoveLoginSuccess,
-    RemovePhoneSuccess,
-    Error,
-    UpdateBiographySuccess
-}
-```
-
-#### **Step 7:** Add a POST controller action for the Update Biography view to *ManageController.cs*
-
-Add a POST controll action to the Manage controller, using the `UpdateBiographySuccess` enum value just created.
+Update the POST controller action in the Manage controller, using the `UpdateBiographySuccess` enum value just created.
 
 ```csharp
 [HttpPost]
@@ -246,19 +217,20 @@ public async Task<ActionResult> UpdateBiography(UpdateBiographyViewModel model)
     if (user != null)
     {
         user.Biography = model.Biography;
+        user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;
         await UserManager.UpdateAsync(user);
     }
     return RedirectToAction("Index", new { Message = ManageMessageId.UpdateBiographySuccess });
 }
-``` 
+```
 
-Much of the code is stright-forward, but we want to draw your attention to a few lines, starting with `var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());`. You've already seen the `GetUserId()` function, but you haven't directly worked with the `UserManager` class. 
+We've added a funciton call to populate the profile picture URL: `user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;`, but it may be a bit confusing, so let's break it down.
 
-> **NOTE** The `UserManager` class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you're not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. 
+First, we call a function that uploads the profile picture to Azure blob storage: `UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture)`. If the upload is successful, it returns the URL of the uploaded image. Otherwise, it returns `null`. 
 
-Back to the code. Because `UserManager` acts as a repository, we use it to retrieve a user object (more specifically, the `ApplicationUser` object which inherits from `IdentityUser`). Once we have the user, we update the biography property and send the user back through the repository to be persisted: `await UserManager.UpdateAsync(user);`.
+If that function returns `null`, the existing profile picture url is kept.
 
-After the user is saved, you're redirected back to the Manage\Index view, passing the `UpdateBiographySuccess` enum value as a query string parameter.
+> **NOTE:** You may not recognise the `??` syntax, as it's a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
 
 #### **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* 
 
@@ -312,15 +284,16 @@ When you launch the app to test, login and navigate to the profile management pa
 
 ### Add Profile Pic to to the web app
 
-- update the IndexViewModel to include the Profile Picture property
-- update Index.cshtml, add HTML to display the update profile picture and a hiddenFor field links
+DONE - update the IndexViewModel to include the Profile Picture property
+DONE - update Index.cshtml, add HTML to display the update profile picture and a hiddenFor field links
 
-- ManageViewModels.cs, add System.Web to usings
-- update UpdateBiographyViewModel class in ManageViewModels.cs
+DONE - ManageViewModels.cs, add System.Web to usings
 
-- update UpdateBiography.cshtml, adding profile picture div
+DONE- update UpdateBiographyViewModel class in ManageViewModels.cs
 
-- update GET controller action for UpdateBiography
+DONE- update UpdateBiography.cshtml, adding profile picture div
+
+DONE - update GET controller action for UpdateBiography
 - update POST controller action for UpdateBiography
 - add method UploadImageAsync
 - add usings to support UploadImageSync code

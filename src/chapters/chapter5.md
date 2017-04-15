@@ -228,7 +228,7 @@ public enum ManageMessageId
 
 #### **Step 7:** Add a POST controller action for the Update Biography view to *ManageController.cs*
 
-Add a POST controll action to the Manage controller, using the `UpdateBiographySuccess` enum value just created.
+Add a POST controller action to the Manage controller, using the `UpdateBiographySuccess` enum value just created.
 
 ```csharp
 [HttpPost]
