@@ -1372,7 +1372,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>In this chapter, you learned:</p>
 <ul>
 <li>Why you shouldn&#39;t store blobs in Azure table storage, and that blob storage is a much better choice</li>
-<li>When interacting with the cloud, you shoudl use asynchronous method calls</li>
+<li>When interacting with the cloud, you should use asynchronous method calls</li>
 <li>When you reference blob containers, always check if they exist before using them</li>
 </ul>
 <p>In the next chapter, we&#39;ll continue to explore blob storage by uploading profile pictures to a holding zone where images will need to be approved prior to being accepted as a profile picture.</p>
@@ -1380,20 +1380,95 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="introducing-a-staging-area-for-images">Introducing a staging area for images</h2>
-<p>We really don&#39;t want to allow employees to upload ANYTHING into their profile picture....</p>
-<h3 id="update-web-app-to-place-code-into-a-staging-area">update web app to place code into a staging area</h3>
+				<h2 id="building-a-staging-blob-container-profile-pictures">Building a Staging Blob Container Profile Pictures</h2>
+<p>This is a short chapter, but sets the stage for something big. Imagine the web app we&#39;ve been building was going to be used in a production capacity. Do you really want to give users the ability to upload <em>any</em> image are their profile image? Some images just aren&#39;t suitable for a work enviornment. </p>
+<p>Wouldn&#39;t it be nice to add a step into the profile image upload process where images were screened? But, who&#39;s going to do the screening? Do you really have time to screen <em>every</em> images uploaded. Maybe it makes sense for a small site, but what happens when there&#39;s thousands of users? </p>
+<p>For me, there&#39;s no chance that I would introduce a manual screen step. Instead, I&#39;d look for every opportunity to automate this process so I can spend the time to write code once, and use it everytime someone changes their profile picture. </p>
+<p>Over the next several chapters, we&#39;ll be building an automated image screening process using <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Microsoft&#39;s Cognitive Services Computer Vision API</a>. We&#39;ll combine various Azure services: blob storage containers, an Azure function listening for changes to a blob container, and REST service calls to the computer vision API. The computer vision API will process each uploaded image, indicating whether it is work appropriate. Images that are acceptable will be moved to the profile picture blob container. Invalid images will be moved to a separate container.  </p>
+<p>In this chapter, we&#39;ll start building the autoamted process by modifying our web app to place the uploaded images in a staging blob container. Let&#39;s get started.</p>
+<h3 id="creating-a-profile-picture-staging-blob-container">Creating a Profile Picture Staging Blob Container</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
+</h4>
+
+<p>This is a fairly short exercise, where you&#39;ll do 2 things to create a staging blob container for profile pictues:</p>
 <ul>
-<li>update Index.cshtml verbiage for alt img tag</li>
-<li>update manage controller code for UploadImageAsync</li>
-<li>add web.config app setting for ProfilePicUploadBlobContainer</li>
+<li><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob contianer name </li>
+<li><strong>Step 2:</strong> Update the upload image function to upload images to the staging blob container</li>
 </ul>
-<h3 id="view-results">view results</h3>
+<h4 id="-step-1-create-a-web-config-app-setting-for-the-upload-staging-blob-contianer-name"><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob contianer name</h4>
+<p>Add a new app setting to the <em>web.config</em> file named <code>ProfilePicUploadBlobContainer</code>.</p>
+<pre><code class="lang-xml">&lt;add key=&quot;ProfilePicUploadBlobContainer&quot; value=&quot;uploaded&quot; /&gt;
+</code></pre>
+<h4 id="-step-2-update-the-upload-image-function-to-upload-images-to-the-staging-blob-container"><strong>Step 2:</strong> Update the upload image function to upload images to the staging blob container</h4>
+<p>Update the <code>UploadImageAsync()</code> function to change the blob container images are uploaded to. You can find this function in <em>ManageController.cs</em>.</p>
+<pre><code class="lang-csharp">public async Task&lt;string&gt; UploadImageAsync(string currentBlobUrl, HttpPostedFileBase imageToUpload)
+{
+    string imageFullPath = null;
+    if (imageToUpload == null || imageToUpload.ContentLength == 0)
+    {
+        return null;
+    }
+    try
+    {
+        // connect to our storage account
+        var cloudStorageAccount = CloudStorageAccount.Parse($&quot;DefaultEndpointsProtocol=https;AccountName={ConfigurationManager.AppSettings[&quot;StorageAccountName&quot;]};AccountKey={ConfigurationManager.AppSettings[&quot;StorageAccountKey&quot;]};&quot;);
+        var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+        var cloudBlobContainer = cloudBlobClient.GetContainerReference(ConfigurationManager.AppSettings[&quot;ProfilePicUploadBlobContainer&quot;]);
+
+        // create the blob storage container, if needed
+        if (await cloudBlobContainer.CreateIfNotExistsAsync())
+        {
+            await cloudBlobContainer.SetPermissionsAsync(
+                new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                }
+            );
+        }
+
+        var imageName = $&quot;{Guid.NewGuid()}{Path.GetExtension(imageToUpload.FileName)}&quot;;
+
+        // upload image blob
+        var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
+        cloudBlockBlob.Properties.ContentType = imageToUpload.ContentType;
+        await cloudBlockBlob.UploadFromStreamAsync(imageToUpload.InputStream);
+
+        // get URL of uploaded image blob - replacing the staging/upload container name 
+        // with the valid blob container name
+        imageFullPath = cloudBlockBlob.Uri.ToString().Replace(ConfigurationManager.AppSettings[&quot;ProfilePicUploadBlobContainer&quot;], ConfigurationManager.AppSettings[&quot;ProfilePicBlobContainer&quot;]);
+    }
+    catch (Exception ex)
+    {
+        // in reality, you should handle this...
+    }
+    return imageFullPath;
+}
+</code></pre>
+<p>The changes made are straight-forward, but we&#39;d like to call attention to the <code>imageFullPath</code> variable and it&#39;s value: </p>
+<pre><code class="lang-csharp">imageFullPath = 
+    cloudBlockBlob.Uri.ToString()
+        .Replace(
+            ConfigurationManager.AppSettings[&quot;ProfilePicUploadBlobContainer&quot;], 
+            ConfigurationManager.AppSettings[&quot;ProfilePicBlobContainer&quot;]);
+</code></pre>
+<p>From the previous chapter, you&#39;ll recall that <code>cloudBlockBlob</code> is a reference to the uploaded blob image. After this change, the blob container we&#39;ll be upload to is the staging/upload container named <em>uploaded</em> (stored in the <code>ProfilePicUploadBlobContainer</code> app setting). This staging/upload container should not be returned to the app, because images in this container have not been processed with the computer vision API. </p>
+<p>When images get processed, valid profile pictures will be placed in the <em>profile-pics</em> container (stored in the <code>ProfilePicBlobContainer</code> app setting). As a result, the URL returned from the upload function returns the URL of the valid image. </p>
+<p>Let&#39;s test it out! Compile and run the web app. When you upload a new image, you should expect the image to be placed into the <em>uploaded</em> blob container, and the profile management page to not display an image (because we haven&#39;t created the Azure function to validate the pictures with the computer vision API).</p>
+<p><img src="images/chapter7/profile-pics-uploaded.gif" class="img-large" /></p>
+<p>Use Storage Explorer to check out the blob containers. You should see the <em>profile-pics</em> and <em>uploaded</em> containers. The <em>profile-pics</em> container will have the original profile picture inside, and the <em>uploaded</em> container will have the new profile picture.</p>
+<p><img src="images/chapter7/storage-explorer.gif" class="img-large" /></p>
+<div class="exercise-end"></div>
+
+<p>That concludes this chapter. We said it would be a short one. </p>
+<h4 id="summary">Summary</h4>
+<p>In this chapter, you:</p>
 <ul>
-<li>run project</li>
-<li>upload an image</li>
-<li>look at storage explorer and see image in the uploaded directory</li>
+<li>Learned about the automated profile picture analysis process we&#39;ll be implementing</li>
+<li>Updated the web app to upload images to a different blob container that will be used as an upload/staging area</li>
+<li>Verified the creation of the upload/staging blob container and verified images were added to the correct blob container</li>
 </ul>
+<p>In the next chapter, we&#39;ll finish building the automated profile picture analysis process.</p>
 
 			</div>
 			<hr>

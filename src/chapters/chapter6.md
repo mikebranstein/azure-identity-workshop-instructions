@@ -361,7 +361,7 @@ Click *Refresh All*, browse to your Azure storage account, and open the *Blob Co
 
 In this chapter, you learned:
 * Why you shouldn't store blobs in Azure table storage, and that blob storage is a much better choice
-* When interacting with the cloud, you shoudl use asynchronous method calls
+* When interacting with the cloud, you should use asynchronous method calls
 * When you reference blob containers, always check if they exist before using them
 
 In the next chapter, we'll continue to explore blob storage by uploading profile pictures to a holding zone where images will need to be approved prior to being accepted as a profile picture.
