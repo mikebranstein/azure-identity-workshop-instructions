@@ -893,8 +893,8 @@ namespace Web
 <li><strong>Step 3:</strong> Create the <code>UpdateBiographyViewModel</code> class in <em>ManageViewModels.cs</em></li>
 <li><strong>Step 4:</strong> Create the Update Biography view</li>
 <li><strong>Step 5:</strong> Add a GET controller action for the Update Biography view to <em>ManageController.cs</em></li>
-<li><strong>Step 6:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></li>
-<li><strong>Step 7:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></li>
+<li><strong>Step 6:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></li>
+<li><strong>Step 7:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></li>
 </ul>
 <p>Finally, we&#39;ll return to the profile management page:</p>
 <ul>
@@ -990,35 +990,93 @@ public async Task&lt;ActionResult&gt; UpdateBiography()
 </code></pre>
 <p>You may not immediately recognize all of the code you just added, so let&#39;s break it down. First, we grab the current user&#39;s id by calling into ASP.NET Identity with <code>User.Identity.GetUserId()</code>. With the user&#39;s id, we call the funciton we created earlier in this chapter (<code>GetBiographyAsync()</code>) to load the user&#39;s biography. </p>
 <p>The retrieved biography is then used to construct a model passed back to the Update Biography view.</p>
-<h4 id="-step-6-add-a-post-controller-action-for-the-update-biography-view-to-managecontroller-cs-"><strong>Step 6:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></h4>
+<h4 id="-step-6-add-a-your-biography-was-updated-message-to-managecontroller-cs-"><strong>Step 6:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></h4>
 <p>Now that we have the Update Biography view showing a user&#39;s biography, let&#39;s start planning what happens when a user&#39;s biogrpahy is updated. </p>
-<p>When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We&#39;ll cover this step next. </p>
-<h4 id="-step-7-add-a-your-biography-was-updated-message-to-managecontroller-cs-"><strong>Step 7:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></h4>
-<p>When A message reading, &quot;Your biography was updated&quot; is also displayed on the Manage\Index view. Displaying</p>
-<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontoller-cs-to-populate-the-view-with-the-updated-biography"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em> to populate the view with the updated biography</h4>
+<p>When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We&#39;ll get to this next. </p>
+<p>When you return to the Manage\Index view, a message reading, &quot;Your biography was updated&quot; is also displayed. This is done by passing a specially-formatted query string value back to the view via the <code>ManageMessageId</code> enum. </p>
+<p>Update the enum&#39;s values to include a value for <code>UpdateBiographySuccess</code>. </p>
+<blockquote>
+<p><strong>NOTE</strong> You may have trouble finding the enum declaration because it&#39;s hidden behind a collapsed region labeled <em>Helpers</em>. Scroll down to the bottom of the <em>ManageController.cs</em> class to find the region. Expand it and you&#39;ll be able to locate the enum.</p>
+</blockquote>
+<pre><code class="lang-csharp">public enum ManageMessageId
+{
+    AddPhoneSuccess,
+    ChangePasswordSuccess,
+    SetTwoFactorSuccess,
+    SetPasswordSuccess,
+    RemoveLoginSuccess,
+    RemovePhoneSuccess,
+    Error,
+    UpdateBiographySuccess
+}
+</code></pre>
+<h4 id="-step-7-add-a-post-controller-action-for-the-update-biography-view-to-managecontroller-cs-"><strong>Step 7:</strong> Add a POST controller action for the Update Biography view to <em>ManageController.cs</em></h4>
+<p>Add a POST controll action to the Manage controller, using the <code>UpdateBiographySuccess</code> enum value just created.</p>
+<pre><code class="lang-csharp">[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel model)
+{
+    if (!ModelState.IsValid)
+    {
+        return View(model);
+    }
+    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+    if (user != null)
+    {
+        user.Biography = model.Biography;
+        await UserManager.UpdateAsync(user);
+    }
+    return RedirectToAction(&quot;Index&quot;, new { Message = ManageMessageId.UpdateBiographySuccess });
+}
+</code></pre>
+<p>Much of the code is stright-forward, but we want to draw your attention to a few lines, starting with <code>var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());</code>. You&#39;ve already seen the <code>GetUserId()</code> function, but you haven&#39;t directly worked with the <code>UserManager</code> class. </p>
+<blockquote>
+<p><strong>NOTE</strong> The <code>UserManager</code> class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you&#39;re not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. </p>
+</blockquote>
+<p>Back to the code. Because <code>UserManager</code> acts as a repository, we use it to retrieve a user object (more specifically, the <code>ApplicationUser</code> object which inherits from <code>IdentityUser</code>). Once we have the user, we update the biography property and send the user back through the repository to be persisted: <code>await UserManager.UpdateAsync(user);</code>.</p>
+<p>After the user is saved, you&#39;re redirected back to the Manage\Index view, passing the <code>UpdateBiographySuccess</code> enum value as a query string parameter.</p>
+<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontoller-cs-"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em></h4>
+<p>The final step is to update the GET controller action of the Manage\Index view. Below is the entire function, but note the added line setting the <code>ViewBag.StatusMessage</code> to &quot;Your biography was updated.&quot; when the <code>ManageMessageId</code> enum has a value of <code>UpdateBiographySuccess</code>. </p>
+<p>You should also note that the index view model&#39;s biography property is set by calling the method you created eariler: <code>UserManager.GetBiographyAsynx(userId)</code>.</p>
+<pre><code class="lang-csharp">//
+// GET: /Manage/Index
+public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
+{
+    ViewBag.StatusMessage =
+        message == ManageMessageId.ChangePasswordSuccess ? &quot;Your password has been changed.&quot;
+        : message == ManageMessageId.SetPasswordSuccess ? &quot;Your password has been set.&quot;
+        : message == ManageMessageId.SetTwoFactorSuccess ? &quot;Your two-factor authentication provider has been set.&quot;
+        : message == ManageMessageId.Error ? &quot;An error has occurred.&quot;
+        : message == ManageMessageId.AddPhoneSuccess ? &quot;Your phone number was added.&quot;
+        : message == ManageMessageId.RemovePhoneSuccess ? &quot;Your phone number was removed.&quot;
+        : message == ManageMessageId.UpdateBiographySuccess ? &quot;Your biography was updated.&quot;
+        : &quot;&quot;;
+
+    var userId = User.Identity.GetUserId();
+    var model = new IndexViewModel
+    {
+        HasPassword = HasPassword(),
+        PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+        TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+        Logins = await UserManager.GetLoginsAsync(userId),
+        BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+        Biography = await UserManager.GetBiographyAsync(userId),
+    };
+    return View(model);
+}
+</code></pre>
 <div class="exercise-end"></div>
 
-<h3 id="build-the-update-biography">Build the Update Biography</h3>
+<p>Phew! That was a huge update to the code base. Compile and cross your fingers ;-).</p>
+<p>When you launch the app to test, login and navigate to the profile management page. You should see something similar to the image below. If you don&#39;t, that&#39;s ok. You can always grab the code from the <code>chapter6</code> branch of the Github repository.</p>
+<p><img src="images/chapter5/manage-biography.gif" class="img-large" /></p>
+<h4 id="summary">Summary</h4>
+<p>In this chapter, you learned:</p>
 <ul>
-<li>update the IndexViewModel to include the Biography property</li>
-<li><p>update Index.cshtml, add HTML to display the update biography links</p>
-</li>
-<li><p>add class to ManageViewModels.cs</p>
-</li>
-<li>create UpdateBiography.cshtml</li>
-<li>copy paste the HTML</li>
-<li>add GET controller action</li>
-<li>locate ManageMessageId enum in the hidden Helpers area, add the UpdateBiographySuccess value to the enum</li>
-<li><p>add POST controller action</p>
-</li>
-<li><p>update the Index GET function to display the correct update message and to load in the Biography via the user manager</p>
-</li>
+<li>It&#39;s easy to extend ASP.NET identity by adding a public property to the <code>ApplicationUser</code> class</li>
+<li>The <code>ApplicationUserManager</code> class acts as a repository for application users</li>
 </ul>
-<h3 id="test-it-">test it!</h3>
-<ul>
-<li>works</li>
-<li>note that the tables are automatically upgraded to account for the changes we&#39;ve made</li>
-</ul>
+<p>In the next chapter, we&#39;ll continue to extend ASP.NET Identity by adding a profile picture to our app.</p>
 
 			</div>
 			<hr>
