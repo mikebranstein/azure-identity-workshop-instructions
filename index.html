@@ -1473,14 +1473,264 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="processing-images-with-azure-functions">Processing images with Azure Functions</h2>
-<p>Introduction</p>
-<h3 id="create-azure-funciton-use-content-from">Create Azure funciton - use content from</h3>
-<p><a href="https://github.com/Microsoft/TechnicalCommunityContent/blob/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On/Azure%20Functions%20HOL%20(C%23).md">https://github.com/Microsoft/TechnicalCommunityContent/blob/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On/Azure%20Functions%20HOL%20(C%23).md</a></p>
+				<h2 id="processing-profile-pictures-with-azure-functions">Processing Profile Pictures with Azure Functions</h2>
+<blockquote>
+<p><em>NOTE:</em> This chapter was adapted from Microsoft&#39;s Technical Community Content Github repo. To find out more and see the original content, visit <a href="https://github.com/Microsoft/TechnicalCommunityContent/tree/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On">Github</a>.</p>
+</blockquote>
+<p>Functions have been the basic building blocks of software since the first lines of code were written and the need for code organization and reuse became a necessity. Azure Functions expand on these concepts by allowing developers to create &quot;serverless&quot;, event-driven functions that run in the cloud and can be shared across a wide variety of services and systems, uniformly managed, and easily scaled based on demand. In addition, Azure Functions can be written in a variety of languages, including C#, JavaScript, Python, Bash, and PowerShell, and they&#39;re perfect for building apps and nanoservices that employ a compute-on-demand model.</p>
+<p>In this chapter, you&#39;ll create an Azure Function that monitors a blob container in Azure Storage for new images, and then performs automated analysis of the images using the Microsoft Cognitive Services <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Computer Vision API</a>. Specifically, The Azure Function will analyze each image that is uploaded to the container for inappropriate content and create a copy of the image in another container. Images that contain inappropriate content will be copied to one container (the <em>rejected</em> container), and images that are acceptable copied to another (the <em>profile-pics</em> container). In addition, the analysis data returned by the Computer Vision API will be stored in blob metadata.</p>
+<h3 id="creating-an-azure-function-app">Creating an Azure Function App</h3>
+<p>The first step in writing an Azure Function is to create an Azure Function App. In this exercise, you&#39;ll create an Azure Function App using the Azure Portal. Then you&#39;ll add the <em>rejected</em> blob container to the storage account you&#39;ve used throughout this bootcamp. The <em>rejected</em> contaner will contain images classified as inappropriate content. </p>
+<p>If you&#39;re wondering about the other two containers mentioned above, don&#39;t worry. You&#39;ve already created them as part of previous chapters. We&#39;ll continue to use them in this chapter. </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create an Azure Function App
+</h4>
+
+<p>Open the <a href="https://portal.azure.com">Azure Portal</a> in your browser. If asked to log in, do so using your Microsoft account. </p>
+<p>Click <em>+ New</em>, followed by <em>Compute</em> and <em>Function App</em>.</p>
+<p><img src="images/chapter8/new-function-app.png" class="img-medium" /></p>
+<p>You&#39;ll be presented with a Function App creation blade.</p>
+<p><img src="images/chapter8/create-function-app.png" class="img-small" /></p>
+<p>Enter an app name that is unique within Azure. Under <em>Resource Group</em>, select <em>Use existing</em> and select the resource group your created earlier. Choose <em>App Service plan/Location</em> for the <em>Hosting Plan</em>, and select the same storage account you created earlier.Make sure the <em>Pin to dashboard</em> is checked.</p>
+<p>Click <em>Create</em> to create a new Function App. The function app will start it&#39;s deployment process. </p>
+<p><img src="images/chapter8/deploying-function-app.png" class="img-small" /></p>
+<p>While you&#39;re waiting for the function app to be created, open the resource group created earlier and locate your storage account. Open the storage account in the portal. </p>
+<p>Click <em>Blobs</em> to view the contents of blob storage.</p>
+<p><img src="images/chapter8/open-blob-storage.png" alt="Opening blob storage"></p>
+<p>You should see several containers inside of your blob storage: <em>profile-pics</em>, <em>uploaded</em>, and <em>azure-webjobs-hosts</em>. You previously created <em>profile-pics</em> and <em>uploaded</em> during previous chapters. The <em>azure-webjobs-hosts</em> container is created by the function app provisioning process, so you may not see it if the funciton app you just created hasn&#39;t been fully provisioned.</p>
+<p>Click <em>+ Container</em> to add a container.</p>
+<p><img src="images/chapter8/add-container.png" class="img-large" /></p>
+<p>Type <em>rejected</em> into the <em>Name</em> box. Select <em>Blob</em> for the <em>Access type</em>. Then click the <em>Create</em> button to create the container.</p>
+<p><img src="images/chapter8/name-container.png" alt="Naming the container"></p>
+<p>Repeat the previous steps to add containers named <em>profile-pics</em> and <em>uploaded</em> if they don&#39;t exist.</p>
+<div class="exercise-end"></div>
+
+<p>Great work! You&#39;ve created the function app and have the three containers needed to store uploaded, rejected, and valid profile pictures.The next step is to add an Azure Function.</p>
+<h3 id="creating-an-azure-function">Creating an Azure Function</h3>
+<p>Once you have created an Azure Function App, you can add Azure Functions to it. In this exercise, you&#39;ll add a function to the Function App you created in the previous exercise and write C# code that uses the <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Computer Vision API</a> to analyze images added to the &quot;uploaded&quot; container for inappropriate content.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create an Azure Function
+</h4>
+
+<p>Return to the bootcamp dashboard and click the Azure Function App that you created and pinned in the previous exercise. </p>
+<p><img src="images/chapter8/open-function-app.png" class="img-small" /></p>
+<p>Click the <em>+</em> symbol next to <em>Functions</em>, as shown in the image below.</p>
+<p><img src="images/chapter8/create-azure-function.gif" class="img-large" /></p>
+<p>Scroll past the <em>Get started quickly...</em> heading and click <em>Custom function</em> under the <em>Get started on your own</em> heading. Click <em>BlobTrigger-CSharp</em>. </p>
+<p>Enter <em>BlobImageAnalysis</em> for the function name and &quot;uploaded/{name}.{ext}&quot; into the <em>Path</em> box. (The latter applies the blob storage trigger to the &quot;uploaded&quot; container that you created earlier in this workshop.) <em>{name}</em> and <em>{ext}</em> refer to function app parameters that will be passed in by the Azure funciton app API automatically. For example, when a profile picture is uploaded with the name mypicture.jpeg, it will be parsed into two variables: <em>name</em> (with a value of <em>mypicture</em>) and <em>ext</em> (with a value of <em>jpeg</em>). </p>
+<p>Click the <em>Create</em> button to create the Azure Function.</p>
+<p>When the Azure Function is created, a code editor window will appear. </p>
+<p><img src="images/chapter8/code-editor.png" class="img-large" /></p>
+<p>Replace the code shown in the code editor with the following statements:</p>
+<pre><code class="lang-csharp">using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
+using System.Net.Http.Headers;
+using System.Configuration;
+
+public async static Task Run(Stream myBlob, string name, string ext, TraceWriter log)
+{       
+    log.Info($&quot;Analyzing uploaded image {name} for appropriate content...&quot;);
+
+    var array = await ToByteArrayAsync(myBlob);
+    var result = await AnalyzeImageAsync(array, log);
+
+    log.Info(&quot;Is Adult: &quot; + result.adult.isAdultContent.ToString());
+    log.Info(&quot;Adult Score: &quot; + result.adult.adultScore.ToString());
+    log.Info(&quot;Is Racy: &quot; + result.adult.isRacyContent.ToString());
+    log.Info(&quot;Racy Score: &quot; + result.adult.racyScore.ToString());
+
+    // Reset stream location
+    myBlob.Seek(0, SeekOrigin.Begin);
+    if (result.adult.isAdultContent || result.adult.isRacyContent)
+    {
+        // profile picture is NOT acceptable - copy blob to the &quot;rejected&quot; container
+        StoreBlobWithMetadata(myBlob, &quot;rejected&quot;, name, ext, result, log);
+    }
+    else
+    {
+        // profile picture is acceptable - copy blob to the &quot;profile-pics&quot; container
+        StoreBlobWithMetadata(myBlob, &quot;profile-pics&quot;, name, ext, result, log);
+    }
+}
+
+private async static Task&lt;ImageAnalysisInfo&gt; AnalyzeImageAsync(byte[] bytes, TraceWriter log)
+{
+    HttpClient client = new HttpClient();
+
+    var key = ConfigurationManager.AppSettings[&quot;SubscriptionKey&quot;].ToString();
+    client.DefaultRequestHeaders.Add(&quot;Ocp-Apim-Subscription-Key&quot;, key);
+
+    HttpContent payload = new ByteArrayContent(bytes);
+    payload.Headers.ContentType = new MediaTypeWithQualityHeaderValue(&quot;application/octet-stream&quot;);
+
+    var results = await client.PostAsync(&quot;https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Adult&quot;, payload);
+    var result = await results.Content.ReadAsAsync&lt;ImageAnalysisInfo&gt;();
+    return result;
+}
+
+// Writes a blob to a specified container and stores metadata with it
+private static void StoreBlobWithMetadata(Stream image, string containerName, string blobName, string ext, ImageAnalysisInfo info, TraceWriter log)
+{
+    log.Info($&quot;Writing blob and metadata to {containerName} container...&quot;);
+
+    var connection = ConfigurationManager.AppSettings[&quot;AzureWebJobsStorage&quot;].ToString();
+    var account = CloudStorageAccount.Parse(connection);
+    var client = account.CreateCloudBlobClient();
+    var container = client.GetContainerReference(containerName);
+
+    try
+    {
+        var blob = container.GetBlockBlobReference($&quot;{blobName}.{ext}&quot;);
+
+        if (blob != null) 
+        {
+            // Upload the blob
+            blob.UploadFromStream(image);
+
+            // Set the content type of the image
+            blob.Properties.ContentType = &quot;image/&quot; + ext;
+            blob.SetProperties();
+
+            // Get the blob attributes
+            blob.FetchAttributes();
+
+            // Write the blob metadata
+            blob.Metadata[&quot;isAdultContent&quot;] = info.adult.isAdultContent.ToString(); 
+            blob.Metadata[&quot;adultScore&quot;] = info.adult.adultScore.ToString(&quot;P0&quot;).Replace(&quot; &quot;,&quot;&quot;); 
+            blob.Metadata[&quot;isRacyContent&quot;] = info.adult.isRacyContent.ToString(); 
+            blob.Metadata[&quot;racyScore&quot;] = info.adult.racyScore.ToString(&quot;P0&quot;).Replace(&quot; &quot;,&quot;&quot;); 
+
+            // Save the blob metadata
+            blob.SetMetadata();
+        }
+    }
+    catch (Exception ex)
+    {
+        log.Info(ex.Message);
+    }
+}
+
+// Converts a stream to a byte array 
+private async static Task&lt;byte[]&gt; ToByteArrayAsync(Stream stream)
+{
+    Int32 length = stream.Length &gt; Int32.MaxValue ? Int32.MaxValue : Convert.ToInt32(stream.Length);
+    byte[] buffer = new Byte[length];
+    await stream.ReadAsync(buffer, 0, length);
+    return buffer;
+}
+
+public class ImageAnalysisInfo
+{
+    public Adult adult { get; set; }
+    public string requestId { get; set; }
+}
+
+public class Adult
+{
+    public bool isAdultContent { get; set; }
+    public bool isRacyContent { get; set; }
+    public float adultScore { get; set; }
+    public float racyScore { get; set; }
+}
+</code></pre>
+<p><em>Run</em> is the method called each time the function is executed. The <em>Run</em> method uses a helper method named <em>AnalyzeImageAsync</em> to pass each blob added to the &quot;uploaded&quot; container to the Computer Vision API for analysis. Then it calls a helper method named <em>StoreBlobWithMetadata</em> to create a copy of the blob in either the &quot;profile-pics&quot; container or the &quot;rejected&quot; container, depending on the scores returned by <em>AnalyzeImageAsync</em>. </p>
+<p>Click the <em>Save</em> button at the top of the code editor to save your changes. The click <em>View Files</em>.</p>
+<p><img src="images/chapter8/save-run-file.png" class="img-medium" /></p>
+<p>Click <em>+ Add</em> to add a new file, and name the file <em>project.json</em>.</p>
+<p><img src="images/chapter8/add-project-file.png" class="img-small" /></p>
+<p>Add the following statements to <em>project.json</em>:</p>
+<pre><code class="lang-json">{
+    &quot;frameworks&quot;: {
+        &quot;net46&quot;: {
+            &quot;dependencies&quot;: {
+                &quot;WindowsAzure.Storage&quot;: &quot;8.1.1&quot;
+            }
+        }
+    }
+}
+</code></pre>
+<p>Click the <em>Save</em> button to save your changes. Then click <em>run.csx</em> to go back to that file in the code editor.</p>
+<p><img src="images/chapter8/save-project-file.png" class="img-large" /></p>
+<div class="exercise-end"></div>
+
+<p>An Azure Function written in C# has been created, complete with a JSON project file containing information regarding project dependencies. The next step is to add an application setting that Azure Function relies on.</p>
+<h3 id="adding-a-subscription-key-to-application-settings">Adding a Subscription Key to Application Settings</h3>
+<p>The Azure Function you created in the previous exercise loads a subscription key for the Microsoft Cognitive Services Computer Vision API from application settings. This key is required in order for your code to call the Computer Vision API, and is transmitted in an HTTP header in each call. In this exercise, you will add an application setting containing the subscription key to the Function App.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add a Subscription Key to Application Settings
+</h4>
+
+<p>Open a new browser window and navigate to <a href="https://www.microsoft.com/cognitive-services/en-us/subscriptions">https://www.microsoft.com/cognitive-services/en-us/subscriptions</a>. If you haven&#39;t signed up for the Computer Vision API, do so now. (Signing up is free.) Then click <em>Copy</em> under <em>Key 1</em> in your Computer Vision subscription to copy the subscription key to the clipboard.</p>
+<p><img src="images/chapter8/computer-vision-key.png" class="img-large" /></p>
+<p>Return to your Function App in the Azure Portal and click on the function app name on the left (as shown in the image below).</p>
+<p><img src="images/chapter8/goto-app-settings.gif" class="img-large" /></p>
+<p>On the right, select the <em>Platform features</em> tab at top. Under <em>General Settings</em>, click <em>Application settings</em>. </p>
+<p>Scroll down until you find the <em>App settings</em> section. Add a new app setting named <em>SubscriptionKey</em>, and paste the Cognitive Services API subscription key that is on the clipboard into the <em>Value</em> box. Then click <em>Save</em> at the top of the blade.</p>
+<p><img src="images/chapter8/add-key.png" alt="Adding a subscription key"></p>
+<p>The app settings are now configured for your Azure Function. It&#39;s a good idea to validate those settings by recompiling the function and ensuring that it compiles without errors. Scroll left until you see the &quot;Function app&quot; blade, and then click <em>BlobImageAnalysis</em>.</p>
+<p><img src="images/chapter8/open-function.png" class="img-small" />    </p>
+<div class="exercise-end"></div>
+
+<h3 id="testing-the-azure-function">Testing the Azure Function</h3>
+<p>Your function is configured to listen for changes to the blob container named &quot;uploaded&quot; that you created earlier in this workshop. Each time an image appears in the container, the function executes and passes the image to the Computer Vision API for analysis. To test the function, you simply upload images to the container. In this exercise, you will use the Azure Portal to upload images to the &quot;uploaded&quot; container and verify that copies of the images are placed in the &quot;accepted&quot; and &quot;rejected&quot; containers.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Uploading an Image to Blob Storage
+</h4>
+
+<p>In the Azure Portal, go to the resource group created for your Function App. Then click the storage account that was created for it.</p>
+<p>Click <em>Blobs</em> to view the contents of blob storage.</p>
+<p><img src="images/chapter8/open-blob-storage.png" class="img-large" /></p>
+<p>Click <em>uploaded</em> to open the &quot;uploaded&quot; container.</p>
+<p><img src="images/chapter8/open-uploaded-container.png" class="img-large" /></p>
+<p>Click <em>Upload</em>.</p>
+<p><img src="images/chapter8/upload-images-1.png" class="img-large" /></p>
+<p>Click the button with the folder icon to the right of the <em>Files</em> box. Select one or more image files. Then click the <em>Upload</em> button to upload the files to the &quot;uploaded&quot; container.</p>
+<blockquote>
+<p><strong>WARNING:</strong> Due to the nature of this exercise, your Azure Function can detect adult and racy images. Please, <strong>DO NOT</strong> upload inappropriate images during the lab. Be respectful of those around you. </p>
+</blockquote>
+<p><img src="images/chapter8/upload-images-2.png" alt="Uploading images to the &quot;uploaded&quot; container"></p>
+<p>Return to the blade for the &quot;uploaded&quot; container and verify that the images you uploaded were uploaded. eight images were uploaded.</p>
+<blockquote>
+<p><strong>NOTE:</strong> These screenshots may be slightly different due to the number and names of images you uploaded.</p>
+</blockquote>
+<p><img src="images/chapter8/uploaded-images.png" class="img-medium" /></p>
+<p>Close the blade for the &quot;uploaded&quot; container and open the &quot;profile-pics&quot; container.</p>
+<p><img src="images/chapter8/open-accepted-container.png" class="img-large" /></p>
+<p>Verify that the &quot;profile-pics&quot; container holds the images you uploaded. <em>These are the images that were classified as appropriate images by the Computer Vision API</em>.</p>
+<blockquote>
+<p>It may take a minute or more for all of the images to appear in the container. If necessary, click <em>Refresh</em> every few seconds until you see all the images you expect.</p>
+</blockquote>
+<p><img src="images/chapter8/accepted-images.png" class="img-large" /></p>
+<p>Close the blade for the &quot;profile-pics&quot; container and open the blade for the &quot;rejected&quot; container.</p>
+<p><img src="images/chapter8/open-rejected-container.png" class="img-large" /></p>
+<p>Verify that the <em>rejected</em> container holds the number of images you would expect to be rejected. <em>These images were classified as inappropriate by the Computer Vision API</em>.</p>
+<p>The presence of all images in the <em>profile-pics</em> and <em>rejected</em> containers is proof that your Azure Function executed each time an image was uploaded to the &quot;uploaded&quot; container. If you would like, return to the BlobImageAnalysis function in the portal and click <em>Monitor</em>. You will see a log detailing each time the function executed.</p>
+<div class="exercise-end"></div>
+
+<h3 id="viewing-blob-metadata">Viewing Blob Metadata</h3>
+<p>What if you would like to view the scores for adult content and raciness returned by the Computer Vision API for each image uploaded to the &quot;uploaded&quot; container? The scores are stored in blob metadata for the images in the &quot;profile-pics&quot; and &quot;rejected&quot; containers, but blob metadata can&#39;t be viewed through the Azure Portal.</p>
+<p>In this exercise, you will use the cross-platform <a href="http://storageexplorer.com">Microsoft Azure Storage Explorer</a> to view blob metadata and see how the Computer Vision API scored the images you uploaded.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: View Blob Metadata with Storage Explorer
+</h4>
+
+<p>Start Storage Explorer. Find your storage account you&#39;ve bene working with and expand the list of blob containers underneath it. Then click the container named <em>profile-pics</em>.</p>
+<p>Right-click an image in the &quot;profile-pics&quot; container and select <em>Properties</em> from the context menu.</p>
+<p>Inspect the blob&#39;s metadata. <em>IsAdultContent</em> and <em>isRacyContent</em> are Boolean values that indicate whether the Computer Vision API detected adult or racy content in the image. <em>adultScore</em> and <em>racyScore</em> are the computed probabilities.</p>
+<p><img src="images/chapter8/profile-pic-metadata.gif" class="img-large" /></p>
+<p>You can probably imagine how this might be used in the real world. Suppose you were building a photo-sharing site and wanted to prevent adult images from being stored. You could easily write an Azure Function that inspects each image that is uploaded and deletes it from storage if it contains adult content.</p>
+<div class="exercise-end"></div>
+
+<h4 id="summary">Summary</h4>
+<p>In this chapter you learned how to:</p>
 <ul>
-<li>use same storage account that we previously created</li>
-<li>update project.json storage dependency</li>
+<li>Create an Azure Function App</li>
+<li>Write an Azure Function that uses a blob trigger</li>
+<li>Add application settings to an Azure Function App</li>
+<li>Use Microsoft Cognitive Services to analyze images and store the results in blob metadata</li>
 </ul>
+<p>This is just one example of how you can leverage Azure Functions to automate repetitive tasks. Experiment with other Azure Function templates to learn more about Azure Functions and to identify additional ways in which they can aid your research or business.</p>
+<p>In the next chapter, we&#39;ll take the web app to the next level by adding in a SingalR hub, and automatically updating a profile picture if it&#39;s approved.</p>
 
 			</div>
 			<hr>
