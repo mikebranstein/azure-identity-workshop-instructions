@@ -1,16 +1,16 @@
 {
-  "name": "nativescript-quick-start",
+  "name": "global-azure-bootcamp-workshop",
   "version": "1.0.0",
-  "description": "A quick-start guide for NativeScript CLI apps",
+  "description": "A workshop for Global Azure Day 2017",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tjvantoll/quick-start-template.git"
+    "url": "https://github.com/mikebranstein/GlobalAzureDay2017-instructions.git"
   },
-  "author": "TJ VanToll",
+  "author": "Mike Branstein",
   "bugs": {
-    "url": "https://github.com/tjvantoll/quick-start-template/issues"
+    "url": "https://github.com/mikebranstein/GlobalAzureDay2017-instructions/issues"
   },
-  "homepage": "https://github.com/tjvantoll/quick-start-template",
+  "homepage": "https://github.com/mikebranstein/GlobalAzureDay2017-instructions",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.1",
