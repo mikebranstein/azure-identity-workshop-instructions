@@ -1,14 +1,14 @@
 ## Building a Staging Blob Container Profile Pictures
 
-This is a short chapter, but sets the stage for something big. Imagine the web app we've been building was going to be used in a production capacity. Do you really want to give users the ability to upload *any* image are their profile image? Some images just aren't suitable for a work enviornment. 
+This is a short chapter, but sets the stage for something big. Imagine the web app we've been building was going to be used in a production capacity. Do you really want to give users the ability to upload *any* image are their profile image? Some images just aren't suitable for a work environment. 
 
 Wouldn't it be nice to add a step into the profile image upload process where images were screened? But, who's going to do the screening? Do you really have time to screen *every* images uploaded. Maybe it makes sense for a small site, but what happens when there's thousands of users? 
 
-For me, there's no chance that I would introduce a manual screen step. Instead, I'd look for every opportunity to automate this process so I can spend the time to write code once, and use it everytime someone changes their profile picture. 
+For me, there's no chance that I would introduce a manual screen step. Instead, I'd look for every opportunity to automate this process so I can spend the time to write code once, and use it every time someone changes their profile picture. 
 
 Over the next several chapters, we'll be building an automated image screening process using [Microsoft's Cognitive Services Computer Vision API](https://www.microsoft.com/cognitive-services/en-us/computer-vision-api). We'll combine various Azure services: blob storage containers, an Azure function listening for changes to a blob container, and REST service calls to the computer vision API. The computer vision API will process each uploaded image, indicating whether it is work appropriate. Images that are acceptable will be moved to the profile picture blob container. Invalid images will be moved to a separate container.  
 
-In this chapter, we'll start building the autoamted process by modifying our web app to place the uploaded images in a staging blob container. Let's get started.
+In this chapter, we'll start building the automated process by modifying our web app to place the uploaded images in a staging blob container. Let's get started.
 
 ### Creating a Profile Picture Staging Blob Container
 
@@ -16,11 +16,11 @@ In this chapter, we'll start building the autoamted process by modifying our web
     <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
 </h4>
 
-This is a fairly short exercise, where you'll do 2 things to create a staging blob container for profile pictues:
-* **Step 1:** Create a web.config app setting for the upload/staging blob contianer name 
+This is a fairly short exercise, where you'll do 2 things to create a staging blob container for profile pictures:
+* **Step 1:** Create a web.config app setting for the upload/staging blob container name 
 * **Step 2:** Update the upload image function to upload images to the staging blob container
 
-#### **Step 1:** Create a web.config app setting for the upload/staging blob contianer name
+#### **Step 1:** Create a web.config app setting for the upload/staging blob container name
 
 Add a new app setting to the *web.config* file named `ProfilePicUploadBlobContainer`.
 

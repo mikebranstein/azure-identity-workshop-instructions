@@ -4,7 +4,7 @@ In this chapter you will learn:
 * How to extend ASP.NET Identity by adding an image to a user profile
 * How to upload files to Azure blob storage
 
-In the last chapter, you learned how to extend ASP.NET Identity by adding a biography to a user's profile. You also saw that by adding a public property to the `ApplicationUser` class, ASP.NET Identity managed the data sotre's schema.
+In the last chapter, you learned how to extend ASP.NET Identity by adding a biography to a user's profile. You also saw that by adding a public property to the `ApplicationUser` class, ASP.NET Identity managed the schema.
 
 We'll continue extending ASP.NET Identity in this chapter by adding an image to the user profile management page.
 
@@ -50,7 +50,7 @@ After uploading an image to blob storage, we'll save the image URL to our user p
 
 #### Updating the `ApplicationUserManager` class
 
-We also need to add an asynchronous accessor function to the `ApplicationUserManager` class (jus tlike we did for the biography property). The method will take a `userId` and return the user's profile picture URL. You can find the `ApplicationUserManager` class in the *IdentityConfig.cs* file, located in the *App_Start* folder.
+We also need to add an asynchronous accessor function to the `ApplicationUserManager` class (just like we did for the biography property). The method will take a `userId` and return the user's profile picture URL. You can find the `ApplicationUserManager` class in the *IdentityConfig.cs* file, located in the *App_Start* folder.
 
 Add this code after the constructor.
 
@@ -92,7 +92,7 @@ Then we'll move on to a new page that uploads the profile picture:
 * **Step 7:** Add application settings to *web.config* 
 
 Finally, we'll return to the profile management page:
-* **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* to populate the view with the updated profile picture URL
+* **Step 8:** Update the GET controller action for the Index view in *ManageController.cs* to populate the view with the updated profile picture URL
 
 There's a lot to do, so let's get moving!
 
@@ -113,7 +113,7 @@ public class IndexViewModel
 }
 ```
 
-> Adding this property will allow the index view to display the profile picture when it loads. We'll be setting the value of the URL later in this excercise when we update the index controller's GET action.
+> Adding this property will allow the index view to display the profile picture when it loads. We'll be setting the value of the URL later in this exercise when we update the index controller's GET action.
 
 #### **Step 2:** Update the Manage\Index view 
 
@@ -167,7 +167,7 @@ using System.Web;
 
 Update a view named `UpdateBiography.cshtml` in the *Views\Manage* folder. This view will use the previously created `UpdateBiographyViewModel` to show and update a user's profile picture.
 
-Add an additional `<div class="form-group">...</div>` element between the existing divs. 
+Add an additional `<div class="form-group">...</div>` element between the existing `<div>` elements. 
 
 ```html
 <div class="form-group">
@@ -224,13 +224,13 @@ public async Task<ActionResult> UpdateBiography(UpdateBiographyViewModel model)
 }
 ```
 
-We've added a funciton call to populate the profile picture URL: `user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;`, but it may be a bit confusing, so let's break it down.
+We've added a function call to populate the profile picture URL: `user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;`, but it may be a bit confusing, so let's break it down.
 
 First, we call a function that uploads the profile picture to Azure blob storage: `UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture)`. If the upload is successful, it returns the URL of the uploaded image. Otherwise, it returns `null`. 
 
 If that function returns `null`, the existing profile picture url is kept.
 
-> **NOTE:** You may not recognise the `??` syntax, as it's a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
+> **NOTE:** You may not recognize the `??` syntax, as it's a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
 
 Add the `UploadImageAsync` function below the POST controller action.
 
@@ -280,11 +280,11 @@ public async Task<string> UploadImageAsync(string currentBlobUrl, HttpPostedFile
 
 There are 4 things happening in the upload function:
 * **Connect to Storage Account:** Using the `CloudStorageAccount` class, parse the storage account connection string, create a blob client, and a reference to the container (or folder) we'd like to access. The blob client works like a web service proxy that can interact with Azure blob storage to get a reference to the blob folders (a.k.a. containers) in the account. 
-* **Create the blob container:** It's important to know that the reference to the blob container doesn't means the cloud container exists. Whenever you access a container, you shoudl first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.
-* **Upload image blob:** With the container refereence, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.
+* **Create the blob container:** It's important to know that the reference to the blob container doesn't means the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.
+* **Upload image blob:** With the container reference, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.
 * **Get URL of the uploaded image blob:** When the image is uploaded, we get the URL of it via the `Uri` property. 
 
-> **NOTE:** Throughout the code we've written to access cloud resources, you'll notice a clear asynchronous programming pattern. When you're interacting with the cloud, you should always perform action in an asynchorous manner because you never know how long an action will take. In the event an action takes longer than expected, executing the command asynchronously won't prevent other code from executing.
+> **NOTE:** Throughout the code we've written to access cloud resources, you'll notice a clear asynchronous programming pattern. When you're interacting with the cloud, you should always perform action in an asynchronous manner because you never know how long an action will take. In the event an action takes longer than expected, executing the command asynchronously won't prevent other code from executing.
 
 The last step is to add several references to the top of the *ManageController.cs* file:
 
@@ -309,7 +309,7 @@ The `StorageAccountName` and `StorageAccountKey` keys are the same account name 
 
 The `ProfilePicBlobContainer` key is a blob container name that will hold our uploaded images. Don't change these. In this chapter, the image upload function uses the key to upload profile pictures to the blob container named *profile-pics*. 
 
-#### **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* 
+#### **Step 8:** Update the GET controller action for the Index view in *ManageController.cs* 
 
 The final step is to update the GET controller action of the Manage\Index view. The entire function is included below. 
 
@@ -353,7 +353,7 @@ When you launch the app to test, login and navigate to the profile management pa
 
 Before we're finished, let's take a look at Storage Explorer to see our uploaded profile picture.
 
-Click *Refresh All*, browse to your Azure storage account, and open the *Blob Containers* element. Inside, you'll see the *profile-pics* container. Seelcting the container will show the uploaded profile pictures.
+Click *Refresh All*, browse to your Azure storage account, and open the *Blob Containers* element. Inside, you'll see the *profile-pics* container. Selecting the container will show the uploaded profile pictures.
 
 <img src="images/chapter6/profile-pics-uploaded.gif" class="img-large" />
 

@@ -1,6 +1,6 @@
 ## Updating Windows Identity
 
-In this chapter, you'll be learning about ASP.NET Identity and how to move it's backend data store from SQL Server to Azure Table Storage.
+In this chapter, you'll be learning about ASP.NET Identity and how to move it's back-end data store from SQL Server to Azure Table Storage.
 
 Before we begin, let's cover a few basics on what ASP.NET Identity is and how it works. 
 
@@ -83,7 +83,7 @@ Considering these changes in web application development, ASP.NET Identity was d
 
 ### Getting Started with ASP.NET Identity
 
-ASP.NET Identity is used in the Visual Studio project templates for ASP.NET MVC, Web Forms, Web API and SPA. In this walkthrough, we'll illustrate how the project templates use ASP.NET Identity to add functionality to register, log in and log out a user.
+ASP.NET Identity is used in the Visual Studio project templates for ASP.NET MVC, Web Forms, Web API and SPA. In this walk-through, we'll illustrate how the project templates use ASP.NET Identity to add functionality to register, log in and log out a user.
 
 ASP.NET Identity is implemented using the following procedure. The purpose of this section is to give you a high level overview of ASP.NET Identity.
 
@@ -104,7 +104,7 @@ ASP.NET Identity is implemented using the following procedure. The purpose of th
     * **Microsoft.AspNet.Identity.OWIN**
         This package contains functionality that is used to plug in OWIN authentication with ASP.NET Identity in ASP.NET applications. This is used when you add log in functionality to your application and call into OWIN Cookie Authentication middleware to generate a cookie.
 
-3. **Registering a user.** After the project is created, launch the web applicaiton. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.
+3. **Registering a user.** After the project is created, launch the web application. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.
 
     <img src="images/chapter2/register.gif" class="img-medium" />
 
@@ -127,12 +127,12 @@ ASP.NET Identity is implemented using the following procedure. The purpose of th
             AddErrors(result);
         }
 
-        // If we got this far, something failed, redisplay form
+        // If we got this far, something failed, re-display form
         return View(model);
     }
     ```
 
-    > **DEFINITION** The `ApplicationUser` class is part of the ASP.NET MVC template, and inherits from the `IdentityUser` class. The class name doesn't matter, but inhireting from `IdentityUser` does. We're not going to cover the specifics of the `IdentityUser` class in this bootcamp, but it represents a user, with properties like *Name*, *Email*, *PhoneNumber*, etc. For more details on the `IdentityUser` class check out [this article](https://msdn.microsoft.com/en-us/magazine/dn818488.aspx).
+    > **DEFINITION** The `ApplicationUser` class is part of the ASP.NET MVC template, and inherits from the `IdentityUser` class. The class name doesn't matter, but inheriting from `IdentityUser` does. We're not going to cover the specifics of the `IdentityUser` class in this workshop, but it represents a user, with properties like *Name*, *Email*, *PhoneNumber*, etc. For more details on the `IdentityUser` class check out [this article](https://msdn.microsoft.com/en-us/magazine/dn818488.aspx).
 
     > **DEFINITION** The `UserManager` class is part of ASP.NET Identity and provides methods for managing users. Strange, right? ;-) 
 
@@ -159,7 +159,7 @@ ASP.NET Identity is implemented using the following procedure. The purpose of th
             AddErrors(result);
         }
 
-        // If we got this far, something failed, redisplay form
+        // If we got this far, something failed, re-display form
         return View(model);
     }
     ```
@@ -172,9 +172,9 @@ There are various other classes in ASP.NET Identity and the ASP.NET MVC template
 
 ### ASP.NET Identity Data Storage
 
-In this section, you'll be learning how to replace the backend data storage platform of ASP.NET Identity. By default, ASP.NET Identity uses [Entity Framework](https://msdn.microsoft.com/en-us/library/aa937723.aspx) to manage data persistence to SQL Server. 
+In this section, you'll be learning how to replace the back-end data storage platform of ASP.NET Identity. By default, ASP.NET Identity uses [Entity Framework](https://msdn.microsoft.com/en-us/library/aa937723.aspx) to manage data persistence to SQL Server. 
 
-Using Entity Framework and SQL Server is a great choice. In fact, we *could* provision a SQL Server database in Azure, and use that for the backend data store for ASP.NET Identity. 
+Using Entity Framework and SQL Server is a great choice. In fact, we *could* provision a SQL Server database in Azure, and use that for the back-end data store for ASP.NET Identity. 
 
 Instead, you'll be replacing Entity Framework and SQL Server with a highly-scalable and light-weight NoSQL Azure service called [Table storage](https://azure.microsoft.com/en-us/services/storage/tables/). 
 
@@ -203,7 +203,7 @@ The Table service contains the following components:
 
 ![image](images/chapter2/table-service.png)
 
-At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services housed within the account. You'll be creating a storage account later in the bootcamp.
+At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services housed within the account. You'll be creating a storage account later in the workshop.
 
 There are various concepts important to know about Azure Table Storage:
 
@@ -220,7 +220,7 @@ You can also address Azure tables directly using this address with the OData pro
 
 #### Comparing Table storage to SQL Server tables
 
-If you're familiar with SQL server, you can compare it easily to the storage account, table service, tables, and entitites:
+If you're familiar with SQL server, you can compare it easily to the storage account, table service, tables, and entities:
 
 * SQL Server == Storage Account
 * Database == Table Service
@@ -228,9 +228,9 @@ If you're familiar with SQL server, you can compare it easily to the storage acc
 * Record == Entity
 * Column == Property
 
-Now that you know about Table storage, let's get to work replacing Entity Framework and SQL Server as the backend store for ASP.NET Identity.
+Now that you know about Table storage, let's get to work replacing Entity Framework and SQL Server as the back-end store for ASP.NET Identity.
 
-### Replacing the Backend Data Store of ASP.NET Identity
+### Replacing the back-end Data Store of ASP.NET Identity
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Removing Entity Framework
@@ -286,7 +286,7 @@ Scroll to element named `<entityFramework>...</entityFramework>` near the end of
 
 <div class="exercise-end"></div>
 
-Now that we've removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the `IdentityUser` class) and the backend data store. 
+Now that we've removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the `IdentityUser` class) and the back-end data store. 
 
 We'll be using Azure Table storage as our data store, so we'll have to add another library to act as the middleware for persisting data to Azure Table storage. The package we'll be using is named *ElCamino.AspNet.Identity.AzureTable*.
 
@@ -310,7 +310,7 @@ After the *ElCamino.AspNet.Identity.AzureTable* package has been installed, ther
 
 <div class="exercise-end"></div>
 
-Now that the easy part is finished, it's time to start updating code to account for a new backend data store. ASP.NET Identity makes this reletively painless. Let's get started.
+Now that the easy part is finished, it's time to start updating code to account for a new back-end data store. ASP.NET Identity makes this relatively painless. Let's get started.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating ASP.NET Identity code to replace Entity Framework
@@ -324,7 +324,7 @@ The first code change we'll make is to the `IdentityModel.cs` file. You can find
 
 Replace the using statements at the top, removing the Entity Framework references and adding the ElCamino references.
 
-> **NOTE** Throughout the bootcamp, feel free to copy and paste code directly from the guide into Visual Studio. There's a handy *Copy* button above our code listings!
+> **NOTE** Throughout the workshop, feel free to copy and paste code directly from the guide into Visual Studio. There's a handy *Copy* button above our code listings!
 
 ```csharp
 using System.Security.Claims;
@@ -358,7 +358,7 @@ The next file we'll change is the `IdentityConfig.cs` file, located in the `App_
 
 This file contains a variety of class definitions used by the ASP.NET MVC template. The most important of the classes is the `ApplicationUserManager` class. This class is responsible for configuring policies and defaults for user accounts in the application (for example, the password validation policy, user email address uniqueness, lockout period if a password is typed in wrong X number of times, and multi-factor authentication via SMS and/or email).
 
-The `ApplicationUserManager` class also contains a reference to the backend data store used to store user account information. We'll be modifying the class to auto-create the necessary tables if they don't exist.  
+The `ApplicationUserManager` class also contains a reference to the back-end data store used to store user account information. We'll be modifying the class to auto-create the necessary tables if they don't exist.  
 
 Start by replacing the using statements at the top, removing the Entity Framework references and adding the ElCamino references.
 
@@ -426,7 +426,7 @@ namespace Web
 
 #### web.config Changes
 
-The last step is to update the `web.config` file and add several ElCamino references to configure the middleware and specify a conneciton string to connect to Azure.
+The last step is to update the `web.config` file and add several ElCamino references to configure the middleware and specify a connection string to connect to Azure.
 
 Replace the `<configSections>...</configSections>` element with the following code:
 
@@ -438,11 +438,11 @@ Replace the `<configSections>...</configSections>` element with the following co
   <!--<elcaminoIdentityConfiguration tablePrefix="" storageConnectionString="DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;" />-->
 ```
 
-By adding these XML settings, we're now able to specify an azure table storage account conneciton string via the web.config file. You may notice the connection string is `UseDevelopmentStorage=true`. This allows us to devleop locally without interfacing directly with Azure.  You'll learn the details of this soon, so hang in there. 
+By adding these XML settings, we're now able to specify an azure table storage account connection string via the web.config file. You may notice the connection string is `UseDevelopmentStorage=true`. This allows us to develop locally without interfacing directly with Azure.  You'll learn the details of this soon, so hang in there. 
 
 <div class="exercise-end"></div>
 
-Nice work! We've finished replacing the backend data store of ASP.NET Identity to use Azure Table storage instead of Entity Framework and SQL Server. 
+Nice work! We've finished replacing the back-end data store of ASP.NET Identity to use Azure Table storage instead of Entity Framework and SQL Server. 
 
 If you've been following along, you should be able to compile the solution. Go ahead and try.
 

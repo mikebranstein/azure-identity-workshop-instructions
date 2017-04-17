@@ -1,6 +1,6 @@
 ## Processing Profile Pictures with Azure Functions
 
-> *NOTE:* This chapter was adapted from Microsoft's Technical Community Content Github repo. To find out more and see the original content, visit [Github](https://github.com/Microsoft/TechnicalCommunityContent/tree/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On).
+> *NOTE:* This chapter was adapted from Microsoft's Technical Community Content Github repository. To find out more and see the original content, visit [Github](https://github.com/Microsoft/TechnicalCommunityContent/tree/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On).
 
 Functions have been the basic building blocks of software since the first lines of code were written and the need for code organization and reuse became a necessity. Azure Functions expand on these concepts by allowing developers to create "serverless", event-driven functions that run in the cloud and can be shared across a wide variety of services and systems, uniformly managed, and easily scaled based on demand. In addition, Azure Functions can be written in a variety of languages, including C#, JavaScript, Python, Bash, and PowerShell, and they're perfect for building apps and nanoservices that employ a compute-on-demand model.
 
@@ -8,7 +8,7 @@ In this chapter, you'll create an Azure Function that monitors a blob container 
 
 ### Creating an Azure Function App
 
-The first step in writing an Azure Function is to create an Azure Function App. In this exercise, you'll create an Azure Function App using the Azure Portal. Then you'll add the *rejected* blob container to the storage account you've used throughout this bootcamp. The *rejected* contaner will contain images classified as inappropriate content. 
+The first step in writing an Azure Function is to create an Azure Function App. In this exercise, you'll create an Azure Function App using the Azure Portal. Then you'll add the *rejected* blob container to the storage account you've used throughout this workshop. The *rejected* container will contain images classified as inappropriate content. 
 
 If you're wondering about the other two containers mentioned above, don't worry. You've already created them as part of previous chapters. We'll continue to use them in this chapter. 
 
@@ -38,7 +38,7 @@ Click *Blobs* to view the contents of blob storage.
 
 ![Opening blob storage](images/chapter8/open-blob-storage.png)
 
-You should see several containers inside of your blob storage: *profile-pics*, *uploaded*, and *azure-webjobs-hosts*. You previously created *profile-pics* and *uploaded* during previous chapters. The *azure-webjobs-hosts* container is created by the function app provisioning process, so you may not see it if the funciton app you just created hasn't been fully provisioned.
+You should see several containers inside of your blob storage: *profile-pics*, *uploaded*, and *azure-webjobs-hosts*. You previously created *profile-pics* and *uploaded* during previous chapters. The *azure-webjobs-hosts* container is created by the function app provisioning process, so you may not see it if the function app you just created hasn't been fully provisioned.
 
 Click *+ Container* to add a container.
 
@@ -62,7 +62,7 @@ Once you have created an Azure Function App, you can add Azure Functions to it. 
     <b>Exercise</b>: Create an Azure Function
 </h4>
 
-Return to the bootcamp dashboard and click the Azure Function App that you created and pinned in the previous exercise. 
+Return to the workshop dashboard and click the Azure Function App that you created and pinned in the previous exercise. 
 
 <img src="images/chapter8/open-function-app.png" class="img-small" />
 
@@ -72,7 +72,7 @@ Click the *+* symbol next to *Functions*, as shown in the image below.
 
 Scroll past the *Get started quickly...* heading and click *Custom function* under the *Get started on your own* heading. Click *BlobTrigger-CSharp*. 
 
-Enter *BlobImageAnalysis* for the function name and "uploaded/{name}.{ext}" into the *Path* box. (The latter applies the blob storage trigger to the "uploaded" container that you created earlier in this workshop.) *{name}* and *{ext}* refer to function app parameters that will be passed in by the Azure funciton app API automatically. For example, when a profile picture is uploaded with the name mypicture.jpeg, it will be parsed into two variables: *name* (with a value of *mypicture*) and *ext* (with a value of *jpeg*). 
+Enter *BlobImageAnalysis* for the function name and "uploaded/{name}.{ext}" into the *Path* box. (The latter applies the blob storage trigger to the "uploaded" container that you created earlier in this workshop.) *{name}* and *{ext}* refer to function app parameters that will be passed in by the Azure function app API automatically. For example, when a profile picture is uploaded with the name mypicture.jpeg, it will be parsed into two variables: *name* (with a value of *mypicture*) and *ext* (with a value of *jpeg*). 
 
 Click the *Create* button to create the Azure Function.
 
@@ -341,4 +341,4 @@ In this chapter you learned how to:
 
 This is just one example of how you can leverage Azure Functions to automate repetitive tasks. Experiment with other Azure Function templates to learn more about Azure Functions and to identify additional ways in which they can aid your research or business.
 
-In the next chapter, we'll take the web app to the next level by adding in a SingalR hub, and automatically updating a profile picture if it's approved.
+In the next chapter, we'll take the web app to the next level by adding in a SignalR hub, and automatically updating a profile picture if it's approved.

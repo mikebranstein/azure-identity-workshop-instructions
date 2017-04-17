@@ -1,6 +1,6 @@
 ## Using Azure Storage Emulator to Develop Locally
 
-Even though this bootcamp is all about the cloud and using Azure, it doesn't mean that we need to be connected to the cloud to develop and test our work.
+Even though this workshop is all about the cloud and using Azure, it doesn't mean that we need to be connected to the cloud to develop and test our work.
 
 In fact, an important aspect of a technology stack is being able to quickly and easily create an isolated (and local) environment for development and testing. 
 
@@ -35,7 +35,7 @@ After the emulator is started, a tray icon will appear noting the emulator is ru
  
 #### Troubleshooting the Storage Emulator
 
-You may have problems starting the storage emulator, and will receive a non-descript error like so:
+You may have problems starting the storage emulator, and will receive an ambiguous error:
 
 <img src="images/chapter3/emulator-error.png" class="img-medium" />
 
@@ -72,7 +72,7 @@ The storage emulator should start.
 
 After the the Azure Storage Emulator is running, let's turn our attention to [Storage Explorer](http://storageexplorer.com). Storage Explorer is a standalone app from Microsoft that allows you to easily work with Azure Storage Accounts on Windows, macOS and Linux.
 
-We'll be using Storage Explorer throughout the bootcamp to peek into the local storage account (created by the Storage Emulator) and Azure-hosted storage account. 
+We'll be using Storage Explorer throughout the workshop to peek into the local storage account (created by the Storage Emulator) and Azure-hosted storage account. 
 
 Let's get started!
 
@@ -110,7 +110,7 @@ Head back to Visual Studio and run your web app.
 
 <img src="images/chapter3/launch-web-app.png" class="img-small" />
 
-If you've made all the changes to your app successfully, the app should start up, and you'll be greeted with the deault ASP.NET MVC template page again. 
+If you've made all the changes to your app successfully, the app should start up, and you'll be greeted with the default ASP.NET MVC template page again. 
 
 But, something will be different this time. You'll recall that we've swapped out Entity Framework and SQL Server in lieu of Azure Table Storage. You'll also recall that we configured the app to create the necessary tables needed for ASP.NET Identity on app startup. 
 
@@ -138,7 +138,7 @@ After registering, you're automatically logged in as that user. Take a minute to
 
 ![image](images/chapter3/view-profile.png)
 
-We'll be coming back to this profile page throughout the bootcamp, modifying it to add a profile picture and a biography.
+We'll be coming back to this profile page throughout the workshop, modifying it to add a profile picture and a biography.
 
 <img src="images/chapter3/manage-profile.png" class="img-medium" />
 

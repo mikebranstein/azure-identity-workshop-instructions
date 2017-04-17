@@ -69,7 +69,7 @@
 <li><a href="https://www.asp.net/signalr">SignalR</a> (yeah it&#39;s not a Azure service, but it is pretty cool)</li>
 </ul>
 <p>In this workshop you&#39;ll learn how to use these Azure services to build a cloud-hosted single sign-on app that can manage your user profile. When you&#39;re finished, you will have built an app that allows you to upload profile pictures that pass through an AI content filter to ensure they&#39;re work appropriate. </p>
-<h4 id="key-concepts-and-take-aways">Key concepts and take aways</h4>
+<h4 id="key-concepts-and-takeaways">Key concepts and takeaways</h4>
 <ul>
 <li>Navigating the Azure portal</li>
 <li>Using Azure Resource Groups to manage multiple Azure services</li>
@@ -94,7 +94,7 @@
 			<hr>
 			<div class="chapter">
 				<h2 id="getting-project-from-github">Getting project from Github</h2>
-<p>All the code you&#39;ll need for working through the bootcamp are stored on Github at <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a>.</p>
+<p>All the code you&#39;ll need for working through the workshop are stored on Github at <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a>.</p>
 <h3 id="organization-of-the-repository">Organization of the Repository</h3>
 <p>The repository at <a href="https://github.com/mikebranstein/GlobalAzureDay2017">https://github.com/mikebranstein/GlobalAzureDay2017</a> is organized into several <a href="https://github.com/mikebranstein/GlobalAzureDay2017/branches/all">branches</a>:</p>
 <ul>
@@ -105,7 +105,7 @@
 <li>chapter7</li>
 <li>chapter9</li>
 </ul>
-<p>Each branch corresponds with the chapters in this bootcamp guide. The guide starts with the code from the <code>start</code> branch, and progresses with each chapter. </p>
+<p>Each branch corresponds with the chapters in this workshop guide. The guide starts with the code from the <code>start</code> branch, and progresses with each chapter. </p>
 <blockquote>
 <p><strong>NOTE</strong> You don&#39;t need to copy the code from each branch, only the <code>start</code> branch. If you&#39;re following along with the guide, you can start with the <code>start</code> branch. If you get stuck, or if you can&#39;t follow-along, you can grab a fresh set of code from a branch name matching the chapter you&#39;re on. For example, if you get stuck and can&#39;t get your code working at the end of chapter 5, you can jump to chapter 6 and grab the <code>chapter6</code> branch.</p>
 </blockquote>
@@ -156,7 +156,7 @@
 			<hr>
 			<div class="chapter">
 				<h2 id="updating-windows-identity">Updating Windows Identity</h2>
-<p>In this chapter, you&#39;ll be learning about ASP.NET Identity and how to move it&#39;s backend data store from SQL Server to Azure Table Storage.</p>
+<p>In this chapter, you&#39;ll be learning about ASP.NET Identity and how to move it&#39;s back-end data store from SQL Server to Azure Table Storage.</p>
 <p>Before we begin, let&#39;s cover a few basics on what ASP.NET Identity is and how it works. </p>
 <h3 id="a-brief-history-of-asp-net-authentication-and-authorization">A brief history of ASP.NET authentication and authorization</h3>
 <p>If you&#39;ve developed an ASP.NET application prior to 2014, you&#39;ve probably heard of the ASP.NET membership system. </p>
@@ -245,7 +245,7 @@
 </li>
 </ul>
 <h3 id="getting-started-with-asp-net-identity">Getting Started with ASP.NET Identity</h3>
-<p>ASP.NET Identity is used in the Visual Studio project templates for ASP.NET MVC, Web Forms, Web API and SPA. In this walkthrough, we&#39;ll illustrate how the project templates use ASP.NET Identity to add functionality to register, log in and log out a user.</p>
+<p>ASP.NET Identity is used in the Visual Studio project templates for ASP.NET MVC, Web Forms, Web API and SPA. In this walk-through, we&#39;ll illustrate how the project templates use ASP.NET Identity to add functionality to register, log in and log out a user.</p>
 <p>ASP.NET Identity is implemented using the following procedure. The purpose of this section is to give you a high level overview of ASP.NET Identity.</p>
 <blockquote>
 <p>You do not need to follow along with these steps, but are welcome to. </p>
@@ -267,7 +267,7 @@
 </li>
 </ul>
 </li>
-<li><p><strong>Registering a user.</strong> After the project is created, launch the web applicaiton. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.</p>
+<li><p><strong>Registering a user.</strong> After the project is created, launch the web application. Click on the Register link to create a user. The following image shows the Register page which collects the user name and password.</p>
 <p> <img src="images/chapter2/register.gif" class="img-medium" /></p>
 <p> When the user clicks the Register button, the Register action of the Account controller creates the user by calling the ASP.NET Identity API. In the code snippet below, the <code>ApplicationUser</code> and <code>UserManager</code> classes are part of ASP.NET Identity. An <code>ApplicationUser</code> is created and passed to the <code>UserManager</code> class to create the user. </p>
 <pre><code class="lang-csharp"> [HttpPost]
@@ -286,12 +286,12 @@
          AddErrors(result);
      }
 
-     // If we got this far, something failed, redisplay form
+     // If we got this far, something failed, re-display form
      return View(model);
  }
 </code></pre>
 <blockquote>
-<p><strong>DEFINITION</strong> The <code>ApplicationUser</code> class is part of the ASP.NET MVC template, and inherits from the <code>IdentityUser</code> class. The class name doesn&#39;t matter, but inhireting from <code>IdentityUser</code> does. We&#39;re not going to cover the specifics of the <code>IdentityUser</code> class in this bootcamp, but it represents a user, with properties like <em>Name</em>, <em>Email</em>, <em>PhoneNumber</em>, etc. For more details on the <code>IdentityUser</code> class check out <a href="https://msdn.microsoft.com/en-us/magazine/dn818488.aspx">this article</a>.</p>
+<p><strong>DEFINITION</strong> The <code>ApplicationUser</code> class is part of the ASP.NET MVC template, and inherits from the <code>IdentityUser</code> class. The class name doesn&#39;t matter, but inheriting from <code>IdentityUser</code> does. We&#39;re not going to cover the specifics of the <code>IdentityUser</code> class in this workshop, but it represents a user, with properties like <em>Name</em>, <em>Email</em>, <em>PhoneNumber</em>, etc. For more details on the <code>IdentityUser</code> class check out <a href="https://msdn.microsoft.com/en-us/magazine/dn818488.aspx">this article</a>.</p>
 <p><strong>DEFINITION</strong> The <code>UserManager</code> class is part of ASP.NET Identity and provides methods for managing users. Strange, right? ;-) </p>
 </blockquote>
 <p> Luckily, the ASP.NET MVC template provides a solid foundation for us, so you don&#39;t need to know <em>everything</em> about ASP.NET Identity to start using it. As we continue, we&#39;ll make sure you know what you&#39;ll need to know as we go. </p>
@@ -315,7 +315,7 @@
          AddErrors(result);
      }
 
-     // If we got this far, something failed, redisplay form
+     // If we got this far, something failed, re-display form
      return View(model);
  }
 </code></pre>
@@ -327,8 +327,8 @@
 </ol>
 <p>There are various other classes in ASP.NET Identity and the ASP.NET MVC template of importance, but we&#39;re not going to investigate them here. But, don&#39;t worry. We&#39;ll teach you about it as needed.</p>
 <h3 id="asp-net-identity-data-storage">ASP.NET Identity Data Storage</h3>
-<p>In this section, you&#39;ll be learning how to replace the backend data storage platform of ASP.NET Identity. By default, ASP.NET Identity uses <a href="https://msdn.microsoft.com/en-us/library/aa937723.aspx">Entity Framework</a> to manage data persistence to SQL Server. </p>
-<p>Using Entity Framework and SQL Server is a great choice. In fact, we <em>could</em> provision a SQL Server database in Azure, and use that for the backend data store for ASP.NET Identity. </p>
+<p>In this section, you&#39;ll be learning how to replace the back-end data storage platform of ASP.NET Identity. By default, ASP.NET Identity uses <a href="https://msdn.microsoft.com/en-us/library/aa937723.aspx">Entity Framework</a> to manage data persistence to SQL Server. </p>
+<p>Using Entity Framework and SQL Server is a great choice. In fact, we <em>could</em> provision a SQL Server database in Azure, and use that for the back-end data store for ASP.NET Identity. </p>
 <p>Instead, you&#39;ll be replacing Entity Framework and SQL Server with a highly-scalable and light-weight NoSQL Azure service called <a href="https://azure.microsoft.com/en-us/services/storage/tables/">Table storage</a>. </p>
 <p>Before we jump in, let&#39;s learn a little bit about Azure Table Storage.</p>
 <h3 id="what-is-azure-table-storage-">What is Azure Table Storage?</h3>
@@ -346,7 +346,7 @@
 <h4 id="table-service-concepts">Table Service Concepts</h4>
 <p>The Table service contains the following components:</p>
 <p><img src="images/chapter2/table-service.png" alt="image"></p>
-<p>At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services housed within the account. You&#39;ll be creating a storage account later in the bootcamp.</p>
+<p>At the top level is a storage account. Storage accounts are named containers with a URL, which is used to access various services housed within the account. You&#39;ll be creating a storage account later in the workshop.</p>
 <p>There are various concepts important to know about Azure Table Storage:</p>
 <ul>
 <li><p><strong>URL format:</strong> You can access tables and entities through code using this address format: http://<code>&lt;storage account&gt;</code>.table.core.windows.net/<code>&lt;table&gt;</code>
@@ -362,7 +362,7 @@ You can also address Azure tables directly using this address with the OData pro
 </li>
 </ul>
 <h4 id="comparing-table-storage-to-sql-server-tables">Comparing Table storage to SQL Server tables</h4>
-<p>If you&#39;re familiar with SQL server, you can compare it easily to the storage account, table service, tables, and entitites:</p>
+<p>If you&#39;re familiar with SQL server, you can compare it easily to the storage account, table service, tables, and entities:</p>
 <ul>
 <li>SQL Server == Storage Account</li>
 <li>Database == Table Service</li>
@@ -370,8 +370,8 @@ You can also address Azure tables directly using this address with the OData pro
 <li>Record == Entity</li>
 <li>Column == Property</li>
 </ul>
-<p>Now that you know about Table storage, let&#39;s get to work replacing Entity Framework and SQL Server as the backend store for ASP.NET Identity.</p>
-<h3 id="replacing-the-backend-data-store-of-asp-net-identity">Replacing the Backend Data Store of ASP.NET Identity</h3>
+<p>Now that you know about Table storage, let&#39;s get to work replacing Entity Framework and SQL Server as the back-end store for ASP.NET Identity.</p>
+<h3 id="replacing-the-back-end-data-store-of-asp-net-identity">Replacing the back-end Data Store of ASP.NET Identity</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Removing Entity Framework
 </h4>
@@ -411,7 +411,7 @@ You can also address Azure tables directly using this address with the OData pro
 </code></pre>
 <div class="exercise-end"></div>
 
-<p>Now that we&#39;ve removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the <code>IdentityUser</code> class) and the backend data store. </p>
+<p>Now that we&#39;ve removed Entity Framework, we need to replace it. If you recall, Entity Framework was used by ASP.NET Identity as a middleware to map between ASP.NET Identity code objects (like the <code>IdentityUser</code> class) and the back-end data store. </p>
 <p>We&#39;ll be using Azure Table storage as our data store, so we&#39;ll have to add another library to act as the middleware for persisting data to Azure Table storage. The package we&#39;ll be using is named <em>ElCamino.AspNet.Identity.AzureTable</em>.</p>
 <blockquote>
 <p><strong>NOTE</strong> The El Camino package is maintained by David Melendez on <a href="https://github.com/dlmelendez/identityazuretable">Github</a>. By default, the ASP.NET Identity system stores all the user information in a Microsoft SQL database using an EntityFramework provider. This project is a replacement of the EntityFramework SQL provider to use Azure Table Storage to persist user information such as (but not limited to): username/password, roles, claims and external login information.</p>
@@ -430,7 +430,7 @@ You can also address Azure tables directly using this address with the OData pro
 </blockquote>
 <div class="exercise-end"></div>
 
-<p>Now that the easy part is finished, it&#39;s time to start updating code to account for a new backend data store. ASP.NET Identity makes this reletively painless. Let&#39;s get started.</p>
+<p>Now that the easy part is finished, it&#39;s time to start updating code to account for a new back-end data store. ASP.NET Identity makes this relatively painless. Let&#39;s get started.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating ASP.NET Identity code to replace Entity Framework
 </h4>
@@ -440,7 +440,7 @@ You can also address Azure tables directly using this address with the OData pro
 <p><img src="images/chapter2/identity-model.png" alt="image"></p>
 <p>Replace the using statements at the top, removing the Entity Framework references and adding the ElCamino references.</p>
 <blockquote>
-<p><strong>NOTE</strong> Throughout the bootcamp, feel free to copy and paste code directly from the guide into Visual Studio. There&#39;s a handy <em>Copy</em> button above our code listings!</p>
+<p><strong>NOTE</strong> Throughout the workshop, feel free to copy and paste code directly from the guide into Visual Studio. There&#39;s a handy <em>Copy</em> button above our code listings!</p>
 </blockquote>
 <pre><code class="lang-csharp">using System.Security.Claims;
 using System.Threading.Tasks;
@@ -464,7 +464,7 @@ using ElCamino.AspNet.Identity.AzureTable.Model;
 <p>The next file we&#39;ll change is the <code>IdentityConfig.cs</code> file, located in the <code>App_Start</code> folder:</p>
 <p><img src="images/chapter2/identity-config.png" alt="image"></p>
 <p>This file contains a variety of class definitions used by the ASP.NET MVC template. The most important of the classes is the <code>ApplicationUserManager</code> class. This class is responsible for configuring policies and defaults for user accounts in the application (for example, the password validation policy, user email address uniqueness, lockout period if a password is typed in wrong X number of times, and multi-factor authentication via SMS and/or email).</p>
-<p>The <code>ApplicationUserManager</code> class also contains a reference to the backend data store used to store user account information. We&#39;ll be modifying the class to auto-create the necessary tables if they don&#39;t exist.  </p>
+<p>The <code>ApplicationUserManager</code> class also contains a reference to the back-end data store used to store user account information. We&#39;ll be modifying the class to auto-create the necessary tables if they don&#39;t exist.  </p>
 <p>Start by replacing the using statements at the top, removing the Entity Framework references and adding the ElCamino references.</p>
 <pre><code class="lang-csharp">using System;
 using System.Collections.Generic;
@@ -521,7 +521,7 @@ namespace Web
 }
 </code></pre>
 <h4 id="web-config-changes">web.config Changes</h4>
-<p>The last step is to update the <code>web.config</code> file and add several ElCamino references to configure the middleware and specify a conneciton string to connect to Azure.</p>
+<p>The last step is to update the <code>web.config</code> file and add several ElCamino references to configure the middleware and specify a connection string to connect to Azure.</p>
 <p>Replace the <code>&lt;configSections&gt;...&lt;/configSections&gt;</code> element with the following code:</p>
 <pre><code class="lang-xml">  &lt;configSections&gt;
     &lt;section name=&quot;elcaminoIdentityConfiguration&quot; type=&quot;ElCamino.AspNet.Identity.AzureTable.Configuration.IdentityConfigurationSection,ElCamino.AspNet.Identity.AzureTable &quot; /&gt;
@@ -529,10 +529,10 @@ namespace Web
   &lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;UseDevelopmentStorage=true&quot; /&gt;
   &lt;!--&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;DefaultEndpointsProtocol=https;AccountName=STORAGE_ACCOUNT_NAME;AccountKey=STORAGE_ACCOUNT_KEY;&quot; /&gt;--&gt;
 </code></pre>
-<p>By adding these XML settings, we&#39;re now able to specify an azure table storage account conneciton string via the web.config file. You may notice the connection string is <code>UseDevelopmentStorage=true</code>. This allows us to devleop locally without interfacing directly with Azure.  You&#39;ll learn the details of this soon, so hang in there. </p>
+<p>By adding these XML settings, we&#39;re now able to specify an azure table storage account connection string via the web.config file. You may notice the connection string is <code>UseDevelopmentStorage=true</code>. This allows us to develop locally without interfacing directly with Azure.  You&#39;ll learn the details of this soon, so hang in there. </p>
 <div class="exercise-end"></div>
 
-<p>Nice work! We&#39;ve finished replacing the backend data store of ASP.NET Identity to use Azure Table storage instead of Entity Framework and SQL Server. </p>
+<p>Nice work! We&#39;ve finished replacing the back-end data store of ASP.NET Identity to use Azure Table storage instead of Entity Framework and SQL Server. </p>
 <p>If you&#39;ve been following along, you should be able to compile the solution. Go ahead and try.</p>
 <p><img src="images/chapter2/recompile-success.png" alt="image"></p>
 <p>In the next chapter, you&#39;ll learn how we can develop locally by using the Azure Storage emulator, and how to create an Azure storage account in the cloud.</p>
@@ -541,7 +541,7 @@ namespace Web
 			<hr>
 			<div class="chapter">
 				<h2 id="using-azure-storage-emulator-to-develop-locally">Using Azure Storage Emulator to Develop Locally</h2>
-<p>Even though this bootcamp is all about the cloud and using Azure, it doesn&#39;t mean that we need to be connected to the cloud to develop and test our work.</p>
+<p>Even though this workshop is all about the cloud and using Azure, it doesn&#39;t mean that we need to be connected to the cloud to develop and test our work.</p>
 <p>In fact, an important aspect of a technology stack is being able to quickly and easily create an isolated (and local) environment for development and testing. </p>
 <p>In this section, you&#39;ll learn how to use the Azure Storage Emulator to host your own Azure-like table storage environment. You&#39;ll also learn how to use Storage Explorer, a GUI application (similar to SQL Server Management Studio), that allows you to navigate and browse through your Azure storage accounts.  </p>
 <h3 id="pre-requisite-check">Pre-requisite Check</h3>
@@ -565,7 +565,7 @@ namespace Web
 <p>After the emulator is started, a tray icon will appear noting the emulator is running:</p>
 <p><img src="images/chapter3/emulator-running.png" alt="image"></p>
 <h4 id="troubleshooting-the-storage-emulator">Troubleshooting the Storage Emulator</h4>
-<p>You may have problems starting the storage emulator, and will receive a non-descript error like so:</p>
+<p>You may have problems starting the storage emulator, and will receive an ambiguous error:</p>
 <p><img src="images/chapter3/emulator-error.png" class="img-medium" /></p>
 <p>There&#39;s a number of reasons why you may receive this error, including:</p>
 <ul>
@@ -585,7 +585,7 @@ namespace Web
 
 <h3 id="using-storage-explorer">Using Storage Explorer</h3>
 <p>After the the Azure Storage Emulator is running, let&#39;s turn our attention to <a href="http://storageexplorer.com">Storage Explorer</a>. Storage Explorer is a standalone app from Microsoft that allows you to easily work with Azure Storage Accounts on Windows, macOS and Linux.</p>
-<p>We&#39;ll be using Storage Explorer throughout the bootcamp to peek into the local storage account (created by the Storage Emulator) and Azure-hosted storage account. </p>
+<p>We&#39;ll be using Storage Explorer throughout the workshop to peek into the local storage account (created by the Storage Emulator) and Azure-hosted storage account. </p>
 <p>Let&#39;s get started!</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Starting up the Azure Storage Emulator
@@ -606,7 +606,7 @@ namespace Web
 <p>Congratulations! That&#39;s how easy it is to use Storage Explorer. We&#39;ll come back to Storage Explorer in a few minutes.</p>
 <p>Head back to Visual Studio and run your web app. </p>
 <p><img src="images/chapter3/launch-web-app.png" class="img-small" /></p>
-<p>If you&#39;ve made all the changes to your app successfully, the app should start up, and you&#39;ll be greeted with the deault ASP.NET MVC template page again. </p>
+<p>If you&#39;ve made all the changes to your app successfully, the app should start up, and you&#39;ll be greeted with the default ASP.NET MVC template page again. </p>
 <p>But, something will be different this time. You&#39;ll recall that we&#39;ve swapped out Entity Framework and SQL Server in lieu of Azure Table Storage. You&#39;ll also recall that we configured the app to create the necessary tables needed for ASP.NET Identity on app startup. </p>
 <p>Let&#39;s check back in Storage Emulator to see the tables created:</p>
 <p><img src="images/chapter3/local-storage-with-tables.gif" alt="image"></p>
@@ -623,7 +623,7 @@ namespace Web
 <p><img src="images/chapter3/register.png" alt="image"></p>
 <p>After registering, you&#39;re automatically logged in as that user. Take a minute to explore your user profile by clicking on your name in the upper-right. </p>
 <p><img src="images/chapter3/view-profile.png" alt="image"></p>
-<p>We&#39;ll be coming back to this profile page throughout the bootcamp, modifying it to add a profile picture and a biography.</p>
+<p>We&#39;ll be coming back to this profile page throughout the workshop, modifying it to add a profile picture and a biography.</p>
 <p><img src="images/chapter3/manage-profile.png" class="img-medium" /></p>
 <p>After registering the user, let&#39;s look back at Storage Explorer. Select the <em>AspNetUsers</em> table and view the contents of the table in the right-side panel. </p>
 <blockquote>
@@ -642,7 +642,7 @@ namespace Web
 <h3 id="creating-a-resource-group">Creating a Resource Group</h3>
 <p>Our first stop will be to create a Resource Group in Azure. </p>
 <blockquote>
-<p><strong>DEFINITION</strong> Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think ofresource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
+<p><strong>DEFINITION</strong> Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
 </blockquote>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create a Dashboard and Resource Group
@@ -652,7 +652,7 @@ namespace Web
 <p>We&#39;ll start by creating a dashboard. </p>
 <p>Login to the Azure portal, click <em>+ New Dashboard</em>, give the dashboard name, and click <em>Done customizing</em>.</p>
 <p><img src="images/chapter4/create-dashboard.gif" class="img-medium" /></p>
-<p>That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the bootcamp because it helps keep everything organized. You&#39;ll have a single place to go to find everything you build today.</p>
+<p>That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the workshop because it helps keep everything organized. You&#39;ll have a single place to go to find everything you build today.</p>
 <h4 id="creating-a-resource-group">Creating a Resource Group</h4>
 <p>Next, we&#39;ll create a resource group to hold the various services we&#39;ll be creating today. </p>
 <p>Click the <em>+ New</em> button on the left.</p>
@@ -685,8 +685,8 @@ namespace Web
 <p>Complete the following fields:</p>
 <ul>
 <li><strong>Name:</strong> this must be a unique, URL-friendly name that will be prepended to the URL <code>{storage-account-name}.core.windows.net</code>. You&#39;ll use this full URL name to reference the storage account in code</li>
-<li><strong>Deployment model:</strong> Resource manager. The <em>Classic</em> option is a legacy option that will be deprecated soon. Don&#39;t pick it. Chosing the <em>Resource manager</em> options also allows you to create automation scripts for provisioning Azure resources easily</li>
-<li><strong>Account kind:</strong> General purpose. You can create an account that stores only blobs (binary large objects), but for our bootcamp we want a storage account that can store both tables and blobs</li>
+<li><strong>Deployment model:</strong> Resource manager. The <em>Classic</em> option is a legacy option that will be deprecated soon. Don&#39;t pick it. Choosing the <em>Resource manager</em> options also allows you to create automation scripts for provisioning Azure resources easily</li>
+<li><strong>Account kind:</strong> General purpose. You can create an account that stores only blobs (binary large objects), but for our workshop we want a storage account that can store both tables and blobs</li>
 <li><strong>Performance:</strong> Standard, because our needs are simple. If you were an enterprise, you may want to choose Premium for the enhanced SLA and scalability. To learn more about the difference, check out this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-introduction#introducing-the-azure-storage-services">article</a></li>
 <li><strong>Replication:</strong> Locally-redundant storage (LRS). The data in your Microsoft Azure storage account is always replicated to ensure durability and high availability. Replication copies your data, either within the same data center, or to a second data center, depending on which replication option you choose. Replication protects your data and preserves your application up-time in the event of transient hardware failures. If your data is replicated to a second data center, that also protects your data against a catastrophic failure in the primary location. To learn more read this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-redundancy">article</a>.</li>
 <li><strong>Storage service encryption:</strong> Disabled. Azure Storage Service Encryption (SSE) for Data at Rest helps you protect and safeguard your data to meet your organizational security and compliance commitments. With this feature, Azure Storage automatically encrypts your data prior to persisting to storage and decrypts prior to retrieval. The encryption, decryption, and key management are totally transparent to users. To learn more, read this <a href="https://docs.microsoft.com/en-us/azure/storage/storage-service-encryption">article</a>.</li>
@@ -734,10 +734,10 @@ namespace Web
 <pre><code class="lang-xml">&lt;elcaminoIdentityConfiguration tablePrefix=&quot;&quot; storageConnectionString=&quot;UseDevelopmentStorage=true&quot; /&gt;
 </code></pre>
 <p>This element contains a storage account connection string. Similar to SQL Server databases, storage accounts have a connection string. And, similar to local SQL server installations (like localdb), locally-hosted storage emulators have a special connection string.</p>
-<p>When you&#39;re devleoping locally, the connection string is <code>UserDevelopmentStorage=true</code>.</p>
+<p>When you&#39;re developing locally, the connection string is <code>UserDevelopmentStorage=true</code>.</p>
 <p>But, when we move to the cloud, the connection string has an enhanced structure containing 3 components: </p>
 <ul>
-<li><strong>Default Endpoints Protocol:</strong> the commnucation protocol used to talk to the remote table storage. By default it&#39;s https, and there&#39;s truthfully no reason for you to change it.</li>
+<li><strong>Default Endpoints Protocol:</strong> the communication protocol used to talk to the remote table storage. By default it&#39;s https, and there&#39;s truthfully no reason for you to change it.</li>
 <li><strong>Account Name:</strong> the name you gave the account.</li>
 <li><strong>Account Key:</strong> a secret key that you shouldn&#39;t share with others. Treat it like a super user password.</li>
 </ul>
@@ -768,7 +768,7 @@ namespace Web
 
 <p>When the web app launches, register a user. </p>
 <blockquote>
-<p><strong>NOTE</strong> You may recall that you previosuly registerd a user with the app, but we&#39;ve just told the app to use a different storage account for ASP.NET Identity. This means you&#39;ll have to re-register the user.</p>
+<p><strong>NOTE</strong> You may recall that you previously registered a user with the app, but we&#39;ve just told the app to use a different storage account for ASP.NET Identity. This means you&#39;ll have to re-register the user.</p>
 </blockquote>
 <p>Click the <em>Register</em> link in the upper-right corner of the app. Enter in an email and password. Press the <em>Register</em> button to create the user.</p>
 <p><img src="images/chapter3/register.png" alt="image"></p>
@@ -818,7 +818,7 @@ namespace Web
 <p><img src="images/chapter4/new-plan.png" class="img-medium" /></p>
 <p>After the plan is created, click <em>Create</em> to create the Web App in Azure.</p>
 <p><img src="images/chapter4/deploying.gif" class="img-large" /></p>
-<p>When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. after the publish has finished, you shoudl see something similar:</p>
+<p>When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. after the publish has finished, you should see something similar:</p>
 <p><img src="images/chapter4/published.png" class="img-large" /></p>
 <p>Finally, Visual Studio will launch the site in your browser, showing you your deployed site.</p>
 <div class="exercise-end"></div>
@@ -898,7 +898,7 @@ namespace Web
 </ul>
 <p>Finally, we&#39;ll return to the profile management page:</p>
 <ul>
-<li><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em> to populate the view with the updated biography</li>
+<li><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageController.cs</em> to populate the view with the updated biography</li>
 </ul>
 <p>There&#39;s a lot to do, so let&#39;s get moving!</p>
 <h4 id="-step-1-update-the-indexviewmodel-in-manageviewmodels-cs-"><strong>Step 1:</strong> Update the <code>IndexViewModel</code> in <em>ManageViewModels.cs</em></h4>
@@ -914,7 +914,7 @@ namespace Web
 }
 </code></pre>
 <blockquote>
-<p>Adding this property will allow the index view to display the biography when it loads. We&#39;ll be setting the value of the biography later in this excercise when we update the index controller&#39;s GET action.</p>
+<p>Adding this property will allow the index view to display the biography when it loads. We&#39;ll be setting the value of the biography later in this exercise when we update the index controller&#39;s GET action.</p>
 </blockquote>
 <h4 id="-step-2-update-the-manage-index-view"><strong>Step 2:</strong> Update the Manage\Index view</h4>
 <p>Update <em>Index.cshtml</em> in the <em>Views\Manage</em> folder to display:</p>
@@ -923,7 +923,7 @@ namespace Web
 <li>Biography value</li>
 <li>Link to update the Biography</li>
 </ul>
-<p>Add the Ravor markup as the first child element of the <code>&lt;dl class=&quot;dl-horizontal&quot;&gt;</code> element:</p>
+<p>Add the Razor markup as the first child element of the <code>&lt;dl class=&quot;dl-horizontal&quot;&gt;</code> element:</p>
 <pre><code class="lang-html">&lt;dt&gt;Biography:&lt;/dt&gt;
 &lt;dd&gt;
     @Model.Biography
@@ -988,13 +988,13 @@ public async Task&lt;ActionResult&gt; UpdateBiography()
     return View(updateBiographyViewModel);
 }
 </code></pre>
-<p>You may not immediately recognize all of the code you just added, so let&#39;s break it down. First, we grab the current user&#39;s id by calling into ASP.NET Identity with <code>User.Identity.GetUserId()</code>. With the user&#39;s id, we call the funciton we created earlier in this chapter (<code>GetBiographyAsync()</code>) to load the user&#39;s biography. </p>
+<p>You may not immediately recognize all of the code you just added, so let&#39;s break it down. First, we grab the current user&#39;s id by calling into ASP.NET Identity with <code>User.Identity.GetUserId()</code>. With the user&#39;s id, we call the function we created earlier in this chapter (<code>GetBiographyAsync()</code>) to load the user&#39;s biography. </p>
 <p>The retrieved biography is then used to construct a model passed back to the Update Biography view.</p>
 <h4 id="-step-6-add-a-your-biography-was-updated-message-to-managecontroller-cs-"><strong>Step 6:</strong> Add a &quot;Your biography was updated&quot; message to <em>ManageController.cs</em></h4>
-<p>Now that we have the Update Biography view showing a user&#39;s biography, let&#39;s start planning what happens when a user&#39;s biogrpahy is updated. </p>
+<p>Now that we have the Update Biography view showing a user&#39;s biography, let&#39;s start planning what happens when a user&#39;s biography is updated. </p>
 <p>When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We&#39;ll get to this next. </p>
 <p>When you return to the Manage\Index view, a message reading, &quot;Your biography was updated&quot; is also displayed. This is done by passing a specially-formatted query string value back to the view via the <code>ManageMessageId</code> enum. </p>
-<p>Update the enum&#39;s values to include a value for <code>UpdateBiographySuccess</code>. </p>
+<p>Update the enum to include a value for <code>UpdateBiographySuccess</code>. </p>
 <blockquote>
 <p><strong>NOTE</strong> You may have trouble finding the enum declaration because it&#39;s hidden behind a collapsed region labeled <em>Helpers</em>. Scroll down to the bottom of the <em>ManageController.cs</em> class to find the region. Expand it and you&#39;ll be able to locate the enum.</p>
 </blockquote>
@@ -1029,15 +1029,15 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
     return RedirectToAction(&quot;Index&quot;, new { Message = ManageMessageId.UpdateBiographySuccess });
 }
 </code></pre>
-<p>Much of the code is stright-forward, but we want to draw your attention to a few lines, starting with <code>var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());</code>. You&#39;ve already seen the <code>GetUserId()</code> function, but you haven&#39;t directly worked with the <code>UserManager</code> class. </p>
+<p>Much of the code is straight-forward, but we want to draw your attention to a few lines, starting with <code>var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());</code>. You&#39;ve already seen the <code>GetUserId()</code> function, but you haven&#39;t directly worked with the <code>UserManager</code> class. </p>
 <blockquote>
 <p><strong>NOTE</strong> The <code>UserManager</code> class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you&#39;re not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. </p>
 </blockquote>
 <p>Back to the code. Because <code>UserManager</code> acts as a repository, we use it to retrieve a user object (more specifically, the <code>ApplicationUser</code> object which inherits from <code>IdentityUser</code>). Once we have the user, we update the biography property and send the user back through the repository to be persisted: <code>await UserManager.UpdateAsync(user);</code>.</p>
 <p>After the user is saved, you&#39;re redirected back to the Manage\Index view, passing the <code>UpdateBiographySuccess</code> enum value as a query string parameter.</p>
-<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontoller-cs-"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em></h4>
+<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontroller-cs-"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageController.cs</em></h4>
 <p>The final step is to update the GET controller action of the Manage\Index view. Below is the entire function, but note the added line setting the <code>ViewBag.StatusMessage</code> to &quot;Your biography was updated.&quot; when the <code>ManageMessageId</code> enum has a value of <code>UpdateBiographySuccess</code>. </p>
-<p>You should also note that the index view model&#39;s biography property is set by calling the method you created eariler: <code>UserManager.GetBiographyAsync(userId)</code>.</p>
+<p>You should also note that the index view model&#39;s biography property is set by calling the method you created earlier: <code>UserManager.GetBiographyAsync(userId)</code>.</p>
 <pre><code class="lang-csharp">//
 // GET: /Manage/Index
 public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
@@ -1087,7 +1087,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <li>How to extend ASP.NET Identity by adding an image to a user profile</li>
 <li>How to upload files to Azure blob storage</li>
 </ul>
-<p>In the last chapter, you learned how to extend ASP.NET Identity by adding a biography to a user&#39;s profile. You also saw that by adding a public property to the <code>ApplicationUser</code> class, ASP.NET Identity managed the data sotre&#39;s schema.</p>
+<p>In the last chapter, you learned how to extend ASP.NET Identity by adding a biography to a user&#39;s profile. You also saw that by adding a public property to the <code>ApplicationUser</code> class, ASP.NET Identity managed the schema.</p>
 <p>We&#39;ll continue extending ASP.NET Identity in this chapter by adding an image to the user profile management page.</p>
 <h3 id="visualizing-what-you-re-building">Visualizing What You&#39;re Building</h3>
 <p>Before we jump in, let&#39;s take a minute to visualize what you&#39;ll be building in this chapter.</p>
@@ -1117,7 +1117,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>So, if we&#39;re not storing binary data in the <code>ApplicationUser</code> class, why are we storing a URL? You may recall from a previous chapter that data stored in an Azure storage account can be accessed via URL in the form of <em><a href="https://{storage-account-name}.{storage-type}.core.windows.net">https://{storage-account-name}.{storage-type}.core.windows.net</a></em>. </p>
 <p>After uploading an image to blob storage, we&#39;ll save the image URL to our user profile.  </p>
 <h4 id="updating-the-applicationusermanager-class">Updating the <code>ApplicationUserManager</code> class</h4>
-<p>We also need to add an asynchronous accessor function to the <code>ApplicationUserManager</code> class (jus tlike we did for the biography property). The method will take a <code>userId</code> and return the user&#39;s profile picture URL. You can find the <code>ApplicationUserManager</code> class in the <em>IdentityConfig.cs</em> file, located in the <em>App_Start</em> folder.</p>
+<p>We also need to add an asynchronous accessor function to the <code>ApplicationUserManager</code> class (just like we did for the biography property). The method will take a <code>userId</code> and return the user&#39;s profile picture URL. You can find the <code>ApplicationUserManager</code> class in the <em>IdentityConfig.cs</em> file, located in the <em>App_Start</em> folder.</p>
 <p>Add this code after the constructor.</p>
 <pre><code class="lang-csharp">public async Task&lt;string&gt; GetProfilePicUrlAsync(string userId)
 {
@@ -1152,7 +1152,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 </ul>
 <p>Finally, we&#39;ll return to the profile management page:</p>
 <ul>
-<li><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em> to populate the view with the updated profile picture URL</li>
+<li><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageController.cs</em> to populate the view with the updated profile picture URL</li>
 </ul>
 <p>There&#39;s a lot to do, so let&#39;s get moving!</p>
 <h4 id="-step-1-update-the-indexviewmodel-in-manageviewmodels-cs-"><strong>Step 1:</strong> Update the <code>IndexViewModel</code> in <em>ManageViewModels.cs</em></h4>
@@ -1169,7 +1169,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 }
 </code></pre>
 <blockquote>
-<p>Adding this property will allow the index view to display the profile picture when it loads. We&#39;ll be setting the value of the URL later in this excercise when we update the index controller&#39;s GET action.</p>
+<p>Adding this property will allow the index view to display the profile picture when it loads. We&#39;ll be setting the value of the URL later in this exercise when we update the index controller&#39;s GET action.</p>
 </blockquote>
 <h4 id="-step-2-update-the-manage-index-view"><strong>Step 2:</strong> Update the Manage\Index view</h4>
 <p>Update <em>Index.cshtml</em> in the <em>Views\Manage</em> folder to display:</p>
@@ -1211,7 +1211,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 </code></pre>
 <h4 id="-step-4-update-the-update-biography-view"><strong>Step 4:</strong> Update the Update Biography view</h4>
 <p>Update a view named <code>UpdateBiography.cshtml</code> in the <em>Views\Manage</em> folder. This view will use the previously created <code>UpdateBiographyViewModel</code> to show and update a user&#39;s profile picture.</p>
-<p>Add an additional <code>&lt;div class=&quot;form-group&quot;&gt;...&lt;/div&gt;</code> element between the existing divs. </p>
+<p>Add an additional <code>&lt;div class=&quot;form-group&quot;&gt;...&lt;/div&gt;</code> element between the existing <code>&lt;div&gt;</code> elements. </p>
 <pre><code class="lang-html">&lt;div class=&quot;form-group&quot;&gt;
     @Html.LabelFor(m =&gt; m.ProfilePicture, new { @class = &quot;col-md-2 control-label&quot; })
     &lt;div class=&quot;col-md-10&quot;&gt;
@@ -1257,11 +1257,11 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
     return RedirectToAction(&quot;Index&quot;, new { Message = ManageMessageId.UpdateBiographySuccess });
 }
 </code></pre>
-<p>We&#39;ve added a funciton call to populate the profile picture URL: <code>user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;</code>, but it may be a bit confusing, so let&#39;s break it down.</p>
+<p>We&#39;ve added a function call to populate the profile picture URL: <code>user.ProfilePicUrl = await UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture) ?? user.ProfilePicUrl;</code>, but it may be a bit confusing, so let&#39;s break it down.</p>
 <p>First, we call a function that uploads the profile picture to Azure blob storage: <code>UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture)</code>. If the upload is successful, it returns the URL of the uploaded image. Otherwise, it returns <code>null</code>. </p>
 <p>If that function returns <code>null</code>, the existing profile picture url is kept.</p>
 <blockquote>
-<p><strong>NOTE:</strong> You may not recognise the <code>??</code> syntax, as it&#39;s a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official <a href="https://msdn.microsoft.com/en-us/library/ms173224.aspx">documentation</a>.</p>
+<p><strong>NOTE:</strong> You may not recognize the <code>??</code> syntax, as it&#39;s a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official <a href="https://msdn.microsoft.com/en-us/library/ms173224.aspx">documentation</a>.</p>
 </blockquote>
 <p>Add the <code>UploadImageAsync</code> function below the POST controller action.</p>
 <pre><code class="lang-csharp">public async Task&lt;string&gt; UploadImageAsync(string currentBlobUrl, HttpPostedFileBase imageToUpload)
@@ -1309,12 +1309,12 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
 <p>There are 4 things happening in the upload function:</p>
 <ul>
 <li><strong>Connect to Storage Account:</strong> Using the <code>CloudStorageAccount</code> class, parse the storage account connection string, create a blob client, and a reference to the container (or folder) we&#39;d like to access. The blob client works like a web service proxy that can interact with Azure blob storage to get a reference to the blob folders (a.k.a. containers) in the account. </li>
-<li><strong>Create the blob container:</strong> It&#39;s important to know that the reference to the blob container doesn&#39;t means the cloud container exists. Whenever you access a container, you shoudl first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.</li>
-<li><strong>Upload image blob:</strong> With the container refereence, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.</li>
+<li><strong>Create the blob container:</strong> It&#39;s important to know that the reference to the blob container doesn&#39;t means the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.</li>
+<li><strong>Upload image blob:</strong> With the container reference, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.</li>
 <li><strong>Get URL of the uploaded image blob:</strong> When the image is uploaded, we get the URL of it via the <code>Uri</code> property. </li>
 </ul>
 <blockquote>
-<p><strong>NOTE:</strong> Throughout the code we&#39;ve written to access cloud resources, you&#39;ll notice a clear asynchronous programming pattern. When you&#39;re interacting with the cloud, you should always perform action in an asynchorous manner because you never know how long an action will take. In the event an action takes longer than expected, executing the command asynchronously won&#39;t prevent other code from executing.</p>
+<p><strong>NOTE:</strong> Throughout the code we&#39;ve written to access cloud resources, you&#39;ll notice a clear asynchronous programming pattern. When you&#39;re interacting with the cloud, you should always perform action in an asynchronous manner because you never know how long an action will take. In the event an action takes longer than expected, executing the command asynchronously won&#39;t prevent other code from executing.</p>
 </blockquote>
 <p>The last step is to add several references to the top of the <em>ManageController.cs</em> file:</p>
 <pre><code class="lang-csharp">using Microsoft.WindowsAzure.Storage;
@@ -1330,7 +1330,7 @@ using System.IO;
 </code></pre>
 <p>The <code>StorageAccountName</code> and <code>StorageAccountKey</code> keys are the same account name and key you added to the storage account connection string earlier. If you&#39;re unsure of these values, look at the El Camino configuration section.</p>
 <p>The <code>ProfilePicBlobContainer</code> key is a blob container name that will hold our uploaded images. Don&#39;t change these. In this chapter, the image upload function uses the key to upload profile pictures to the blob container named <em>profile-pics</em>. </p>
-<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontoller-cs-"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageContoller.cs</em></h4>
+<h4 id="-step-8-update-the-get-controller-action-for-the-index-view-in-managecontroller-cs-"><strong>Step 8:</strong> Update the GET controller action for the Index view in <em>ManageController.cs</em></h4>
 <p>The final step is to update the GET controller action of the Manage\Index view. The entire function is included below. </p>
 <pre><code class="lang-csharp">//
 // GET: /Manage/Index
@@ -1366,7 +1366,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>When you launch the app to test, login and navigate to the profile management page. You should see something similar to the image below. If you don&#39;t, that&#39;s ok. You can always grab the code from the <code>chapter7</code> branch of the Github repository.</p>
 <p><img src="images/chapter6/upload-picture.gif" class="img-large" /></p>
 <p>Before we&#39;re finished, let&#39;s take a look at Storage Explorer to see our uploaded profile picture.</p>
-<p>Click <em>Refresh All</em>, browse to your Azure storage account, and open the <em>Blob Containers</em> element. Inside, you&#39;ll see the <em>profile-pics</em> container. Seelcting the container will show the uploaded profile pictures.</p>
+<p>Click <em>Refresh All</em>, browse to your Azure storage account, and open the <em>Blob Containers</em> element. Inside, you&#39;ll see the <em>profile-pics</em> container. Selecting the container will show the uploaded profile pictures.</p>
 <p><img src="images/chapter6/profile-pics-uploaded.gif" class="img-large" /></p>
 <h4 id="summary">Summary</h4>
 <p>In this chapter, you learned:</p>
@@ -1381,22 +1381,22 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			<hr>
 			<div class="chapter">
 				<h2 id="building-a-staging-blob-container-profile-pictures">Building a Staging Blob Container Profile Pictures</h2>
-<p>This is a short chapter, but sets the stage for something big. Imagine the web app we&#39;ve been building was going to be used in a production capacity. Do you really want to give users the ability to upload <em>any</em> image are their profile image? Some images just aren&#39;t suitable for a work enviornment. </p>
+<p>This is a short chapter, but sets the stage for something big. Imagine the web app we&#39;ve been building was going to be used in a production capacity. Do you really want to give users the ability to upload <em>any</em> image are their profile image? Some images just aren&#39;t suitable for a work environment. </p>
 <p>Wouldn&#39;t it be nice to add a step into the profile image upload process where images were screened? But, who&#39;s going to do the screening? Do you really have time to screen <em>every</em> images uploaded. Maybe it makes sense for a small site, but what happens when there&#39;s thousands of users? </p>
-<p>For me, there&#39;s no chance that I would introduce a manual screen step. Instead, I&#39;d look for every opportunity to automate this process so I can spend the time to write code once, and use it everytime someone changes their profile picture. </p>
+<p>For me, there&#39;s no chance that I would introduce a manual screen step. Instead, I&#39;d look for every opportunity to automate this process so I can spend the time to write code once, and use it every time someone changes their profile picture. </p>
 <p>Over the next several chapters, we&#39;ll be building an automated image screening process using <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Microsoft&#39;s Cognitive Services Computer Vision API</a>. We&#39;ll combine various Azure services: blob storage containers, an Azure function listening for changes to a blob container, and REST service calls to the computer vision API. The computer vision API will process each uploaded image, indicating whether it is work appropriate. Images that are acceptable will be moved to the profile picture blob container. Invalid images will be moved to a separate container.  </p>
-<p>In this chapter, we&#39;ll start building the autoamted process by modifying our web app to place the uploaded images in a staging blob container. Let&#39;s get started.</p>
+<p>In this chapter, we&#39;ll start building the automated process by modifying our web app to place the uploaded images in a staging blob container. Let&#39;s get started.</p>
 <h3 id="creating-a-profile-picture-staging-blob-container">Creating a Profile Picture Staging Blob Container</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
 </h4>
 
-<p>This is a fairly short exercise, where you&#39;ll do 2 things to create a staging blob container for profile pictues:</p>
+<p>This is a fairly short exercise, where you&#39;ll do 2 things to create a staging blob container for profile pictures:</p>
 <ul>
-<li><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob contianer name </li>
+<li><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob container name </li>
 <li><strong>Step 2:</strong> Update the upload image function to upload images to the staging blob container</li>
 </ul>
-<h4 id="-step-1-create-a-web-config-app-setting-for-the-upload-staging-blob-contianer-name"><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob contianer name</h4>
+<h4 id="-step-1-create-a-web-config-app-setting-for-the-upload-staging-blob-container-name"><strong>Step 1:</strong> Create a web.config app setting for the upload/staging blob container name</h4>
 <p>Add a new app setting to the <em>web.config</em> file named <code>ProfilePicUploadBlobContainer</code>.</p>
 <pre><code class="lang-xml">&lt;add key=&quot;ProfilePicUploadBlobContainer&quot; value=&quot;uploaded&quot; /&gt;
 </code></pre>
@@ -1475,12 +1475,12 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			<div class="chapter">
 				<h2 id="processing-profile-pictures-with-azure-functions">Processing Profile Pictures with Azure Functions</h2>
 <blockquote>
-<p><em>NOTE:</em> This chapter was adapted from Microsoft&#39;s Technical Community Content Github repo. To find out more and see the original content, visit <a href="https://github.com/Microsoft/TechnicalCommunityContent/tree/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On">Github</a>.</p>
+<p><em>NOTE:</em> This chapter was adapted from Microsoft&#39;s Technical Community Content Github repository. To find out more and see the original content, visit <a href="https://github.com/Microsoft/TechnicalCommunityContent/tree/master/Cloud%20Computing/Azure%20Functions/Session%202%20-%20Hands%20On">Github</a>.</p>
 </blockquote>
 <p>Functions have been the basic building blocks of software since the first lines of code were written and the need for code organization and reuse became a necessity. Azure Functions expand on these concepts by allowing developers to create &quot;serverless&quot;, event-driven functions that run in the cloud and can be shared across a wide variety of services and systems, uniformly managed, and easily scaled based on demand. In addition, Azure Functions can be written in a variety of languages, including C#, JavaScript, Python, Bash, and PowerShell, and they&#39;re perfect for building apps and nanoservices that employ a compute-on-demand model.</p>
 <p>In this chapter, you&#39;ll create an Azure Function that monitors a blob container in Azure Storage for new images, and then performs automated analysis of the images using the Microsoft Cognitive Services <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Computer Vision API</a>. Specifically, The Azure Function will analyze each image that is uploaded to the container for inappropriate content and create a copy of the image in another container. Images that contain inappropriate content will be copied to one container (the <em>rejected</em> container), and images that are acceptable copied to another (the <em>profile-pics</em> container). In addition, the analysis data returned by the Computer Vision API will be stored in blob metadata.</p>
 <h3 id="creating-an-azure-function-app">Creating an Azure Function App</h3>
-<p>The first step in writing an Azure Function is to create an Azure Function App. In this exercise, you&#39;ll create an Azure Function App using the Azure Portal. Then you&#39;ll add the <em>rejected</em> blob container to the storage account you&#39;ve used throughout this bootcamp. The <em>rejected</em> contaner will contain images classified as inappropriate content. </p>
+<p>The first step in writing an Azure Function is to create an Azure Function App. In this exercise, you&#39;ll create an Azure Function App using the Azure Portal. Then you&#39;ll add the <em>rejected</em> blob container to the storage account you&#39;ve used throughout this workshop. The <em>rejected</em> container will contain images classified as inappropriate content. </p>
 <p>If you&#39;re wondering about the other two containers mentioned above, don&#39;t worry. You&#39;ve already created them as part of previous chapters. We&#39;ll continue to use them in this chapter. </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create an Azure Function App
@@ -1497,7 +1497,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>While you&#39;re waiting for the function app to be created, open the resource group created earlier and locate your storage account. Open the storage account in the portal. </p>
 <p>Click <em>Blobs</em> to view the contents of blob storage.</p>
 <p><img src="images/chapter8/open-blob-storage.png" alt="Opening blob storage"></p>
-<p>You should see several containers inside of your blob storage: <em>profile-pics</em>, <em>uploaded</em>, and <em>azure-webjobs-hosts</em>. You previously created <em>profile-pics</em> and <em>uploaded</em> during previous chapters. The <em>azure-webjobs-hosts</em> container is created by the function app provisioning process, so you may not see it if the funciton app you just created hasn&#39;t been fully provisioned.</p>
+<p>You should see several containers inside of your blob storage: <em>profile-pics</em>, <em>uploaded</em>, and <em>azure-webjobs-hosts</em>. You previously created <em>profile-pics</em> and <em>uploaded</em> during previous chapters. The <em>azure-webjobs-hosts</em> container is created by the function app provisioning process, so you may not see it if the function app you just created hasn&#39;t been fully provisioned.</p>
 <p>Click <em>+ Container</em> to add a container.</p>
 <p><img src="images/chapter8/add-container.png" class="img-large" /></p>
 <p>Type <em>rejected</em> into the <em>Name</em> box. Select <em>Blob</em> for the <em>Access type</em>. Then click the <em>Create</em> button to create the container.</p>
@@ -1512,12 +1512,12 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
     <b>Exercise</b>: Create an Azure Function
 </h4>
 
-<p>Return to the bootcamp dashboard and click the Azure Function App that you created and pinned in the previous exercise. </p>
+<p>Return to the workshop dashboard and click the Azure Function App that you created and pinned in the previous exercise. </p>
 <p><img src="images/chapter8/open-function-app.png" class="img-small" /></p>
 <p>Click the <em>+</em> symbol next to <em>Functions</em>, as shown in the image below.</p>
 <p><img src="images/chapter8/create-azure-function.gif" class="img-large" /></p>
 <p>Scroll past the <em>Get started quickly...</em> heading and click <em>Custom function</em> under the <em>Get started on your own</em> heading. Click <em>BlobTrigger-CSharp</em>. </p>
-<p>Enter <em>BlobImageAnalysis</em> for the function name and &quot;uploaded/{name}.{ext}&quot; into the <em>Path</em> box. (The latter applies the blob storage trigger to the &quot;uploaded&quot; container that you created earlier in this workshop.) <em>{name}</em> and <em>{ext}</em> refer to function app parameters that will be passed in by the Azure funciton app API automatically. For example, when a profile picture is uploaded with the name mypicture.jpeg, it will be parsed into two variables: <em>name</em> (with a value of <em>mypicture</em>) and <em>ext</em> (with a value of <em>jpeg</em>). </p>
+<p>Enter <em>BlobImageAnalysis</em> for the function name and &quot;uploaded/{name}.{ext}&quot; into the <em>Path</em> box. (The latter applies the blob storage trigger to the &quot;uploaded&quot; container that you created earlier in this workshop.) <em>{name}</em> and <em>{ext}</em> refer to function app parameters that will be passed in by the Azure function app API automatically. For example, when a profile picture is uploaded with the name mypicture.jpeg, it will be parsed into two variables: <em>name</em> (with a value of <em>mypicture</em>) and <em>ext</em> (with a value of <em>jpeg</em>). </p>
 <p>Click the <em>Create</em> button to create the Azure Function.</p>
 <p>When the Azure Function is created, a code editor window will appear. </p>
 <p><img src="images/chapter8/code-editor.png" class="img-large" /></p>
@@ -1730,23 +1730,23 @@ public class Adult
 <li>Use Microsoft Cognitive Services to analyze images and store the results in blob metadata</li>
 </ul>
 <p>This is just one example of how you can leverage Azure Functions to automate repetitive tasks. Experiment with other Azure Function templates to learn more about Azure Functions and to identify additional ways in which they can aid your research or business.</p>
-<p>In the next chapter, we&#39;ll take the web app to the next level by adding in a SingalR hub, and automatically updating a profile picture if it&#39;s approved.</p>
+<p>In the next chapter, we&#39;ll take the web app to the next level by adding in a SignalR hub, and automatically updating a profile picture if it&#39;s approved.</p>
 
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="using-signalr-to-asynchrously-update-profile-pictures">Using SignalR to Asynchrously Update Profile Pictures</h2>
-<p>In the last several chatpers, you learned how to create an asynchronous image analysis process using Azure functions, blob storage, and the Cognitive Services Computer Vision API. Even though we automated the profile picture review and approval process, we inadvertantly created another problem: our web app doesn&#39;t support the asynchronous process (meaning, users must continuously refresh their browser to check if their profile picture was approved). </p>
+				<h2 id="using-signalr-to-asynchronously-update-profile-pictures">Using SignalR to Asynchronously Update Profile Pictures</h2>
+<p>In the last several chapters, you learned how to create an asynchronous image analysis process using Azure functions, blob storage, and the Cognitive Services Computer Vision API. Even though we automated the profile picture review and approval process, we inadvertently created another problem: our web app doesn&#39;t support the asynchronous process (meaning, users must continuously refresh their browser to check if their profile picture was approved). </p>
 <p>If there were only a way to notify the web browser when a profile picture was approved. There is: <a href="https://www.asp.net/signalr">ASP.NET SignalR</a>.</p>
 <ul>
 <li><strong>DEFINITION:</strong> ASP.NET SignalR (commonly known as simple SignalR) is a library for ASP.NET developers that makes developing real-time web functionality easy. SignalR allows bi-directional communication between server and client. Servers can now push content to connected clients instantly as it becomes available. SignalR supports Web Sockets, and falls back to other compatible techniques for older browsers.</li>
 </ul>
 <p>In this chapter, you&#39;ll learn how to use SignalR to notify users on the profile management page when profile pictures are approved.</p>
 <h3 id="what-you-re-building">What You&#39;re Building</h3>
-<p>Before we jump into modifying our web app, let&#39;s take a quick look at the process SignalR will help us estalbish:</p>
-<p>After a user updates their profile picture, our appwill redirect to the profile management page. When the page loads, JavaScript on the page will establish a connection to a SignalR hub. SignalR hubs allow apps to make remote procedure calls (RPCs) from a server to connected clients. After conencting to the SignalR hub, the profile management page waits and listens for a message from the server. If the user browses away from the page, the browser stops listening and disconnects from the SignalR hub.</p>
+<p>Before we jump into modifying our web app, let&#39;s take a quick look at the process SignalR will help us establish:</p>
+<p>After a user updates their profile picture, our app will redirect to the profile management page. When the page loads, JavaScript on the page will establish a connection to a SignalR hub. SignalR hubs allow apps to make remote procedure calls (RPCs) from a server to connected clients. After connecting to the SignalR hub, the profile management page waits and listens for a message from the server. If the user browses away from the page, the browser stops listening and disconnects from the SignalR hub.</p>
 <p>When the Azure function finishes processing an acceptable profile picture, it POSTs an HTTP request to a Web API endpoint hosted in our web app. The Web API endpoint pushes a message to the clients listening to the SignalR hub. The message includes the profile picture file name that was just accepted.</p>
-<p>Back on the client side, when a message is recieved, the page determines if the profile picture accepted by the Azure function is the picture uploaded by the client. If it is, the image is reloaded by appending a random query string to the image&#39;s source URL.</p>
+<p>Back on the client side, when a message is received, the page determines if the profile picture accepted by the Azure function is the picture uploaded by the client. If it is, the image is reloaded by appending a random query string to the image&#39;s source URL.</p>
 <h3 id="adding-signalr-to-the-web-app">Adding SignalR to the Web App</h3>
 <p>In this exercise, you&#39;ll be adding SignalR to the web app by creating:</p>
 <ul>
@@ -1766,13 +1766,13 @@ public class Adult
 </ul>
 <p><img src="images/chapter9/install-signalr.png" alt="image"></p>
 <h4 id="manage-index-cshtml">Manage\Index.cshtml</h4>
-<p>Add a SignalR script reference and hub listerner code to the <em>Manage\Index</em> view. When you add this reference, be sure to check the verison of SignalR installed. You can find the version number by looking in the <em>Scripts</em> folder of the MVC app. Look for a file named <em>jquery.signalr-X.Y.Z.js</em>, where X.Y.Z is the MAJOR.MINOR.PATCH version number of SignalR. Our version is v2.2.1.</p>
+<p>Add a SignalR script reference and hub listener code to the <em>Manage\Index</em> view. When you add this reference, be sure to check the version of SignalR installed. You can find the version number by looking in the <em>Scripts</em> folder of the MVC app. Look for a file named <em>jquery.signalr-X.Y.Z.js</em>, where X.Y.Z is the MAJOR.MINOR.PATCH version number of SignalR. Our version is v2.2.1.</p>
 <p><img src="images/chapter9/check-signalr-version.png" alt="image"></p>
 <p>Add the JavaScript code snippet to the bottom of the view.</p>
 <pre><code class="lang-javascript">@section scripts {
-    &lt;!--Reference the SignalR library - make sure it&#39;s verison matches the installed version.--&gt;
+    &lt;!--Reference the SignalR library - make sure it&#39;s version matches the installed version.--&gt;
     &lt;script src=&quot;~/Scripts/jquery.signalR-2.2.1.min.js&quot;&gt;&lt;/script&gt;
-    &lt;!--Reference the autogenerated SignalR hub script.--&gt;
+    &lt;!--Reference the auto-generated SignalR hub script.--&gt;
     &lt;script src=&quot;~/signalr/hubs&quot;&gt;&lt;/script&gt;
     &lt;!--SignalR script to handle profile picture updated message.--&gt;
     &lt;script&gt;
@@ -1802,15 +1802,15 @@ public class Adult
 </code></pre>
 <p>In the code snippet above, 3 things happen when the page loads:</p>
 <ol>
-<li><p>a reference to the profile picture SignalR hub (<code>$.connection.profilePicHub</code>) is stored. You may be wondering why/how the JavaScript code knows what <code>profilePicHub</code> is. For now, jsut know that SignalR creates that for you automatically when the page loads, and that you&#39;ll learn more about it later in this chapter.</p>
+<li><p>a reference to the profile picture SignalR hub (<code>$.connection.profilePicHub</code>) is stored. You may be wondering why/how the JavaScript code knows what <code>profilePicHub</code> is. For now, just know that SignalR creates that for you automatically when the page loads, and that you&#39;ll learn more about it later in this chapter.</p>
 </li>
-<li><p>we establish a client-side function (<code>profilePic.client.profilePicUpdated</code>) that is called when the server pushes a method. The URL of the profile picture is passed to this function. The function uses a hidden field on the page (remember adding <code>@Html.HiddenFor(x =&gt; x.ProfilePicUrl, new { id = &quot;profilePictureUrl&quot; })</code> to the MVC view earlier?) . The hidden field is used to check whether the URL passed to the function is the URL of the current user&#39;s profile picture. If it is, the profile picture image&#39;s source property is updated with a randon query string: this is a cool trick to force the image to be reloaded. </p>
+<li><p>we establish a client-side function (<code>profilePic.client.profilePicUpdated</code>) that is called when the server pushes a method. The URL of the profile picture is passed to this function. The function uses a hidden field on the page (remember adding <code>@Html.HiddenFor(x =&gt; x.ProfilePicUrl, new { id = &quot;profilePictureUrl&quot; })</code> to the MVC view earlier?) . The hidden field is used to check whether the URL passed to the function is the URL of the current user&#39;s profile picture. If it is, the profile picture image&#39;s source property is updated with a random query string: this is a cool trick to force the image to be reloaded. </p>
 </li>
 <li><p>the connection with the SignalR hub is established, beginning the listening process. When the hub connection starts, we have the opportunity to run additional code, but in our circumstance, there&#39;s no need.</p>
 </li>
 </ol>
 <blockquote>
-<p><strong>NOTE:</strong> You may be wondering why we&#39;re checking to ensure the URL passed to a client is the right URL. Imagine several users upload profile pictures simultaneously, each placing their picture in the <em>uploaded</em> blob container. The Azure function indiscriminately processes each image, and POSTs back to our Web API endpoint. The web app then broadcasts the picture URL to all clients connected to the SignalR hub. It&#39;s because of this broadcast that clietns receive messages formt he server about their image and other&#39;s images. There <em>are</em> ways to change the way SignalR works, but for the purposes f this workshop, we&#39;ve stuck with the broadcast approach. But, in a more professional setting, you wouldn&#39;t want to broadcast messages to clients that either aren&#39;t expecting them or to which they don&#39;t pertain.</p>
+<p><strong>NOTE:</strong> You may be wondering why we&#39;re checking to ensure the URL passed to a client is the right URL. Imagine several users upload profile pictures simultaneously, each placing their picture in the <em>uploaded</em> blob container. The Azure function indiscriminately processes each image, and POSTs back to our Web API endpoint. The web app then broadcasts the picture URL to all clients connected to the SignalR hub. It&#39;s because of this broadcast that clients receive messages from the server about their image and others images. There <em>are</em> ways to change the way SignalR works, but for the purposes f this workshop, we&#39;ve stuck with the broadcast approach. But, in a more professional setting, you wouldn&#39;t want to broadcast messages to clients that either aren&#39;t expecting them or to which they don&#39;t pertain.</p>
 </blockquote>
 <h4 id="profilepichub-cs">ProfilePicHub.cs</h4>
 <p>Next, we&#39;ll create our SignalR hub by adding a new class to the root of the web app project. Name the class <em>ProfilePicHub</em> and add the code below. </p>
@@ -1834,9 +1834,9 @@ namespace Web
     }
 }
 </code></pre>
-<p>As you can see, there&#39;s not much going on in the <em>ProfilePicHub</em> class, but that&#39;s because all the heavy lifting is being done in the inheritied <em>Hub</em> class.</p>
+<p>As you can see, there&#39;s not much going on in the <em>ProfilePicHub</em> class, but that&#39;s because all the heavy lifting is being done in the inherited <em>Hub</em> class.</p>
 <blockquote>
-<p><strong>NOTE:</strong> The name of the <em>ProfilePicHub</em> class isn&#39;t a coincidence. Earlier in this exercise, you created a reference to the SignalR hub in JavaScript: <code>var profilePic = $.connection.profilePicHub;</code>. When you inhreit from the <em>Hub</em> class, SignalR will create a JavaScript object of the same name, placing it inside of the <code>$.connection</code> object.</p>
+<p><strong>NOTE:</strong> The name of the <em>ProfilePicHub</em> class isn&#39;t a coincidence. Earlier in this exercise, you created a reference to the SignalR hub in JavaScript: <code>var profilePic = $.connection.profilePicHub;</code>. When you inherit from the <em>Hub</em> class, SignalR will create a JavaScript object of the same name, placing it inside of the <code>$.connection</code> object.</p>
 </blockquote>
 <p>You&#39;ll also notice the <em>ProfilePicBroadcaster</em> class that is passed in as a dependency to this class. This class lives up to it&#39;s name and broadcasts messages when a profile picture is updated. We have yet to define the class, so let&#39;s tackle that now.</p>
 <h4 id="profilepicbroadcaster-cs">ProfilePicBroadcaster.cs</h4>
@@ -1890,9 +1890,9 @@ namespace Web
 <p>In whole, the purpose of this class is to store a reference to the connected SignalR clients, and provide a mechanism to broadcast a message to all clients.</p>
 <p>More specifically, there&#39;s 5 code blocks:</p>
 <ul>
-<li><p>Blocks 1-4 work together to lazily instantiate a singleton instance of this class. The class is intended to be used like a factory class, where you obtain an instantiated reference of the class through the <code>ProfilePicBroadcaster.Instance</code> property. When this property is referenced the first time, the private readonly static <code>_instance</code> variable is created. The code is a bit pretentious and may look confusing if you don&#39;t have any experience with the <code>Lazy&lt;&gt;</code> class and the singleton pattern. An easy way to think of these 4 code blocks is to know that when you call <code>ProfilePicBroadbaster.Instance</code> one or more times, you&#39;ll get the same instance of the object, meaning .NET only fires the constructor once and only uses the memory space once. </p>
+<li><p>Blocks 1-4 work together to lazily instantiate a singleton instance of this class. The class is intended to be used like a factory class, where you obtain an instantiated reference of the class through the <code>ProfilePicBroadcaster.Instance</code> property. When this property is referenced the first time, the <code>private readonly static _instance</code> variable is created. The code is a bit pretentious and may look confusing if you don&#39;t have any experience with the <code>Lazy&lt;&gt;</code> class and the singleton pattern. An easy way to think of these 4 code blocks is to know that when you call <code>ProfilePicBroadcaster.Instance</code> one or more times, you&#39;ll get the same instance of the object, meaning .NET only fires the constructor once and only uses the memory space once. </p>
 </li>
-<li><p>Block 5 is the only public instance method of the class. When called, it broadcasts a message to all connected clients by calling a method on <code>Clients.All</code>. You may notice something interesting about the method name called: <code>profilePicUpdated(profilePicUrl)</code>. This method is actually the method name we created in JavaScript earlier on the <code>client</code> object: <code>profilePic.client.profilePicUpdated = function (profilePicUrl) { ... };</code>. As long as the names of these methods are identical, SignalR passes data betweent he C# function call you&#39;ve written here and the JavaScript function. Pretty cool.</p>
+<li><p>Block 5 is the only public instance method of the class. When called, it broadcasts a message to all connected clients by calling a method on <code>Clients.All</code>. You may notice something interesting about the method name called: <code>profilePicUpdated(profilePicUrl)</code>. This method is actually the method name we created in JavaScript earlier on the <code>client</code> object: <code>profilePic.client.profilePicUpdated = function (profilePicUrl) { ... };</code>. As long as the names of these methods are identical, SignalR passes data between the C# function call you&#39;ve written here and the JavaScript function. Pretty cool.</p>
 </li>
 </ul>
 <blockquote>
@@ -1934,7 +1934,7 @@ namespace Web
 <li>Microsoft.AspNet.WebApi.Client</li>
 </ul>
 <h4 id="webapiconfig-cs">WebApiConfig.cs</h4>
-<p>Create a file named <em>WebApiConfig.cs</em> in the <em>App_Start</em> folder. Add this code to the file, which configures several defautls for Web API.</p>
+<p>Create a file named <em>WebApiConfig.cs</em> in the <em>App_Start</em> folder. Add this code to the file, which configures several defaults for Web API.</p>
 <pre><code class="lang-csharp">using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2019,10 +2019,10 @@ namespace Web.Controllers
 
 <p>That&#39;s it! We&#39;re finished with the web project. But, there&#39;s something you&#39;ll need to do before moving on.</p>
 <blockquote>
-<p><strong>WARNING:</strong> It&#39;s critical that you re-publish the project to the Azure web app you created earlier. In the next section, you&#39;ll be updating your Azure function to POST the update porfile picture URL to a <em>public</em> Web API endpoint. If your Web API endpoint isn&#39;t publically exposed, the Azure function won&#39;t be able to communicate with it.</p>
+<p><strong>WARNING:</strong> It&#39;s critical that you re-publish the project to the Azure web app you created earlier. In the next section, you&#39;ll be updating your Azure function to POST the update profile picture URL to a <em>public</em> Web API endpoint. If your Web API endpoint isn&#39;t publicly exposed, the Azure function won&#39;t be able to communicate with it.</p>
 </blockquote>
 <h3 id="calling-a-web-api-endpoint-from-an-azure-function">Calling a Web API Endpoint from an Azure Function</h3>
-<p>The last step is to call the Web API enpoint from the Azure function after a profile picture is accepted as an approrpiate picture. </p>
+<p>The last step is to call the Web API endpoint from the Azure function after a profile picture is accepted as an appropriate picture. </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Call a Web API Endpoint from an Azure Function
 </h4>
@@ -2167,7 +2167,7 @@ public class Adult
     public float racyScore { get; set; }
 }
 </code></pre>
-<p>The code added uses two confguration app settings to POST the URL of the profile picture when it&#39;s acceptable.</p>
+<p>The code added uses two configuration app settings to POST the URL of the profile picture when it&#39;s acceptable.</p>
 <p>Return to the <em>Application Settings</em> area of the function app.</p>
 <p><img src="images/chapter9/goto-app-settings.gif" class="img-large" /></p>
 <p>Add app settings for <code>WebAPIEndpointBaseUrl</code> and <code>StorageAccountName</code>:</p>
@@ -2179,7 +2179,7 @@ public class Adult
 <p>You&#39;re finished!</p>
 <div class="exercise-end"></div>
 
-<p>Wow! That was a lot of changes, but we think it was worth it. Browse out to the AZure-hosted URL of your web app (ours is <em><a href="http://louglobalazure2017.azurewebsites.net/">http://louglobalazure2017.azurewebsites.net/</a></em>). When you upload a new profile picture, you&#39;ll navigate back to the profile management page. After a few seconds, you should see the image update after the the Azure function analyzes it with the Cognitive Services API and calls the Web API endpoint we created. The Web API endpoint broasdcasts the profile picture URL to all connected SignalR hub clients. When this is recieved by the listener in JavaScript, the source property of the image is updated to include a random query string, causing the image to re-fresh.</p>
+<p>Wow! That was a lot of changes, but we think it was worth it. Browse out to the Azure-hosted URL of your web app (ours is <em><a href="http://louglobalazure2017.azurewebsites.net/">http://louglobalazure2017.azurewebsites.net/</a></em>). When you upload a new profile picture, you&#39;ll navigate back to the profile management page. After a few seconds, you should see the image update after the the Azure function analyzes it with the Cognitive Services API and calls the Web API endpoint we created. The Web API endpoint broadcasts the profile picture URL to all connected SignalR hub clients. When this is received by the listener in JavaScript, the source property of the image is updated to include a random query string, causing the image to re-fresh.</p>
 <p>It&#39;s beautiful.</p>
 <p><img src="images/chapter9/signalr-update.gif" class="img-large" /></p>
 <h4 id="summary">Summary</h4>

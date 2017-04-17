@@ -1,6 +1,6 @@
 ## Getting project from Github
 
-All the code you'll need for working through the bootcamp are stored on Github at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017).
+All the code you'll need for working through the workshop are stored on Github at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017).
 
 ### Organization of the Repository
 
@@ -13,7 +13,7 @@ The repository at [https://github.com/mikebranstein/GlobalAzureDay2017](https://
 * chapter7
 * chapter9
 
-Each branch corresponds with the chapters in this bootcamp guide. The guide starts with the code from the `start` branch, and progresses with each chapter. 
+Each branch corresponds with the chapters in this workshop guide. The guide starts with the code from the `start` branch, and progresses with each chapter. 
 
 > **NOTE** You don't need to copy the code from each branch, only the `start` branch. If you're following along with the guide, you can start with the `start` branch. If you get stuck, or if you can't follow-along, you can grab a fresh set of code from a branch name matching the chapter you're on. For example, if you get stuck and can't get your code working at the end of chapter 5, you can jump to chapter 6 and grab the `chapter6` branch.
 

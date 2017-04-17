@@ -6,7 +6,7 @@ In this chapter, you'll be learning how to create an Azure storage account and c
 
 Our first stop will be to create a Resource Group in Azure. 
 
-> **DEFINITION** Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think ofresource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.
+> **DEFINITION** Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Create a Dashboard and Resource Group
@@ -20,7 +20,7 @@ Login to the Azure portal, click *+ New Dashboard*, give the dashboard name, and
 
 <img src="images/chapter4/create-dashboard.gif" class="img-medium" />
 
-That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the bootcamp because it helps keep everything organized. You'll have a single place to go to find everything you build today.
+That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the workshop because it helps keep everything organized. You'll have a single place to go to find everything you build today.
 
 #### Creating a Resource Group
 
@@ -76,8 +76,8 @@ Return to your dashboard if you're not already there. Click *+ New*, select *Sto
 
 Complete the following fields:
 * **Name:** this must be a unique, URL-friendly name that will be prepended to the URL `{storage-account-name}.core.windows.net`. You'll use this full URL name to reference the storage account in code
-* **Deployment model:** Resource manager. The *Classic* option is a legacy option that will be deprecated soon. Don't pick it. Chosing the *Resource manager* options also allows you to create automation scripts for provisioning Azure resources easily
-* **Account kind:** General purpose. You can create an account that stores only blobs (binary large objects), but for our bootcamp we want a storage account that can store both tables and blobs
+* **Deployment model:** Resource manager. The *Classic* option is a legacy option that will be deprecated soon. Don't pick it. Choosing the *Resource manager* options also allows you to create automation scripts for provisioning Azure resources easily
+* **Account kind:** General purpose. You can create an account that stores only blobs (binary large objects), but for our workshop we want a storage account that can store both tables and blobs
 * **Performance:** Standard, because our needs are simple. If you were an enterprise, you may want to choose Premium for the enhanced SLA and scalability. To learn more about the difference, check out this [article](https://docs.microsoft.com/en-us/azure/storage/storage-introduction#introducing-the-azure-storage-services)
 * **Replication:** Locally-redundant storage (LRS). The data in your Microsoft Azure storage account is always replicated to ensure durability and high availability. Replication copies your data, either within the same data center, or to a second data center, depending on which replication option you choose. Replication protects your data and preserves your application up-time in the event of transient hardware failures. If your data is replicated to a second data center, that also protects your data against a catastrophic failure in the primary location. To learn more read this [article](https://docs.microsoft.com/en-us/azure/storage/storage-redundancy).
 * **Storage service encryption:** Disabled. Azure Storage Service Encryption (SSE) for Data at Rest helps you protect and safeguard your data to meet your organizational security and compliance commitments. With this feature, Azure Storage automatically encrypts your data prior to persisting to storage and decrypts prior to retrieval. The encryption, decryption, and key management are totally transparent to users. To learn more, read this [article](https://docs.microsoft.com/en-us/azure/storage/storage-service-encryption).
@@ -148,10 +148,10 @@ Take a closer look at the `<elcaminoIdentityConfiguration>` element:
 
 This element contains a storage account connection string. Similar to SQL Server databases, storage accounts have a connection string. And, similar to local SQL server installations (like localdb), locally-hosted storage emulators have a special connection string.
 
-When you're devleoping locally, the connection string is `UserDevelopmentStorage=true`.
+When you're developing locally, the connection string is `UserDevelopmentStorage=true`.
 
 But, when we move to the cloud, the connection string has an enhanced structure containing 3 components: 
-* **Default Endpoints Protocol:** the commnucation protocol used to talk to the remote table storage. By default it's https, and there's truthfully no reason for you to change it.
+* **Default Endpoints Protocol:** the communication protocol used to talk to the remote table storage. By default it's https, and there's truthfully no reason for you to change it.
 * **Account Name:** the name you gave the account.
 * **Account Key:** a secret key that you shouldn't share with others. Treat it like a super user password.
 
@@ -197,7 +197,7 @@ Now that you've updated the `web.config` to point to an Azure storage account, l
 
 When the web app launches, register a user. 
 
-> **NOTE** You may recall that you previosuly registerd a user with the app, but we've just told the app to use a different storage account for ASP.NET Identity. This means you'll have to re-register the user.
+> **NOTE** You may recall that you previously registered a user with the app, but we've just told the app to use a different storage account for ASP.NET Identity. This means you'll have to re-register the user.
 
 Click the *Register* link in the upper-right corner of the app. Enter in an email and password. Press the *Register* button to create the user.
 
@@ -269,7 +269,7 @@ After the plan is created, click *Create* to create the Web App in Azure.
 
 <img src="images/chapter4/deploying.gif" class="img-large" />
 
-When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. after the publish has finished, you shoudl see something similar:
+When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. after the publish has finished, you should see something similar:
 
 <img src="images/chapter4/published.png" class="img-large" />
 

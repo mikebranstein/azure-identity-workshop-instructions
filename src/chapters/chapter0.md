@@ -44,7 +44,7 @@ We've assembled an exciting workshop to introduce you to several Azure services 
 
 In this workshop you'll learn how to use these Azure services to build a cloud-hosted single sign-on app that can manage your user profile. When you're finished, you will have built an app that allows you to upload profile pictures that pass through an AI content filter to ensure they're work appropriate. 
 
-#### Key concepts and take aways
+#### Key concepts and takeaways
 
 * Navigating the Azure portal
 * Using Azure Resource Groups to manage multiple Azure services

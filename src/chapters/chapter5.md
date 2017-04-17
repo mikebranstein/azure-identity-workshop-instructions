@@ -86,7 +86,7 @@ Then we'll move on to a new page that updates the biography:
 * **Step 7:** Add a POST controller action for the Update Biography view to *ManageController.cs*
 
 Finally, we'll return to the profile management page:
-* **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* to populate the view with the updated biography
+* **Step 8:** Update the GET controller action for the Index view in *ManageController.cs* to populate the view with the updated biography
 
 There's a lot to do, so let's get moving!
 
@@ -106,7 +106,7 @@ public class IndexViewModel
 }
 ```
 
-> Adding this property will allow the index view to display the biography when it loads. We'll be setting the value of the biography later in this excercise when we update the index controller's GET action.
+> Adding this property will allow the index view to display the biography when it loads. We'll be setting the value of the biography later in this exercise when we update the index controller's GET action.
 
 #### **Step 2:** Update the Manage\Index view 
 
@@ -115,7 +115,7 @@ Update *Index.cshtml* in the *Views\Manage* folder to display:
 * Biography value
 * Link to update the Biography
 
-Add the Ravor markup as the first child element of the `<dl class="dl-horizontal">` element:
+Add the Razor markup as the first child element of the `<dl class="dl-horizontal">` element:
 
 ```html
 <dt>Biography:</dt>
@@ -196,19 +196,19 @@ public async Task<ActionResult> UpdateBiography()
 }
 ``` 
 
-You may not immediately recognize all of the code you just added, so let's break it down. First, we grab the current user's id by calling into ASP.NET Identity with `User.Identity.GetUserId()`. With the user's id, we call the funciton we created earlier in this chapter (`GetBiographyAsync()`) to load the user's biography. 
+You may not immediately recognize all of the code you just added, so let's break it down. First, we grab the current user's id by calling into ASP.NET Identity with `User.Identity.GetUserId()`. With the user's id, we call the function we created earlier in this chapter (`GetBiographyAsync()`) to load the user's biography. 
 
 The retrieved biography is then used to construct a model passed back to the Update Biography view.
 
 #### **Step 6:** Add a "Your biography was updated" message to *ManageController.cs*
 
-Now that we have the Update Biography view showing a user's biography, let's start planning what happens when a user's biogrpahy is updated. 
+Now that we have the Update Biography view showing a user's biography, let's start planning what happens when a user's biography is updated. 
 
 When the biography is updated, the POST controller action will be called and the user will be redirected back to the Manage\Index view. We'll get to this next. 
 
 When you return to the Manage\Index view, a message reading, "Your biography was updated" is also displayed. This is done by passing a specially-formatted query string value back to the view via the `ManageMessageId` enum. 
 
-Update the enum's values to include a value for `UpdateBiographySuccess`. 
+Update the enum to include a value for `UpdateBiographySuccess`. 
 
 > **NOTE** You may have trouble finding the enum declaration because it's hidden behind a collapsed region labeled *Helpers*. Scroll down to the bottom of the *ManageController.cs* class to find the region. Expand it and you'll be able to locate the enum.
 
@@ -249,7 +249,7 @@ public async Task<ActionResult> UpdateBiography(UpdateBiographyViewModel model)
 }
 ``` 
 
-Much of the code is stright-forward, but we want to draw your attention to a few lines, starting with `var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());`. You've already seen the `GetUserId()` function, but you haven't directly worked with the `UserManager` class. 
+Much of the code is straight-forward, but we want to draw your attention to a few lines, starting with `var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());`. You've already seen the `GetUserId()` function, but you haven't directly worked with the `UserManager` class. 
 
 > **NOTE** The `UserManager` class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you're not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. 
 
@@ -257,11 +257,11 @@ Back to the code. Because `UserManager` acts as a repository, we use it to retri
 
 After the user is saved, you're redirected back to the Manage\Index view, passing the `UpdateBiographySuccess` enum value as a query string parameter.
 
-#### **Step 8:** Update the GET controller action for the Index view in *ManageContoller.cs* 
+#### **Step 8:** Update the GET controller action for the Index view in *ManageController.cs* 
 
 The final step is to update the GET controller action of the Manage\Index view. Below is the entire function, but note the added line setting the `ViewBag.StatusMessage` to "Your biography was updated." when the `ManageMessageId` enum has a value of `UpdateBiographySuccess`. 
 
-You should also note that the index view model's biography property is set by calling the method you created eariler: `UserManager.GetBiographyAsync(userId)`.
+You should also note that the index view model's biography property is set by calling the method you created earlier: `UserManager.GetBiographyAsync(userId)`.
 
 ```csharp
 //
