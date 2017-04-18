@@ -1713,7 +1713,7 @@ public class Adult
     <b>Exercise</b>: View Blob Metadata with Storage Explorer
 </h4>
 
-<p>Start Storage Explorer. Find your storage account you&#39;ve bene working with and expand the list of blob containers underneath it. Then click the container named <em>profile-pics</em>.</p>
+<p>Start Storage Explorer. Find your storage account you&#39;ve been working with and expand the list of blob containers underneath it. Then click the container named <em>profile-pics</em>.</p>
 <p>Right-click an image in the &quot;profile-pics&quot; container and select <em>Properties</em> from the context menu.</p>
 <p>Inspect the blob&#39;s metadata. <em>IsAdultContent</em> and <em>isRacyContent</em> are Boolean values that indicate whether the Computer Vision API detected adult or racy content in the image. <em>adultScore</em> and <em>racyScore</em> are the computed probabilities.</p>
 <p><img src="images/chapter8/profile-pic-metadata.gif" class="img-large" /></p>
@@ -1801,15 +1801,15 @@ public class Adult
 </code></pre>
 <p>In the code snippet above, 3 things happen when the page loads:</p>
 <ol>
-<li><p>a reference to the profile picture SignalR hub (<code>$.connection.profilePicHub</code>) is stored. You may be wondering why/how the JavaScript code knows what <code>profilePicHub</code> is. For now, just know that SignalR creates that for you automatically when the page loads, and that you&#39;ll learn more about it later in this chapter.</p>
+<li><p>A reference to the profile picture SignalR hub (<code>$.connection.profilePicHub</code>) is stored. You may be wondering why/how the JavaScript code knows what <code>profilePicHub</code> is. For now, just know that SignalR creates that for you automatically when the page loads, and that you&#39;ll learn more about it later in this chapter.</p>
 </li>
-<li><p>we establish a client-side function (<code>profilePic.client.profilePicUpdated</code>) that is called when the server pushes a method. The URL of the profile picture is passed to this function. The function uses a hidden field on the page (remember adding <code>@Html.HiddenFor(x =&gt; x.ProfilePicUrl, new { id = &quot;profilePictureUrl&quot; })</code> to the MVC view earlier?) . The hidden field is used to check whether the URL passed to the function is the URL of the current user&#39;s profile picture. If it is, the profile picture image&#39;s source property is updated with a random query string: this is a cool trick to force the image to be reloaded. </p>
+<li><p>We establish a client-side function (<code>profilePic.client.profilePicUpdated</code>) that is called when the server pushes a method. The URL of the profile picture is passed to this function. The function uses a hidden field on the page (remember adding <code>@Html.HiddenFor(x =&gt; x.ProfilePicUrl, new { id = &quot;profilePictureUrl&quot; })</code> to the MVC view earlier?) . The hidden field is used to check whether the URL passed to the function is the URL of the current user&#39;s profile picture. If it is, the profile picture image&#39;s source property is updated with a random query string: this is a cool trick to force the image to be reloaded. </p>
 </li>
-<li><p>the connection with the SignalR hub is established, beginning the listening process. When the hub connection starts, we have the opportunity to run additional code, but in our circumstance, there&#39;s no need.</p>
+<li><p>The connection with the SignalR hub is established, beginning the listening process. When the hub connection starts, we have the opportunity to run additional code, but in our circumstance, there&#39;s no need.</p>
 </li>
 </ol>
 <blockquote>
-<p><strong>NOTE:</strong> You may be wondering why we&#39;re checking to ensure the URL passed to a client is the right URL. Imagine several users upload profile pictures simultaneously, each placing their picture in the <em>uploaded</em> blob container. The Azure function indiscriminately processes each image, and POSTs back to our Web API endpoint. The web app then broadcasts the picture URL to all clients connected to the SignalR hub. It&#39;s because of this broadcast that clients receive messages from the server about their image and others images. There <em>are</em> ways to change the way SignalR works, but for the purposes f this workshop, we&#39;ve stuck with the broadcast approach. But, in a more professional setting, you wouldn&#39;t want to broadcast messages to clients that either aren&#39;t expecting them or to which they don&#39;t pertain.</p>
+<p><strong>NOTE:</strong> You may be wondering why we&#39;re checking to ensure the URL passed to a client is the right URL. Imagine several users upload profile pictures simultaneously, each placing their picture in the <em>uploaded</em> blob container. The Azure function indiscriminately processes each image, and POSTs back to our Web API endpoint. The web app then broadcasts the picture URL to all clients connected to the SignalR hub. It&#39;s because of this broadcast that clients receive messages from the server about their image and others images. There <em>are</em> ways to change the way SignalR works, but for the purposes of this workshop, we&#39;ve stuck with the broadcast approach. But, in a more professional setting, you wouldn&#39;t want to broadcast messages to clients that either aren&#39;t expecting them or to which they don&#39;t pertain.</p>
 </blockquote>
 <h4 id="profilepichub-cs">ProfilePicHub.cs</h4>
 <p>Next, we&#39;ll create our SignalR hub by adding a new class to the root of the web app project. Name the class <em>ProfilePicHub</em> and add the code below. </p>
@@ -2178,7 +2178,8 @@ public class Adult
 <p>You&#39;re finished!</p>
 <div class="exercise-end"></div>
 
-<p>Wow! That was a lot of changes, but we think it was worth it. Browse out to the Azure-hosted URL of your web app (ours is <em><a href="http://louglobalazure2017.azurewebsites.net/">http://louglobalazure2017.azurewebsites.net/</a></em>). When you upload a new profile picture, you&#39;ll navigate back to the profile management page. After a few seconds, you should see the image update after the the Azure function analyzes it with the Cognitive Services API and calls the Web API endpoint we created. The Web API endpoint broadcasts the profile picture URL to all connected SignalR hub clients. When this is received by the listener in JavaScript, the source property of the image is updated to include a random query string, causing the image to re-fresh.</p>
+<p>Wow! That was a lot of changes, but we think it was worth it. Browse out to the Azure-hosted URL of your web app (ours is <em><a href="http://louglobalazure2017.azurewebsites.net/">http://louglobalazure2017.azurewebsites.net/</a></em>). You&#39;ll note this URL is different from the others in the guide, but it has the same functionality.</p>
+<p>When you upload a new profile picture, you&#39;ll navigate back to the profile management page. After a few seconds, you should see the image update after the the Azure function analyzes it with the Cognitive Services API and calls the Web API endpoint we created. The Web API endpoint broadcasts the profile picture URL to all connected SignalR hub clients. When this is received by the listener in JavaScript, the source property of the image is updated to include a random query string, causing the image to re-fresh.</p>
 <p>It&#39;s beautiful.</p>
 <p><img src="images/chapter9/signalr-update.gif" class="img-large" /></p>
 <h4 id="summary">Summary</h4>
