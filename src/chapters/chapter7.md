@@ -1,6 +1,6 @@
 ## Building a Staging Blob Container Profile Pictures
 
-This is a short chapter, but sets the stage for something big. Imagine the web app we've been building was going to be used in a production capacity. Do you really want to give users the ability to upload *any* image are their profile image? Some images just aren't suitable for a work environment. 
+This is a short chapter, but sets the stage for something big. Imagine the web app we've been building was going to be used in a production capacity. Do you really want to give users the ability to upload *any* image for their profile picture? Some images just aren't suitable for a work environment. 
 
 Wouldn't it be nice to add a step into the profile image upload process where images were screened? But, who's going to do the screening? Do you really have time to screen *every* images uploaded. Maybe it makes sense for a small site, but what happens when there's thousands of users? 
 
@@ -87,7 +87,7 @@ imageFullPath =
             ConfigurationManager.AppSettings["ProfilePicBlobContainer"]);
 ```
 
-From the previous chapter, you'll recall that `cloudBlockBlob` is a reference to the uploaded blob image. After this change, the blob container we'll be upload to is the staging/upload container named *uploaded* (stored in the `ProfilePicUploadBlobContainer` app setting). This staging/upload container should not be returned to the app, because images in this container have not been processed with the computer vision API. 
+From the previous chapter, you'll recall that `cloudBlockBlob` is a reference to the uploaded blob image. After this change, the blob container we'll be uploading it to the staging/upload container named *uploaded* (stored in the `ProfilePicUploadBlobContainer` app setting). This staging/upload container should not be returned to the app, because images in this container have not been processed with the computer vision API. 
 
 When images get processed, valid profile pictures will be placed in the *profile-pics* container (stored in the `ProfilePicBlobContainer` app setting). As a result, the URL returned from the upload function returns the URL of the valid image. 
 

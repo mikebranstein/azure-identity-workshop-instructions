@@ -251,7 +251,7 @@ public async Task<ActionResult> UpdateBiography(UpdateBiographyViewModel model)
 
 Much of the code is straight-forward, but we want to draw your attention to a few lines, starting with `var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());`. You've already seen the `GetUserId()` function, but you haven't directly worked with the `UserManager` class. 
 
-> **NOTE** The `UserManager` class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you're not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. 
+> **NOTE** The `UserManager` class, well, manages users. That sounds redundant, but we like to think of it as a user repository. If you're not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. 
 
 Back to the code. Because `UserManager` acts as a repository, we use it to retrieve a user object (more specifically, the `ApplicationUser` object which inherits from `IdentityUser`). Once we have the user, we update the biography property and send the user back through the repository to be persisted: `await UserManager.UpdateAsync(user);`.
 

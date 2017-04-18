@@ -26,7 +26,7 @@ You'll be presented with a Function App creation blade.
 
 <img src="images/chapter8/create-function-app.png" class="img-small" />
 
-Enter an app name that is unique within Azure. Under *Resource Group*, select *Use existing* and select the resource group your created earlier. Choose *App Service plan/Location* for the *Hosting Plan*, and select the same storage account you created earlier.Make sure the *Pin to dashboard* is checked.
+Enter an app name that is unique within Azure. Under *Resource Group*, select *Use existing* and select the resource group your created earlier. Choose *App Service plan/Location* for the *Hosting Plan*, and select the same storage account you created earlier. Make sure the *Pin to dashboard* is checked.
 
 Click *Create* to create a new Function App. The function app will start it's deployment process. 
 
@@ -52,7 +52,7 @@ Repeat the previous steps to add containers named *profile-pics* and *uploaded* 
 
 <div class="exercise-end"></div>
 
-Great work! You've created the function app and have the three containers needed to store uploaded, rejected, and valid profile pictures.The next step is to add an Azure Function.
+Great work! You've created the function app and have the three containers needed to store uploaded, rejected, and valid profile pictures. The next step is to add an Azure Function.
 
 ### Creating an Azure Function
 
@@ -197,7 +197,7 @@ public class Adult
 
 *Run* is the method called each time the function is executed. The *Run* method uses a helper method named *AnalyzeImageAsync* to pass each blob added to the "uploaded" container to the Computer Vision API for analysis. Then it calls a helper method named *StoreBlobWithMetadata* to create a copy of the blob in either the "profile-pics" container or the "rejected" container, depending on the scores returned by *AnalyzeImageAsync*. 
 
-Click the *Save* button at the top of the code editor to save your changes. The click *View Files*.
+Click the *Save* button at the top of the code editor to save your changes. Then click *View Files*.
 
 <img src="images/chapter8/save-run-file.png" class="img-medium" />
 

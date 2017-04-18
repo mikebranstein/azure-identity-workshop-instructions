@@ -1031,7 +1031,7 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
 </code></pre>
 <p>Much of the code is straight-forward, but we want to draw your attention to a few lines, starting with <code>var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());</code>. You&#39;ve already seen the <code>GetUserId()</code> function, but you haven&#39;t directly worked with the <code>UserManager</code> class. </p>
 <blockquote>
-<p><strong>NOTE</strong> The <code>UserManager</code> class, well, manages users. That sounds redundant, but we like ot think of it as a user repository. If you&#39;re not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. </p>
+<p><strong>NOTE</strong> The <code>UserManager</code> class, well, manages users. That sounds redundant, but we like to think of it as a user repository. If you&#39;re not familiar with the repository pattern, Martin Fowler has an excellent article on [repositories] online. Check it out. </p>
 </blockquote>
 <p>Back to the code. Because <code>UserManager</code> acts as a repository, we use it to retrieve a user object (more specifically, the <code>ApplicationUser</code> object which inherits from <code>IdentityUser</code>). Once we have the user, we update the biography property and send the user back through the repository to be persisted: <code>await UserManager.UpdateAsync(user);</code>.</p>
 <p>After the user is saved, you&#39;re redirected back to the Manage\Index view, passing the <code>UpdateBiographySuccess</code> enum value as a query string parameter.</p>
@@ -1095,7 +1095,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>We&#39;ll be adding the <em>Profile Picture</em> field. Once added, you&#39;ll be able to see your uploaded picture on the main page and navigate to a second page to update it.</p>
 <p>Let&#39;s get started! We&#39;ll begin by modifying ASP.NET Identity to include the new field, then move on to modifying the MVC code.</p>
 <h3 id="extending-asp-net-identity">Extending ASP.NET Identity</h3>
-<p>You&#39;ll recall that we previously updated the <code>ApplicationUser</code> and <code>ApplicationUserManager</code> classes to extend ASp.NET Identity. We&#39;ll be doing something similar for the profile picture. </p>
+<p>You&#39;ll recall that we previously updated the <code>ApplicationUser</code> and <code>ApplicationUserManager</code> classes to extend ASP.NET Identity. We&#39;ll be doing something similar for the profile picture. </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
 </h4>
@@ -1210,7 +1210,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <pre><code class="lang-csharp">using System.Web;
 </code></pre>
 <h4 id="-step-4-update-the-update-biography-view"><strong>Step 4:</strong> Update the Update Biography view</h4>
-<p>Update a view named <code>UpdateBiography.cshtml</code> in the <em>Views\Manage</em> folder. This view will use the previously created <code>UpdateBiographyViewModel</code> to show and update a user&#39;s profile picture.</p>
+<p>Update the view named <code>UpdateBiography.cshtml</code> in the <em>Views\Manage</em> folder. This view will use the previously created <code>UpdateBiographyViewModel</code> to show and update a user&#39;s profile picture.</p>
 <p>Add an additional <code>&lt;div class=&quot;form-group&quot;&gt;...&lt;/div&gt;</code> element between the existing <code>&lt;div&gt;</code> elements. </p>
 <pre><code class="lang-html">&lt;div class=&quot;form-group&quot;&gt;
     @Html.LabelFor(m =&gt; m.ProfilePicture, new { @class = &quot;col-md-2 control-label&quot; })
@@ -1309,7 +1309,7 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
 <p>There are 4 things happening in the upload function:</p>
 <ul>
 <li><strong>Connect to Storage Account:</strong> Using the <code>CloudStorageAccount</code> class, parse the storage account connection string, create a blob client, and a reference to the container (or folder) we&#39;d like to access. The blob client works like a web service proxy that can interact with Azure blob storage to get a reference to the blob folders (a.k.a. containers) in the account. </li>
-<li><strong>Create the blob container:</strong> It&#39;s important to know that the reference to the blob container doesn&#39;t means the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.</li>
+<li><strong>Create the blob container:</strong> It&#39;s important to know that the reference to the blob container doesn&#39;t mean the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.</li>
 <li><strong>Upload image blob:</strong> With the container reference, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.</li>
 <li><strong>Get URL of the uploaded image blob:</strong> When the image is uploaded, we get the URL of it via the <code>Uri</code> property. </li>
 </ul>
@@ -1381,7 +1381,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 			<hr>
 			<div class="chapter">
 				<h2 id="building-a-staging-blob-container-profile-pictures">Building a Staging Blob Container Profile Pictures</h2>
-<p>This is a short chapter, but sets the stage for something big. Imagine the web app we&#39;ve been building was going to be used in a production capacity. Do you really want to give users the ability to upload <em>any</em> image are their profile image? Some images just aren&#39;t suitable for a work environment. </p>
+<p>This is a short chapter, but sets the stage for something big. Imagine the web app we&#39;ve been building was going to be used in a production capacity. Do you really want to give users the ability to upload <em>any</em> image for their profile picture? Some images just aren&#39;t suitable for a work environment. </p>
 <p>Wouldn&#39;t it be nice to add a step into the profile image upload process where images were screened? But, who&#39;s going to do the screening? Do you really have time to screen <em>every</em> images uploaded. Maybe it makes sense for a small site, but what happens when there&#39;s thousands of users? </p>
 <p>For me, there&#39;s no chance that I would introduce a manual screen step. Instead, I&#39;d look for every opportunity to automate this process so I can spend the time to write code once, and use it every time someone changes their profile picture. </p>
 <p>Over the next several chapters, we&#39;ll be building an automated image screening process using <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Microsoft&#39;s Cognitive Services Computer Vision API</a>. We&#39;ll combine various Azure services: blob storage containers, an Azure function listening for changes to a blob container, and REST service calls to the computer vision API. The computer vision API will process each uploaded image, indicating whether it is work appropriate. Images that are acceptable will be moved to the profile picture blob container. Invalid images will be moved to a separate container.  </p>
@@ -1452,7 +1452,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
             ConfigurationManager.AppSettings[&quot;ProfilePicUploadBlobContainer&quot;], 
             ConfigurationManager.AppSettings[&quot;ProfilePicBlobContainer&quot;]);
 </code></pre>
-<p>From the previous chapter, you&#39;ll recall that <code>cloudBlockBlob</code> is a reference to the uploaded blob image. After this change, the blob container we&#39;ll be upload to is the staging/upload container named <em>uploaded</em> (stored in the <code>ProfilePicUploadBlobContainer</code> app setting). This staging/upload container should not be returned to the app, because images in this container have not been processed with the computer vision API. </p>
+<p>From the previous chapter, you&#39;ll recall that <code>cloudBlockBlob</code> is a reference to the uploaded blob image. After this change, the blob container we&#39;ll be uploading it to the staging/upload container named <em>uploaded</em> (stored in the <code>ProfilePicUploadBlobContainer</code> app setting). This staging/upload container should not be returned to the app, because images in this container have not been processed with the computer vision API. </p>
 <p>When images get processed, valid profile pictures will be placed in the <em>profile-pics</em> container (stored in the <code>ProfilePicBlobContainer</code> app setting). As a result, the URL returned from the upload function returns the URL of the valid image. </p>
 <p>Let&#39;s test it out! Compile and run the web app. When you upload a new image, you should expect the image to be placed into the <em>uploaded</em> blob container, and the profile management page to not display an image (because we haven&#39;t created the Azure function to validate the pictures with the computer vision API).</p>
 <p><img src="images/chapter7/profile-pics-uploaded.gif" class="img-large" /></p>
@@ -1491,7 +1491,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p><img src="images/chapter8/new-function-app.png" class="img-medium" /></p>
 <p>You&#39;ll be presented with a Function App creation blade.</p>
 <p><img src="images/chapter8/create-function-app.png" class="img-small" /></p>
-<p>Enter an app name that is unique within Azure. Under <em>Resource Group</em>, select <em>Use existing</em> and select the resource group your created earlier. Choose <em>App Service plan/Location</em> for the <em>Hosting Plan</em>, and select the same storage account you created earlier.Make sure the <em>Pin to dashboard</em> is checked.</p>
+<p>Enter an app name that is unique within Azure. Under <em>Resource Group</em>, select <em>Use existing</em> and select the resource group your created earlier. Choose <em>App Service plan/Location</em> for the <em>Hosting Plan</em>, and select the same storage account you created earlier. Make sure the <em>Pin to dashboard</em> is checked.</p>
 <p>Click <em>Create</em> to create a new Function App. The function app will start it&#39;s deployment process. </p>
 <p><img src="images/chapter8/deploying-function-app.png" class="img-small" /></p>
 <p>While you&#39;re waiting for the function app to be created, open the resource group created earlier and locate your storage account. Open the storage account in the portal. </p>
@@ -1505,7 +1505,7 @@ public async Task&lt;ActionResult&gt; Index(ManageMessageId? message)
 <p>Repeat the previous steps to add containers named <em>profile-pics</em> and <em>uploaded</em> if they don&#39;t exist.</p>
 <div class="exercise-end"></div>
 
-<p>Great work! You&#39;ve created the function app and have the three containers needed to store uploaded, rejected, and valid profile pictures.The next step is to add an Azure Function.</p>
+<p>Great work! You&#39;ve created the function app and have the three containers needed to store uploaded, rejected, and valid profile pictures. The next step is to add an Azure Function.</p>
 <h3 id="creating-an-azure-function">Creating an Azure Function</h3>
 <p>Once you have created an Azure Function App, you can add Azure Functions to it. In this exercise, you&#39;ll add a function to the Function App you created in the previous exercise and write C# code that uses the <a href="https://www.microsoft.com/cognitive-services/en-us/computer-vision-api">Computer Vision API</a> to analyze images added to the &quot;uploaded&quot; container for inappropriate content.</p>
 <h4 class="exercise-start">
@@ -1634,7 +1634,7 @@ public class Adult
 }
 </code></pre>
 <p><em>Run</em> is the method called each time the function is executed. The <em>Run</em> method uses a helper method named <em>AnalyzeImageAsync</em> to pass each blob added to the &quot;uploaded&quot; container to the Computer Vision API for analysis. Then it calls a helper method named <em>StoreBlobWithMetadata</em> to create a copy of the blob in either the &quot;profile-pics&quot; container or the &quot;rejected&quot; container, depending on the scores returned by <em>AnalyzeImageAsync</em>. </p>
-<p>Click the <em>Save</em> button at the top of the code editor to save your changes. The click <em>View Files</em>.</p>
+<p>Click the <em>Save</em> button at the top of the code editor to save your changes. Then click <em>View Files</em>.</p>
 <p><img src="images/chapter8/save-run-file.png" class="img-medium" /></p>
 <p>Click <em>+ Add</em> to add a new file, and name the file <em>project.json</em>.</p>
 <p><img src="images/chapter8/add-project-file.png" class="img-small" /></p>

@@ -20,7 +20,7 @@ Let's get started! We'll begin by modifying ASP.NET Identity to include the new 
 
 ### Extending ASP.NET Identity
 
-You'll recall that we previously updated the `ApplicationUser` and `ApplicationUserManager` classes to extend ASp.NET Identity. We'll be doing something similar for the profile picture. 
+You'll recall that we previously updated the `ApplicationUser` and `ApplicationUserManager` classes to extend ASP.NET Identity. We'll be doing something similar for the profile picture. 
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Extending ASP.NET Identity with a Profile Picture
@@ -165,7 +165,7 @@ using System.Web;
 
 #### **Step 4:** Update the Update Biography view
 
-Update a view named `UpdateBiography.cshtml` in the *Views\Manage* folder. This view will use the previously created `UpdateBiographyViewModel` to show and update a user's profile picture.
+Update the view named `UpdateBiography.cshtml` in the *Views\Manage* folder. This view will use the previously created `UpdateBiographyViewModel` to show and update a user's profile picture.
 
 Add an additional `<div class="form-group">...</div>` element between the existing `<div>` elements. 
 
@@ -280,7 +280,7 @@ public async Task<string> UploadImageAsync(string currentBlobUrl, HttpPostedFile
 
 There are 4 things happening in the upload function:
 * **Connect to Storage Account:** Using the `CloudStorageAccount` class, parse the storage account connection string, create a blob client, and a reference to the container (or folder) we'd like to access. The blob client works like a web service proxy that can interact with Azure blob storage to get a reference to the blob folders (a.k.a. containers) in the account. 
-* **Create the blob container:** It's important to know that the reference to the blob container doesn't means the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.
+* **Create the blob container:** It's important to know that the reference to the blob container doesn't mean the cloud container exists. Whenever you access a container, you should first ensure that it exists. If not, create it. This may seem extra, but always checking for the container helps you to write more defensive code that ensures any implicit assumptions (like the existence of the container) are valid.
 * **Upload image blob:** With the container reference, we get a reference to a blob block (a.k.a. file) that will contain our image. After setting the content type of the blob block, the image bits are uploaded.
 * **Get URL of the uploaded image blob:** When the image is uploaded, we get the URL of it via the `Uri` property. 
 
