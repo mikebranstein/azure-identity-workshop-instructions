@@ -317,7 +317,7 @@ In this exercise, you will use the cross-platform [Microsoft Azure Storage Explo
     <b>Exercise</b>: View Blob Metadata with Storage Explorer
 </h4>
 
-Start Storage Explorer. Find your storage account you've bene working with and expand the list of blob containers underneath it. Then click the container named *profile-pics*.
+Start Storage Explorer. Find your storage account you've been working with and expand the list of blob containers underneath it. Then click the container named *profile-pics*.
 
 Right-click an image in the "profile-pics" container and select *Properties* from the context menu.
 
