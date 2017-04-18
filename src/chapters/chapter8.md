@@ -203,7 +203,7 @@ Click the *Save* button at the top of the code editor to save your changes. Then
 
 Click *+ Add* to add a new file, and name the file *project.json*.
 
-<img src="images/chapter8/add-project-file.png" class="img-small" />
+![image](images/chapter8/add-project-file.png)  
 
 Add the following statements to *project.json*:
 
@@ -247,11 +247,9 @@ On the right, select the *Platform features* tab at top. Under *General Settings
 
 Scroll down until you find the *App settings* section. Add a new app setting named *SubscriptionKey*, and paste the Cognitive Services API subscription key that is on the clipboard into the *Value* box. Then click *Save* at the top of the blade.
 
-![Adding a subscription key](images/chapter8/add-key.png)
+<img src="images/chapter8/add-key.png" class="img-medium" />
 
-The app settings are now configured for your Azure Function. It's a good idea to validate those settings by recompiling the function and ensuring that it compiles without errors. Scroll left until you see the "Function app" blade, and then click *BlobImageAnalysis*.
-
-<img src="images/chapter8/open-function.png" class="img-small" />	
+The app settings are now configured for your Azure Function. 
 
 <div class="exercise-end"></div>
 
