@@ -246,8 +246,10 @@ Now that you understand the basics of web apps, let's create one and deploy our 
 Earlier in this chapter, we created a storage account in Azure via the Azure portal. You can also create Web Apps via the Azure portal in the same manner. But, we're going to show you another way of creating a Web App: from Visual Studio.
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Deploying to a Web App from Visual Studio
+    <b>Exercise</b>: Deploying to a Web App from Visual Studio 2017
 </h4>
+
+> **NOTE:** This exercise assumes you're running Visual Studio 2017. The UI and screens in Visual Studio 2015 aren't the same, but similar. We're not going to include screen shots for 2015, but we think you can figure it out.
 
 From Visual Studio, right-click the *Web* project and select *Publish*. In the web publish window, select *Microsoft Azure App Service*, *Create New*, and press *Publish*. This short clip walks you through the process:
 
