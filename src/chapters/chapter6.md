@@ -230,7 +230,7 @@ First, we call a function that uploads the profile picture to Azure blob storage
 
 If that function returns `null`, the existing profile picture url is kept.
 
-> **NOTE:** You may not recognize the `??` syntax, as it's a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
+> **NOTE:** You may not recognize the `??` syntax, as it's a feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official [documentation](https://msdn.microsoft.com/en-us/library/ms173224.aspx).
 
 Add the `UploadImageAsync` function below the POST controller action.
 
