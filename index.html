@@ -1309,7 +1309,7 @@ public async Task&lt;ActionResult&gt; UpdateBiography(UpdateBiographyViewModel m
 <p>First, we call a function that uploads the profile picture to Azure blob storage: <code>UploadImageAsync(model.ProfilePicUrl, model.ProfilePicture)</code>. If the upload is successful, it returns the URL of the uploaded image. Otherwise, it returns <code>null</code>. </p>
 <p>If that function returns <code>null</code>, the existing profile picture url is kept.</p>
 <blockquote>
-<p><strong>NOTE:</strong> You may not recognize the <code>??</code> syntax, as it&#39;s a newer feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official <a href="https://msdn.microsoft.com/en-us/library/ms173224.aspx">documentation</a>.</p>
+<p><strong>NOTE:</strong> You may not recognize the <code>??</code> syntax, as it&#39;s a feature of C# called the null-coalescing operator. It returns the left-hand operand if the operand is not null; otherwise it returns the right hand operand. For more information on this operator, check out the official <a href="https://msdn.microsoft.com/en-us/library/ms173224.aspx">documentation</a>.</p>
 </blockquote>
 <p>Add the <code>UploadImageAsync</code> function below the POST controller action.</p>
 <pre><code class="lang-csharp">public async Task&lt;string&gt; UploadImageAsync(string currentBlobUrl, HttpPostedFileBase imageToUpload)
