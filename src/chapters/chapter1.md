@@ -22,7 +22,7 @@ Each branch corresponds with the chapters in this workshop guide. The guide star
 Before we go any further, be sure you have all the pre-requisites downloaded and installed. You'll need the following:
 
 * Microsoft Windows PC
-* [Visual Studio](https://www.visualstudio.com) 2015 or later
+* [Visual Studio](https://www.visualstudio.com) 2015 or later (2017 preferred)
 * [Azure Subscription](https://azure.microsoft.com) (trial is ok, and we'll sign you up in our first session)
 * [Azure SDK for .NET](https://azure.microsoft.com/en-us/downloads/) installed (be sure to get the right one for your version of Visual Studio)
 * [Storage Explorer](http://storageexplorer.com/) installed
