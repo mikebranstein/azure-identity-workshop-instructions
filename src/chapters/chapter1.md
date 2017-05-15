@@ -1,10 +1,10 @@
 ## Getting project from Github
 
-All the code you'll need for working through the workshop are stored on Github at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017).
+All the code you'll need for working through the workshop are stored on Github at [https://github.com/mikebranstein/azure-identity-workshop](https://github.com/mikebranstein/azure-identity-workshop).
 
 ### Organization of the Repository
 
-The repository at [https://github.com/mikebranstein/GlobalAzureDay2017](https://github.com/mikebranstein/GlobalAzureDay2017) is organized into several [branches](https://github.com/mikebranstein/GlobalAzureDay2017/branches/all):
+The repository at [https://github.com/mikebranstein/azure-identity-workshop](https://github.com/mikebranstein/azure-identity-workshop) is organized into several [branches](https://github.com/mikebranstein/azure-identity-workshop/branches/all):
 
 * start
 * chapter2
@@ -27,7 +27,7 @@ Before we go any further, be sure you have all the pre-requisites downloaded and
 * [Azure SDK for .NET](https://azure.microsoft.com/en-us/downloads/) installed (be sure to get the right one for your version of Visual Studio)
 * [Storage Explorer](http://storageexplorer.com/) installed
 * [Storage Emulator](https://go.microsoft.com/fwlink/?LinkId=717179&clcid=0x409) installed
-* The [starter project](https://github.com/mikebranstein/GlobalAzureDay2017/tree/start) on Github
+* The [starter project](https://github.com/mikebranstein/azure-identity-workshop/tree/start) on Github
 
 ### Clone project from start branch
 
@@ -37,9 +37,9 @@ Let's get started by getting the `start` branch.
     <b>Exercise</b>: Getting the code
 </h4>
 
-Clone or download the `start` branch from [https://github.com/mikebranstein/GlobalAzureDay2017/tree/start](https://github.com/mikebranstein/GlobalAzureDay2017/tree/start)).
+Clone or download the `start` branch from [https://github.com/mikebranstein/azure-identity-workshop/tree/start](https://github.com/mikebranstein/azure-identity-workshop/tree/start)).
 
-Use this [link](https://github.com/mikebranstein/GlobalAzureDay2017/archive/start.zip) to download a zip file of the `start` branch.
+Use this [link](https://github.com/mikebranstein/azure-identity-workshop/archive/start.zip) to download a zip file of the `start` branch.
 
 ![image](images/chapter1/downloaded-zip.png)
 

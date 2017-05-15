@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-This is a website adapted from a quick start template. The actual guide is hosted on Github at [https://mikebranstein.github.io/GlobalAzureDay2017-instructions/](https://mikebranstein.github.io/GlobalAzureDay2017-instructions/). 
+This is a website adapted from a quick start template. The actual guide is hosted on Github at [https://mikebranstein.github.io/azure-identity-workshop-instructions/](https://mikebranstein.github.io/azure-identity-workshop-instructions/). 
 
 ## Setup
 
