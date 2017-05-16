@@ -424,7 +424,7 @@ You can also address Azure tables directly using this address with the OData pro
 <li>EntityFramework</li>
 </ul>
 <p><img src="images/chapter2/uninstall-ef.gif" class="img-medium" /></p>
-<p>We&#39;re not done yet, so hold on. There are several references to Entity Framework in the <code>web.config</code> file. Remove the following:</p>
+<p>We&#39;re not done yet, so hold on. There <strong>may be</strong> several references to Entity Framework in the <code>web.config</code> file. If any of the following sections exist, remove them:</p>
 <p>In <code>&lt;configSections&gt;</code>, remove the section named <em>entityFramework</em>. Leave the <code>&lt;configSections&gt;</code> element in place, because we&#39;ll be adding to it later.</p>
 <pre><code class="lang-xml">&lt;configSections&gt;
     &lt;section name=&quot;entityFramework&quot; type=&quot;System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; requirePermission=&quot;false&quot; /&gt;

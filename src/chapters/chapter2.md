@@ -251,7 +251,7 @@ Uninstall these NuGet packages in the following order:
 
 <img src="images/chapter2/uninstall-ef.gif" class="img-medium" />
 
-We're not done yet, so hold on. There are several references to Entity Framework in the `web.config` file. Remove the following:
+We're not done yet, so hold on. There **may be** several references to Entity Framework in the `web.config` file. If any of the following sections exist, remove them:
 
 In `<configSections>`, remove the section named *entityFramework*. Leave the `<configSections>` element in place, because we'll be adding to it later.
 
