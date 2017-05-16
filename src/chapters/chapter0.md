@@ -1,9 +1,6 @@
 ## Introduction
 
-Welcome to the AZure Identity Workshop! 
-
-
-All around the world user groups and communities want to learn about Azure and Cloud Computing! On April 22, 2017, all communities will come together once again in the fifth great Global Azure Bootcamp event! Each user group will organize their own one day deep dive class on Azure the way they see fit and how it works for their members. The result is that thousands of people get to learn about Azure and join together online under the social hashtag #GlobalAzure! Join hundreds of other organizers to help out and be part of the experience! 
+Welcome to the Azure Identity Workshop! 
 
 ### About the Azure Identity Workshop
 
