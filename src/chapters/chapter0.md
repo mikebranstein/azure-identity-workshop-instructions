@@ -55,7 +55,7 @@ In this workshop you'll learn how to use these Azure services to build a cloud-h
 
 You can find additional lab materials and presentation content at the locations below:
 
-* Presentation: [https://github.com/mikebranstein/azure-identity-workshop/blob/master/Azure%20Bootcamp.pptx](https://github.com/mikebranstein/azure-identity-workshop/blob/master/Azure%20Bootcamp.pptx)
+* Presentation: [https://github.com/mikebranstein/azure-identity-workshop/blob/master/AzureIdentityWorkshop.pptx](https://github.com/mikebranstein/azure-identity-workshop/blob/master/AzureIdentityWorkshop.pptx)
 * Source code for the code used in this guide: [https://github.com/mikebranstein/azure-identity-workshop](https://github.com/mikebranstein/azure-identity-workshop)
 * This guide: [https://github.com/mikebranstein/azure-identity-workshop-instructions](https://mikebranstein.github.io/azure-identity-workshop-instructions/)
 
